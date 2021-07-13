@@ -1,7 +1,7 @@
 # uCentral UI Library
 
 ## What is this?
-The uCentral UI Library is a library that will be used for different micro services clients part of the uCentral program such as [uCentralGW UI](https://github.com/Telecominfraproject/wlan-cloud-ucentralgw-ui). To use the interface,
+The uCentral UI Library will be used for different micro services clients part of the uCentral program such as [uCentralGW UI](https://github.com/Telecominfraproject/wlan-cloud-ucentralgw-ui). To use this library,
 you either need to run it on your machine for development or install it.
 
 ### Development
