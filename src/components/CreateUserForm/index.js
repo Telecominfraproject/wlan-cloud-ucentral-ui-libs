@@ -28,12 +28,6 @@ const CreateUserForm = ({ t, fields, updateField, createUser, loading }) => {
   return (
     <CForm>
       <CFormGroup row>
-        <CLabel sm="2" col htmlFor="name">
-          {t('user.nickname_explanation')}
-        </CLabel>
-        <CCol sm="4">
-          <CInput id="name" value={fields.name.value} onChange={updateField} />
-        </CCol>
         <CLabel sm="2" col htmlFor="email">
           {t('user.email_address')}
         </CLabel>
@@ -43,8 +37,15 @@ const CreateUserForm = ({ t, fields, updateField, createUser, loading }) => {
             value={fields.email.value}
             onChange={updateField}
             invalid={fields.email.error}
+            maxLength="50"
           />
           <CInvalidFeedback>{t('user.provide_email')}</CInvalidFeedback>
+        </CCol>
+        <CLabel sm="2" col htmlFor="name">
+          {t('user.name')}
+        </CLabel>
+        <CCol sm="4">
+          <CInput id="name" value={fields.name.value} onChange={updateField} maxLength="20" />
         </CCol>
       </CFormGroup>
       <CFormGroup row>
@@ -59,6 +60,7 @@ const CreateUserForm = ({ t, fields, updateField, createUser, loading }) => {
               value={fields.currentPassword.value}
               onChange={updateField}
               invalid={fields.currentPassword.error}
+              maxLength="50"
             />
             <CInputGroupAppend>
               <CPopover content={t('user.show_hide_password')}>
@@ -70,8 +72,8 @@ const CreateUserForm = ({ t, fields, updateField, createUser, loading }) => {
                 </CButton>
               </CPopover>
             </CInputGroupAppend>
+            <CInvalidFeedback>{t('user.provide_password')}</CInvalidFeedback>
           </CInputGroup>
-          <CInvalidFeedback>{t('user.provide_password')}</CInvalidFeedback>
         </CCol>
         <CLabel sm="2" col htmlFor="changePassword">
           {t('user.force_password_change')}
@@ -103,8 +105,25 @@ const CreateUserForm = ({ t, fields, updateField, createUser, loading }) => {
           {t('user.note')}
         </CLabel>
         <CCol sm="4">
-          <CInput id="notes" value={fields.notes.value} onChange={updateField} />
+          <CInput id="notes" value={fields.notes.value} onChange={updateField} maxLength="50" />
+          <small className="text-muted">{t('common.optional')}</small>
         </CCol>
+      </CFormGroup>
+      <CFormGroup row>
+        <CLabel sm="2" col htmlFor="description">
+          {t('user.description')}
+        </CLabel>
+        <CCol sm="4">
+          <CInput
+            id="description"
+            value={fields.description.value}
+            onChange={updateField}
+            maxLength="50"
+          />
+          <small className="text-muted">{t('common.optional')}</small>
+        </CCol>
+        <CLabel sm="2" col />
+        <CCol sm="4" />
       </CFormGroup>
       <CRow>
         <CCol />

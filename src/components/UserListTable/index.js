@@ -12,7 +12,7 @@ import {
   CPopover,
   CButton,
 } from '@coreui/react';
-import { cilTrash } from '@coreui/icons';
+import { cilCheckCircle, cilTrash } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import { capitalizeFirstLetter, prettyDate } from '../../utils/formatting';
 import DeleteModal from '../DeleteModal';
@@ -40,16 +40,22 @@ const UserListTable = ({
     setShowDeleteModal(true);
   };
 
+  const getValidatedIcon = (validated) => {
+    const color = validated ? 'success' : 'secondary';
+    return <CIcon content={cilCheckCircle} color={color} size="lg" />;
+  };
+
   const fields = [
-    { key: 'Id', label: t('user.id'), _style: { width: '50%' } },
-    { key: 'name', label: t('user.nickname'), _style: { width: '15%' } },
-    { key: 'email', label: t('user.email_address'), _style: { width: '10%' } },
+    { key: 'email', label: t('user.login_id'), _style: { width: '20%' } },
+    { key: 'name', label: t('user.name'), _style: { width: '20%' } },
     { key: 'userRole', label: t('user.user_role'), _style: { width: '5%' } },
-    { key: 'lastLogin', label: t('user.last_login'), _style: { width: '10%' } },
+    { key: 'description', label: t('user.description'), _style: { width: '26%' } },
+    { key: 'validated', label: t('user.validated'), _style: { width: '5%' } },
+    { key: 'lastLogin', label: t('user.last_login'), _style: { width: '20%' } },
     {
       key: 'user_actions',
       label: '',
-      _style: { width: '5%' },
+      _style: { width: '4%' },
       sorter: false,
       filter: false,
     },
@@ -83,6 +89,15 @@ const UserListTable = ({
             hover
             border
             scopedSlots={{
+              validated: (item) => (
+                <td className="centeredColumn">
+                  <CPopover
+                    content={item.validated ? t('user.validated') : t('user.not_validated')}
+                  >
+                    {getValidatedIcon(item.validated)}
+                  </CPopover>
+                </td>
+              ),
               lastLogin: (item) => <td>{item.lastLogin ? prettyDate(item.lastLogin) : ''}</td>,
               userRole: (item) => (
                 <td>{item.userRole ? capitalizeFirstLetter(item.userRole) : ''}</td>
