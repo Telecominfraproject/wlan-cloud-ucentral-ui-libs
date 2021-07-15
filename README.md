@@ -5,7 +5,7 @@ The uCentral UI Library will be used for different micro services clients part o
 you either need to run it on your machine for development or install it.
 
 ### Development
-Here are the instructions to use the librar Please install `npm` for the platform you are using.
+Please install `npm` for the platform you are using and run these commands.
 ```
 git clone https://github.com/Telecominfraproject/wlan-cloud-ucentral-ui-libs
 cd wlan-cloud-ucentral-ui-libs
