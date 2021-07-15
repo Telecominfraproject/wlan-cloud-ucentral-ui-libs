@@ -12,7 +12,7 @@ import {
   CPopover,
   CButton,
 } from '@coreui/react';
-import { cilCheckCircle, cilTrash } from '@coreui/icons';
+import { cilBan, cilCheckCircle, cilTrash } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import { capitalizeFirstLetter, prettyDate } from '../../utils/formatting';
 import DeleteModal from '../DeleteModal';
@@ -42,7 +42,7 @@ const UserListTable = ({
 
   const getValidatedIcon = (validated) => {
     const color = validated ? 'success' : 'secondary';
-    return <CIcon content={cilCheckCircle} color={color} size="lg" />;
+    return <CIcon content={validated ? cilCheckCircle : cilBan} color={color} size="lg" />;
   };
 
   const fields = [

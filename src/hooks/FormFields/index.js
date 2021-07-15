@@ -9,9 +9,9 @@ export default (initialState) => {
       setFields({
         ...fields,
         [e.target.id]: {
+          ...fields[e.target.id],
           value: e.target.value,
           error: false,
-          optional: fields[e.target.id].optional,
         },
       });
     },
@@ -19,9 +19,9 @@ export default (initialState) => {
       setFields({
         ...fields,
         [field]: {
+          ...fields[field],
           value,
           error,
-          optional: fields[field].optional,
         },
       });
     },

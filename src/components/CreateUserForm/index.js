@@ -9,6 +9,7 @@ import {
   CInputGroupAppend,
   CInvalidFeedback,
   CLabel,
+  CLink,
   CPopover,
   CRow,
   CSelect,
@@ -17,8 +18,9 @@ import {
 import PropTypes from 'prop-types';
 import LoadingButton from 'components/LoadingButton';
 import CIcon from '@coreui/icons-react';
+import styles from './index.module.scss';
 
-const CreateUserForm = ({ t, fields, updateField, createUser, loading }) => {
+const CreateUserForm = ({ t, fields, updateField, createUser, loading, policies }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const toggleShowPassword = () => {
@@ -127,6 +129,27 @@ const CreateUserForm = ({ t, fields, updateField, createUser, loading }) => {
       </CFormGroup>
       <CRow>
         <CCol />
+        <CCol xs={3} className={styles.linksColumn}>
+          <CLink
+            className="c-subheader-nav-link"
+            aria-current="page"
+            href={policies.accessPolicy}
+            target="_blank"
+            style={{ paddingRight: '30px' }}
+            hidden={policies.accessPolicy.length === 0}
+          >
+            {t('common.access_policy')}
+          </CLink>
+          <CLink
+            className="c-subheader-nav-link"
+            aria-current="page"
+            href={policies.passwordPolicy}
+            target="_blank"
+            hidden={policies.passwordPolicy.length === 0}
+          >
+            {t('common.password_policy')}
+          </CLink>
+        </CCol>
         <CCol xs={2}>
           <LoadingButton
             label={t('user.create')}
@@ -144,6 +167,7 @@ const CreateUserForm = ({ t, fields, updateField, createUser, loading }) => {
 
 CreateUserForm.propTypes = {
   t: PropTypes.func.isRequired,
+  policies: PropTypes.instanceOf(Object).isRequired,
   fields: PropTypes.instanceOf(Object).isRequired,
   updateField: PropTypes.func.isRequired,
   createUser: PropTypes.func.isRequired,
