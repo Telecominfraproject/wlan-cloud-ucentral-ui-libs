@@ -15,13 +15,12 @@ export default (initialState) => {
         },
       });
     },
-    (field, { value, error }) => {
+    (field, newValues) => {
       setFields({
         ...fields,
         [field]: {
           ...fields[field],
-          value,
-          error,
+          ...newValues,
         },
       });
     },
