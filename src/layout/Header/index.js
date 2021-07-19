@@ -6,15 +6,29 @@ import {
   CHeaderNav,
   CSubheader,
   CBreadcrumbRouter,
-  CLink,
-  CPopover,
+  CDropdown,
+  CDropdownToggle,
+  CDropdownMenu,
+  CDropdownItem,
 } from '@coreui/react';
 import PropTypes from 'prop-types';
 import CIcon from '@coreui/icons-react';
 import { cilAccountLogout } from '@coreui/icons';
 import LanguageSwitcher from '../../components/LanguageSwitcher';
+import ImgWithFallback from '../../components/ImgWithFallback';
+import { emailToName } from '../../utils/formatting';
 
-const Header = ({ showSidebar, setShowSidebar, routes, t, i18n, logout, authToken, endpoints }) => {
+const Header = ({
+  showSidebar,
+  setShowSidebar,
+  routes,
+  t,
+  i18n,
+  logout,
+  authToken,
+  endpoints,
+  user,
+}) => {
   const [translatedRoutes, setTranslatedRoutes] = useState(routes);
 
   const toggleSidebar = () => {
@@ -45,17 +59,26 @@ const Header = ({ showSidebar, setShowSidebar, routes, t, i18n, logout, authToke
         <LanguageSwitcher i18n={i18n} />
       </CHeaderNav>
 
-      <CHeaderNav className="px-3">
-        <CPopover content={t('common.logout')}>
-          <CLink className="c-subheader-nav-link">
-            <CIcon
-              name="cilAccountLogout"
-              content={cilAccountLogout}
-              size="2xl"
-              onClick={() => logout(authToken, endpoints.ucentralsec)}
-            />
-          </CLink>
-        </CPopover>
+      <CHeaderNav className="px-1">
+        <CDropdown inNav className="c-header-nav-items mx-2" direction="down">
+          <CDropdownToggle className="c-header-nav-link" caret={false}>
+            <div className="c-avatar">
+              <ImgWithFallback
+                src={user.avatar && user.avatar !== '' ? user.avatar : '/'}
+                fallback={() => emailToName(user.email)}
+              />
+            </div>
+          </CDropdownToggle>
+          <CDropdownMenu className="pt-0" placement="bottom-end">
+            <CDropdownItem>
+              <div className="px-3">My Account</div>
+            </CDropdownItem>
+            <CDropdownItem onClick={() => logout(authToken, endpoints.ucentralsec)}>
+              <strong className="px-3">Logout</strong>
+              <CIcon name="cilAccountLogout" content={cilAccountLogout} />
+            </CDropdownItem>
+          </CDropdownMenu>
+        </CDropdown>
       </CHeaderNav>
 
       <CSubheader className="px-3 justify-content-between">
@@ -77,6 +100,7 @@ Header.propTypes = {
   logout: PropTypes.func.isRequired,
   authToken: PropTypes.string.isRequired,
   endpoints: PropTypes.instanceOf(Object).isRequired,
+  user: PropTypes.instanceOf(Object).isRequired,
 };
 
 export default React.memo(Header);

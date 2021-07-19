@@ -11,8 +11,9 @@ import {
   CDataTable,
   CPopover,
   CButton,
+  CLink,
 } from '@coreui/react';
-import { cilBan, cilCheckCircle, cilTrash } from '@coreui/icons';
+import { cilBan, cilCheckCircle, cilInfo, cilPlus, cilTrash } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import { capitalizeFirstLetter, prettyDate } from '../../utils/formatting';
 import DeleteModal from '../DeleteModal';
@@ -49,13 +50,13 @@ const UserListTable = ({
     { key: 'email', label: t('user.login_id'), _style: { width: '20%' } },
     { key: 'name', label: t('user.name'), _style: { width: '20%' } },
     { key: 'userRole', label: t('user.user_role'), _style: { width: '5%' } },
-    { key: 'description', label: t('user.description'), _style: { width: '26%' } },
+    { key: 'description', label: t('user.description'), _style: { width: '25%' } },
     { key: 'validated', label: t('user.validated'), _style: { width: '5%' } },
     { key: 'lastLogin', label: t('user.last_login'), _style: { width: '20%' } },
     {
       key: 'user_actions',
       label: '',
-      _style: { width: '4%' },
+      _style: { width: '5%' },
       sorter: false,
       filter: false,
     },
@@ -88,9 +89,26 @@ const UserListTable = ({
             loading={loading}
             hover
             border
+            columnHeaderSlot={{
+              user_actions: (
+                <div className="text-center">
+                  <CPopover content={t('user.create')}>
+                    <CLink
+                      className="c-subheader-nav-link"
+                      aria-current="page"
+                      to={() => `/users/create`}
+                    >
+                      <CButton color="primary" variant="outline" shape="square" size="sm">
+                        <CIcon name="cil-info" content={cilPlus} size="sm" />
+                      </CButton>
+                    </CLink>
+                  </CPopover>
+                </div>
+              ),
+            }}
             scopedSlots={{
               validated: (item) => (
-                <td className="centeredColumn">
+                <td className="text-center">
                   <CPopover
                     content={item.validated ? t('user.validated') : t('user.not_validated')}
                   >
@@ -103,17 +121,34 @@ const UserListTable = ({
                 <td>{item.userRole ? capitalizeFirstLetter(item.userRole) : ''}</td>
               ),
               user_actions: (item) => (
-                <td className="py-2">
-                  <CPopover content={t('common.delete')}>
-                    <CButton
-                      onClick={() => handleDeleteClick(item.Id)}
-                      color="primary"
-                      variant="outline"
-                      size="sm"
-                    >
-                      <CIcon content={cilTrash} size="sm" />
-                    </CButton>
-                  </CPopover>
+                <td className="py-2 text-center">
+                  <CRow>
+                    <CCol>
+                      <CPopover content={t('configuration.details')}>
+                        <CLink
+                          className="c-subheader-nav-link"
+                          aria-current="page"
+                          to={() => `/users/${item.Id}`}
+                        >
+                          <CButton color="primary" variant="outline" shape="square" size="sm">
+                            <CIcon name="cil-info" content={cilInfo} size="sm" />
+                          </CButton>
+                        </CLink>
+                      </CPopover>
+                    </CCol>
+                    <CCol>
+                      <CPopover content={t('common.delete')}>
+                        <CButton
+                          onClick={() => handleDeleteClick(item.Id)}
+                          color="primary"
+                          variant="outline"
+                          size="sm"
+                        >
+                          <CIcon content={cilTrash} size="sm" />
+                        </CButton>
+                      </CPopover>
+                    </CCol>
+                  </CRow>
                 </td>
               ),
             }}

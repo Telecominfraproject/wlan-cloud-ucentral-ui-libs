@@ -12,6 +12,7 @@ import {
   CPopover,
   CAlert,
   CInvalidFeedback,
+  CLink,
 } from '@coreui/react';
 import PropTypes from 'prop-types';
 import CIcon from '@coreui/icons-react';
@@ -29,6 +30,7 @@ const ChangePasswordForm = ({
   updateField,
   changePasswordResponse,
   cancelPasswordChange,
+  policies,
 }) => (
   <CForm onKeyDown={(e) => onKeyDown(e, signIn)}>
     <h1>
@@ -88,13 +90,31 @@ const ChangePasswordForm = ({
       </CCol>
     </CRow>
     <CRow>
-      <CCol xs="6">
+      <CCol>
         <CButton color="primary" className="px-4" onClick={() => signIn(true)} disabled={loading}>
           {loading ? t('login.changing_password') : t('login.change_password')}
           <CSpinner hidden={!loading} color="light" component="span" size="sm" />
         </CButton>
+        <CLink
+          className="c-subheader-nav-link px-3"
+          aria-current="page"
+          href={policies.accessPolicy}
+          target="_blank"
+          hidden={policies.accessPolicy.length === 0}
+        >
+          {t('common.access_policy')}
+        </CLink>
+        <CLink
+          className="c-subheader-nav-link"
+          aria-current="page"
+          href={policies.passwordPolicy}
+          target="_blank"
+          hidden={policies.passwordPolicy.length === 0}
+        >
+          {t('common.password_policy')}
+        </CLink>
       </CCol>
-      <CCol xs="6" className={styles.forgotPassword}>
+      <CCol xs="5" className={styles.forgotPassword}>
         <CButton variant="ghost" color="primary" onClick={cancelPasswordChange}>
           {t('common.cancel')}
         </CButton>
@@ -113,6 +133,7 @@ ChangePasswordForm.propTypes = {
   updateField: PropTypes.func.isRequired,
   changePasswordResponse: PropTypes.instanceOf(Object).isRequired,
   cancelPasswordChange: PropTypes.func.isRequired,
+  policies: PropTypes.instanceOf(Object).isRequired,
 };
 
-export default ChangePasswordForm;
+export default React.memo(ChangePasswordForm);

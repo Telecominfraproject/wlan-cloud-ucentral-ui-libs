@@ -18,7 +18,6 @@ import {
 import PropTypes from 'prop-types';
 import LoadingButton from 'components/LoadingButton';
 import CIcon from '@coreui/icons-react';
-import styles from './index.module.scss';
 
 const CreateUserForm = ({ t, fields, updateField, createUser, loading, policies }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -129,7 +128,7 @@ const CreateUserForm = ({ t, fields, updateField, createUser, loading, policies 
       </CFormGroup>
       <CRow>
         <CCol />
-        <CCol xs={3} className={styles.linksColumn}>
+        <CCol xs={3} className="mt-2 text-right">
           <CLink
             className="c-subheader-nav-link"
             aria-current="page"
@@ -150,13 +149,13 @@ const CreateUserForm = ({ t, fields, updateField, createUser, loading, policies 
             {t('common.password_policy')}
           </CLink>
         </CCol>
-        <CCol xs={2}>
+        <CCol xs={1} className="text-right">
           <LoadingButton
             label={t('user.create')}
             isLoadingLabel={t('common.loading_ellipsis')}
             isLoading={loading}
             action={createUser}
-            block
+            block={false}
             disabled={loading}
           />
         </CCol>

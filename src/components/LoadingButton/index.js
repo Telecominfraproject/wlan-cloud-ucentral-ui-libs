@@ -42,4 +42,4 @@ LoadingButton.defaultProps = {
   disabled: false,
 };
 
-export default LoadingButton;
+export default React.memo(LoadingButton);

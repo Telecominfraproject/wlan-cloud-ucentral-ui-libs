@@ -17,3 +17,15 @@ export const prettyDate = (dateString) => {
 };
 
 export const capitalizeFirstLetter = (string) => string.charAt(0).toUpperCase() + string.slice(1);
+
+export const emailToName = (email) => {
+  if (email) {
+    const pre = email.split('@')[0];
+    if (!pre.includes('.')) {
+      return `${pre.substring(0, 2).toUpperCase()}`;
+    }
+    const parts = pre.split('.');
+    return `${parts[0].charAt(0).toUpperCase()}${parts[1].charAt(0).toUpperCase()}`;
+  }
+  return 'N/A';
+};

@@ -22,6 +22,7 @@ const LoginPage = ({
   sendForgotPasswordEmail,
   changePasswordResponse,
   cancelPasswordChange,
+  policies,
 }) => {
   const getForm = () => {
     if (!isLogin) {
@@ -37,6 +38,7 @@ const LoginPage = ({
           forgotResponse={forgotResponse}
           toggleForgotPassword={toggleForgotPassword}
           sendForgotPasswordEmail={sendForgotPasswordEmail}
+          policies={policies}
         />
       );
     }
@@ -52,6 +54,7 @@ const LoginPage = ({
           updateField={updateField}
           changePasswordResponse={changePasswordResponse}
           cancelPasswordChange={cancelPasswordChange}
+          policies={policies}
         />
       );
     }
@@ -66,6 +69,7 @@ const LoginPage = ({
         updateField={updateField}
         loginResponse={loginResponse}
         toggleForgotPassword={toggleForgotPassword}
+        policies={policies}
       />
     );
   };
@@ -81,7 +85,7 @@ const LoginPage = ({
               alt="OpenWifi"
             />
             <CCardGroup>
-              <CCard className="p-4">
+              <CCard className="p-4" color={isLogin && isPasswordChange ? 'secondary' : ''}>
                 <CCardBody>{getForm()}</CCardBody>
               </CCard>
             </CCardGroup>
@@ -108,6 +112,7 @@ LoginPage.propTypes = {
   sendForgotPasswordEmail: PropTypes.func.isRequired,
   changePasswordResponse: PropTypes.instanceOf(Object).isRequired,
   cancelPasswordChange: PropTypes.func.isRequired,
+  policies: PropTypes.instanceOf(Object).isRequired,
 };
 
 export default React.memo(LoginPage);

@@ -10,9 +10,11 @@ export { default as UserListTable } from './components/UserListTable';
 export { default as CreateUserForm } from './components/CreateUserForm';
 export { default as LoadingButton } from './components/LoadingButton';
 export { default as ConfirmFooter } from './components/ConfirmFooter';
+export { default as UserProfileCard } from './components/UserProfileCard';
 
 // Pages
 export { default as LoginPage } from './components/LoginPage';
 
 // Hooks
-export { default as useFormFields } from './hooks/FormFields';
+export { default as useFormFields } from './hooks/useFormFields';
+export { default as useUser } from './hooks/useUser';
