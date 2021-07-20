@@ -13,13 +13,23 @@ import {
   CPopover,
   CRow,
   CSelect,
+  CInputFile,
 } from '@coreui/react';
 import PropTypes from 'prop-types';
 import CIcon from '@coreui/icons-react';
 import NotesTable from '../NotesTable';
 import LoadingButton from '../LoadingButton';
 
-const EditMyProfile = ({ t, user, updateUserWithId, loading, saveUser, policies, addNote }) => {
+const EditMyProfile = ({
+  t,
+  user,
+  updateUserWithId,
+  loading,
+  saveUser,
+  policies,
+  addNote,
+  uploadAvatar,
+}) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const toggleShowPassword = () => {
@@ -98,6 +108,12 @@ const EditMyProfile = ({ t, user, updateUserWithId, loading, saveUser, policies,
             size="lg"
           />
         </CCol>
+        <CLabel sm="2" col htmlFor="avatar">
+          {t('user.avatar_file')}
+        </CLabel>
+        <CCol sm="4">
+          <CInputFile id="file-input" name="file-input" accept="image/*" onChange={uploadAvatar} />
+        </CCol>
       </CFormGroup>
       <CRow>
         <CCol />
@@ -135,6 +151,7 @@ EditMyProfile.propTypes = {
   saveUser: PropTypes.func.isRequired,
   policies: PropTypes.instanceOf(Object).isRequired,
   addNote: PropTypes.func.isRequired,
+  uploadAvatar: PropTypes.func.isRequired,
 };
 
 export default React.memo(EditMyProfile);

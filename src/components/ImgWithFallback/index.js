@@ -5,7 +5,7 @@ import { CImg } from '@coreui/react';
 const ImgWithFallback = ({ src, fallback }) => {
   const [error, setError] = useState(false);
 
-  if (error) {
+  if (src === '' || error) {
     return <div className="avatar bg-secondary">{fallback()}</div>;
   }
 
@@ -13,7 +13,12 @@ const ImgWithFallback = ({ src, fallback }) => {
 };
 
 ImgWithFallback.propTypes = {
-  src: PropTypes.string.isRequired,
+  src: PropTypes.string,
   fallback: PropTypes.func.isRequired,
 };
+
+ImgWithFallback.defaultProps = {
+  src: '',
+};
+
 export default React.memo(ImgWithFallback);

@@ -28,6 +28,7 @@ const Header = ({
   authToken,
   endpoints,
   user,
+  avatar,
 }) => {
   const [translatedRoutes, setTranslatedRoutes] = useState(routes);
 
@@ -63,10 +64,7 @@ const Header = ({
         <CDropdown inNav className="c-header-nav-items mx-2" direction="down">
           <CDropdownToggle className="c-header-nav-link" caret={false}>
             <div className="c-avatar avatar">
-              <ImgWithFallback
-                src={user.avatar && user.avatar !== '' ? user.avatar : '/'}
-                fallback={() => emailToName(user.email)}
-              />
+              <ImgWithFallback src={avatar} fallback={() => emailToName(user.email)} />
             </div>
           </CDropdownToggle>
           <CDropdownMenu className="pt-0" placement="bottom-end">
@@ -101,6 +99,7 @@ Header.propTypes = {
   authToken: PropTypes.string.isRequired,
   endpoints: PropTypes.instanceOf(Object).isRequired,
   user: PropTypes.instanceOf(Object).isRequired,
+  avatar: PropTypes.string.isRequired,
 };
 
 export default React.memo(Header);

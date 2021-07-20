@@ -19,7 +19,15 @@ import PropTypes from 'prop-types';
 import LoadingButton from 'components/LoadingButton';
 import CIcon from '@coreui/icons-react';
 
-const CreateUserForm = ({ t, fields, updateField, createUser, loading, policies }) => {
+const CreateUserForm = ({
+  t,
+  fields,
+  updateField,
+  createUser,
+  loading,
+  policies,
+  toggleChange,
+}) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const toggleShowPassword = () => {
@@ -110,8 +118,8 @@ const CreateUserForm = ({ t, fields, updateField, createUser, loading, policies 
           <CSwitch
             id="changePassword"
             color="success"
-            defaultChecked={fields.changePassword.value}
-            onClick={updateField}
+            defaultChecked={fields.changePassword.value === 'on'}
+            onClick={toggleChange}
           />
         </CCol>
       </CFormGroup>
@@ -159,6 +167,7 @@ CreateUserForm.propTypes = {
   updateField: PropTypes.func.isRequired,
   createUser: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
+  toggleChange: PropTypes.func.isRequired,
 };
 
 export default React.memo(CreateUserForm);
