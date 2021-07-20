@@ -18,7 +18,7 @@ export default (initialState) => {
     (key, newValues) => {
       setUser({
         ...user,
-        [user]: {
+        [key]: {
           ...user[key],
           ...newValues,
         },

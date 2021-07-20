@@ -16,10 +16,11 @@ import {
   CSwitch,
 } from '@coreui/react';
 import PropTypes from 'prop-types';
-import LoadingButton from 'components/LoadingButton';
 import CIcon from '@coreui/icons-react';
+import NotesTable from '../NotesTable';
+import LoadingButton from '../LoadingButton';
 
-const CreateUserForm = ({ t, fields, updateField, createUser, loading, policies }) => {
+const EditUserForm = ({ t, user, updateUserWithId, loading, saveUser, policies, addNote }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const toggleShowPassword = () => {
@@ -28,25 +29,31 @@ const CreateUserForm = ({ t, fields, updateField, createUser, loading, policies 
 
   return (
     <CForm>
-      <CFormGroup row className="pb-3">
-        <CLabel sm="2" col htmlFor="email">
-          {t('user.email_address')}
+      <CFormGroup row>
+        <CLabel sm="2" col htmlFor="name">
+          {t('user.name')}
+        </CLabel>
+        <CCol sm="4">
+          <CInput id="name" value={user.name.value} onChange={updateUserWithId} maxLength="20" />
+        </CCol>
+        <CLabel sm="2" col htmlFor="description">
+          {t('user.description')}
         </CLabel>
         <CCol sm="4">
           <CInput
-            id="email"
-            value={fields.email.value}
-            onChange={updateField}
-            invalid={fields.email.error}
+            id="description"
+            value={user.description.value}
+            onChange={updateUserWithId}
             maxLength="50"
           />
-          <CInvalidFeedback>{t('user.provide_email')}</CInvalidFeedback>
         </CCol>
+      </CFormGroup>
+      <CFormGroup row>
         <CLabel sm="2" col htmlFor="userRole">
           {t('user.user_role')}
         </CLabel>
         <CCol sm="4">
-          <CSelect custom id="userRole" defaultValue="Admin" onChange={updateField}>
+          <CSelect custom id="userRole" onChange={updateUserWithId} value={user.userRole.value}>
             <option value="admin">Admin</option>
             <option value="csr">CSR</option>
             <option value="root">Root</option>
@@ -55,39 +62,17 @@ const CreateUserForm = ({ t, fields, updateField, createUser, loading, policies 
             <option value="system">System</option>
           </CSelect>
         </CCol>
-      </CFormGroup>
-      <CFormGroup row>
-        <CLabel sm="2" col htmlFor="name">
-          {t('user.name')}
-        </CLabel>
-        <CCol sm="4">
-          <CInput id="name" value={fields.name.value} onChange={updateField} maxLength="20" />
-        </CCol>
-        <CLabel sm="2" col htmlFor="description">
-          {t('user.description')}
-        </CLabel>
-        <CCol sm="4">
-          <CInput
-            id="description"
-            value={fields.description.value}
-            onChange={updateField}
-            maxLength="50"
-          />
-          <small className="text-muted">{t('common.optional')}</small>
-        </CCol>
-      </CFormGroup>
-      <CFormGroup row className="pb-3">
         <CLabel sm="2" col htmlFor="currentPassword">
-          {t('user.password')}
+          {t('login.new_password')}
         </CLabel>
         <CCol sm="4">
           <CInputGroup>
             <CInput
               type={showPassword ? 'text' : 'password'}
               id="currentPassword"
-              value={fields.currentPassword.value}
-              onChange={updateField}
-              invalid={fields.currentPassword.error}
+              value={user.currentPassword.value}
+              onChange={updateUserWithId}
+              invalid={user.currentPassword.error}
               maxLength="50"
             />
             <CInputGroupAppend>
@@ -103,25 +88,24 @@ const CreateUserForm = ({ t, fields, updateField, createUser, loading, policies 
             <CInvalidFeedback>{t('user.provide_password')}</CInvalidFeedback>
           </CInputGroup>
         </CCol>
-        <CLabel sm="2" col htmlFor="changePassword">
-          {t('user.force_password_change')}
-        </CLabel>
-        <CCol sm="4">
-          <CSwitch
-            id="changePassword"
-            color="success"
-            defaultChecked={fields.changePassword.value}
-            onClick={updateField}
-          />
-        </CCol>
       </CFormGroup>
       <CFormGroup row>
-        <CLabel sm="2" col htmlFor="notes">
-          {t('user.note')}
+        <CLabel sm="3" col htmlFor="changePassword">
+          {t('user.force_password_change')}
         </CLabel>
-        <CCol sm="4">
-          <CInput id="notes" value={fields.notes.value} onChange={updateField} maxLength="50" />
-          <small className="text-muted">{t('common.optional')}</small>
+        <CCol sm="1">
+          <CInputGroup>
+            <CSwitch
+              id="changePassword"
+              color="success"
+              defaultChecked={user.changePassword.value}
+              onClick={updateUserWithId}
+              size="lg"
+            />
+          </CInputGroup>
+        </CCol>
+        <CCol sm="8">
+          <NotesTable t={t} notes={user.notes.value} addNote={addNote} loading={loading} />
         </CCol>
       </CFormGroup>
       <CRow>
@@ -139,10 +123,10 @@ const CreateUserForm = ({ t, fields, updateField, createUser, loading, policies 
         </CCol>
         <CCol xs={2} className="text-center">
           <LoadingButton
-            label={t('user.create')}
-            isLoadingLabel={t('user.creating')}
+            label={t('common.save')}
+            isLoadingLabel={t('common.saving')}
             isLoading={loading}
-            action={createUser}
+            action={saveUser}
             block={false}
             disabled={loading}
           />
@@ -152,13 +136,14 @@ const CreateUserForm = ({ t, fields, updateField, createUser, loading, policies 
   );
 };
 
-CreateUserForm.propTypes = {
+EditUserForm.propTypes = {
   t: PropTypes.func.isRequired,
-  policies: PropTypes.instanceOf(Object).isRequired,
-  fields: PropTypes.instanceOf(Object).isRequired,
-  updateField: PropTypes.func.isRequired,
-  createUser: PropTypes.func.isRequired,
+  user: PropTypes.instanceOf(Object).isRequired,
+  updateUserWithId: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
+  saveUser: PropTypes.func.isRequired,
+  policies: PropTypes.instanceOf(Object).isRequired,
+  addNote: PropTypes.func.isRequired,
 };
 
-export default React.memo(CreateUserForm);
+export default React.memo(EditUserForm);

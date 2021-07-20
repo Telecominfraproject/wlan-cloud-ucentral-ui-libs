@@ -2,18 +2,17 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import ReactPaginate from 'react-paginate';
 import {
+  CButton,
   CCard,
-  CCardHeader,
-  CSelect,
-  CCol,
-  CRow,
   CCardBody,
+  CCardHeader,
+  CCol,
   CDataTable,
   CPopover,
-  CButton,
-  CLink,
+  CRow,
+  CSelect,
 } from '@coreui/react';
-import { cilBan, cilCheckCircle, cilInfo, cilPlus, cilTrash } from '@coreui/icons';
+import { cilBan, cilCheckCircle, cilPencil, cilSync, cilTrash } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import { capitalizeFirstLetter, prettyDate } from '../../utils/formatting';
 import DeleteModal from '../DeleteModal';
@@ -28,6 +27,9 @@ const UserListTable = ({
   setPage,
   deleteUser,
   deleteLoading,
+  toggleCreate,
+  toggleEdit,
+  refreshUsers,
 }) => {
   const [idToDelete, setIdToDelete] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -50,13 +52,20 @@ const UserListTable = ({
     { key: 'email', label: t('user.login_id'), _style: { width: '20%' } },
     { key: 'name', label: t('user.name'), _style: { width: '20%' } },
     { key: 'userRole', label: t('user.user_role'), _style: { width: '5%' } },
-    { key: 'description', label: t('user.description'), _style: { width: '25%' } },
+    { key: 'description', label: t('user.description'), _style: { width: '24%' } },
     { key: 'validated', label: t('user.validated'), _style: { width: '5%' } },
     { key: 'lastLogin', label: t('user.last_login'), _style: { width: '20%' } },
     {
-      key: 'user_actions',
+      key: 'user_details',
       label: '',
-      _style: { width: '5%' },
+      _style: { width: '3%' },
+      sorter: false,
+      filter: false,
+    },
+    {
+      key: 'user_delete',
+      label: '',
+      _style: { width: '3%' },
       sorter: false,
       filter: false,
     },
@@ -68,17 +77,44 @@ const UserListTable = ({
         <CCardHeader>
           <CRow>
             <CCol />
-            <CCol xs={1}>
-              <CSelect
-                custom
-                defaultValue={usersPerPage}
-                onChange={(e) => setUsersPerPage(e.target.value)}
-                disabled={loading}
-              >
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-              </CSelect>
+            <CCol xs={2}>
+              <CRow>
+                <CCol xs={5}>
+                  <div className="text-right">
+                    <CSelect
+                      custom
+                      defaultValue={usersPerPage}
+                      onChange={(e) => setUsersPerPage(e.target.value)}
+                      disabled={loading}
+                    >
+                      <option value="10">10</option>
+                      <option value="25">25</option>
+                      <option value="50">50</option>
+                    </CSelect>
+                  </div>
+                </CCol>
+                <CCol xs={5}>
+                  <div className="text-right">
+                    <CButton
+                      color="primary"
+                      variant="outline"
+                      shape="square"
+                      onClick={toggleCreate}
+                    >
+                      {t('user.create')}
+                    </CButton>
+                  </div>
+                </CCol>
+                <CCol xs={2}>
+                  <div className="text-center">
+                    <CPopover content={t('common.refresh')}>
+                      <CButton onClick={refreshUsers} color="primary" variant="outline">
+                        <CIcon name="cil-sync" content={cilSync} />
+                      </CButton>
+                    </CPopover>
+                  </div>
+                </CCol>
+              </CRow>
             </CCol>
           </CRow>
         </CCardHeader>
@@ -89,23 +125,6 @@ const UserListTable = ({
             loading={loading}
             hover
             border
-            columnHeaderSlot={{
-              user_actions: (
-                <div className="text-center">
-                  <CPopover content={t('user.create')}>
-                    <CLink
-                      className="c-subheader-nav-link"
-                      aria-current="page"
-                      to={() => `/users/create`}
-                    >
-                      <CButton color="primary" variant="outline" shape="square" size="sm">
-                        <CIcon name="cil-info" content={cilPlus} size="sm" />
-                      </CButton>
-                    </CLink>
-                  </CPopover>
-                </div>
-              ),
-            }}
             scopedSlots={{
               validated: (item) => (
                 <td className="text-center">
@@ -120,35 +139,33 @@ const UserListTable = ({
               userRole: (item) => (
                 <td>{item.userRole ? capitalizeFirstLetter(item.userRole) : ''}</td>
               ),
-              user_actions: (item) => (
+              user_details: (item) => (
                 <td className="py-2 text-center">
-                  <CRow>
-                    <CCol>
-                      <CPopover content={t('configuration.details')}>
-                        <CLink
-                          className="c-subheader-nav-link"
-                          aria-current="page"
-                          to={() => `/users/${item.Id}`}
-                        >
-                          <CButton color="primary" variant="outline" shape="square" size="sm">
-                            <CIcon name="cil-info" content={cilInfo} size="sm" />
-                          </CButton>
-                        </CLink>
-                      </CPopover>
-                    </CCol>
-                    <CCol>
-                      <CPopover content={t('common.delete')}>
-                        <CButton
-                          onClick={() => handleDeleteClick(item.Id)}
-                          color="primary"
-                          variant="outline"
-                          size="sm"
-                        >
-                          <CIcon content={cilTrash} size="sm" />
-                        </CButton>
-                      </CPopover>
-                    </CCol>
-                  </CRow>
+                  <CPopover content={t('common.edit')}>
+                    <CButton
+                      color="primary"
+                      variant="outline"
+                      shape="square"
+                      size="sm"
+                      onClick={() => toggleEdit(item.Id)}
+                    >
+                      <CIcon name="cil-pencil" content={cilPencil} size="sm" />
+                    </CButton>
+                  </CPopover>
+                </td>
+              ),
+              user_delete: (item) => (
+                <td className="py-2 text-center">
+                  <CPopover content={t('common.delete')}>
+                    <CButton
+                      onClick={() => handleDeleteClick(item.Id)}
+                      color="primary"
+                      variant="outline"
+                      size="sm"
+                    >
+                      <CIcon content={cilTrash} size="sm" />
+                    </CButton>
+                  </CPopover>
                 </td>
               ),
             }}
@@ -196,6 +213,9 @@ UserListTable.propTypes = {
   setPage: PropTypes.func.isRequired,
   deleteUser: PropTypes.func.isRequired,
   deleteLoading: PropTypes.bool.isRequired,
+  toggleCreate: PropTypes.func.isRequired,
+  toggleEdit: PropTypes.func.isRequired,
+  refreshUsers: PropTypes.func.isRequired,
 };
 
 export default React.memo(UserListTable);

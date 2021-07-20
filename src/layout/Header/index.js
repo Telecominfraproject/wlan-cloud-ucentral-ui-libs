@@ -62,7 +62,7 @@ const Header = ({
       <CHeaderNav className="px-1">
         <CDropdown inNav className="c-header-nav-items mx-2" direction="down">
           <CDropdownToggle className="c-header-nav-link" caret={false}>
-            <div className="c-avatar">
+            <div className="c-avatar avatar">
               <ImgWithFallback
                 src={user.avatar && user.avatar !== '' ? user.avatar : '/'}
                 fallback={() => emailToName(user.email)}
@@ -70,11 +70,11 @@ const Header = ({
             </div>
           </CDropdownToggle>
           <CDropdownMenu className="pt-0" placement="bottom-end">
-            <CDropdownItem>
-              <div className="px-3">My Account</div>
+            <CDropdownItem to={() => '/myprofile'}>
+              <div className="px-3">{t('user.my_profile')}</div>
             </CDropdownItem>
             <CDropdownItem onClick={() => logout(authToken, endpoints.ucentralsec)}>
-              <strong className="px-3">Logout</strong>
+              <strong className="px-3">{t('common.logout')}</strong>
               <CIcon name="cilAccountLogout" content={cilAccountLogout} />
             </CDropdownItem>
           </CDropdownMenu>
