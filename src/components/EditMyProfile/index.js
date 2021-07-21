@@ -19,6 +19,7 @@ import PropTypes from 'prop-types';
 import CIcon from '@coreui/icons-react';
 import NotesTable from '../NotesTable';
 import LoadingButton from '../LoadingButton';
+import Avatar from '../Avatar';
 
 const EditMyProfile = ({
   t,
@@ -29,6 +30,10 @@ const EditMyProfile = ({
   policies,
   addNote,
   uploadAvatar,
+  avatar,
+  newAvatar,
+  deleteAvatar,
+  showPreview,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -109,10 +114,53 @@ const EditMyProfile = ({
           />
         </CCol>
         <CLabel sm="2" col htmlFor="avatar">
-          {t('user.avatar_file')}
+          {t('user.avatar')}
         </CLabel>
         <CCol sm="4">
-          <CInputFile id="file-input" name="file-input" accept="image/*" onChange={uploadAvatar} />
+          <CRow>
+            <CCol sm="2" className="pt-2">
+              {t('common.current')}
+              <div className="pt-5">Preview</div>
+            </CCol>
+            <CCol sm="2">
+              <Avatar src={avatar} fallback={user.email.value} />
+              <div className="pt-3">
+                <Avatar src={newAvatar} fallback={user.email.value} />
+              </div>
+            </CCol>
+            <CCol sm="4" className="pt-2">
+              <div className="mt-1 mb-4">
+                <LoadingButton
+                  label={t('user.delete_avatar')}
+                  isLoadingLabel={t('user.deleting')}
+                  isLoading={loading}
+                  action={deleteAvatar}
+                  block={false}
+                  disabled={loading || !avatar || avatar === '' || avatar === 'data:;base64,'}
+                />
+              </div>
+              <div className="pt-1">
+                <CInputFile
+                  id="file-input"
+                  name="file-input"
+                  accept="image/*"
+                  onChange={showPreview}
+                />
+              </div>
+              <div className="pt-3">
+                <LoadingButton
+                  label={t('user.save_avatar')}
+                  isLoadingLabel={t('common.saving')}
+                  isLoading={loading}
+                  action={uploadAvatar}
+                  block={false}
+                  disabled={
+                    loading || !newAvatar || newAvatar === '' || newAvatar === 'data:;base64,'
+                  }
+                />
+              </div>
+            </CCol>
+          </CRow>
         </CCol>
       </CFormGroup>
       <CRow>
@@ -152,6 +200,15 @@ EditMyProfile.propTypes = {
   policies: PropTypes.instanceOf(Object).isRequired,
   addNote: PropTypes.func.isRequired,
   uploadAvatar: PropTypes.func.isRequired,
+  avatar: PropTypes.string,
+  newAvatar: PropTypes.string,
+  showPreview: PropTypes.func.isRequired,
+  deleteAvatar: PropTypes.func.isRequired,
+};
+
+EditMyProfile.defaultProps = {
+  avatar: '',
+  newAvatar: '',
 };
 
 export default React.memo(EditMyProfile);

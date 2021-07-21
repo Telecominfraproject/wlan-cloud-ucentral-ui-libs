@@ -15,8 +15,7 @@ import PropTypes from 'prop-types';
 import CIcon from '@coreui/icons-react';
 import { cilAccountLogout } from '@coreui/icons';
 import LanguageSwitcher from '../../components/LanguageSwitcher';
-import ImgWithFallback from '../../components/ImgWithFallback';
-import { emailToName } from '../../utils/formatting';
+import Avatar from '../../components/Avatar';
 
 const Header = ({
   showSidebar,
@@ -63,9 +62,7 @@ const Header = ({
       <CHeaderNav className="px-1">
         <CDropdown inNav className="c-header-nav-items mx-2" direction="down">
           <CDropdownToggle className="c-header-nav-link" caret={false}>
-            <div className="c-avatar avatar">
-              <ImgWithFallback src={avatar} fallback={() => emailToName(user.email)} />
-            </div>
+            <Avatar src={avatar} fallback={user.email} />
           </CDropdownToggle>
           <CDropdownMenu className="pt-0" placement="bottom-end">
             <CDropdownItem to={() => '/myprofile'}>

@@ -77,48 +77,48 @@ const UserListTable = ({
         <CCardHeader>
           <CRow>
             <CCol />
-            <CCol xs={2}>
-              <CRow>
-                <CCol xs={5}>
-                  <div className="text-right">
-                    <CSelect
-                      custom
-                      defaultValue={usersPerPage}
-                      onChange={(e) => setUsersPerPage(e.target.value)}
-                      disabled={loading}
-                    >
-                      <option value="10">10</option>
-                      <option value="25">25</option>
-                      <option value="50">50</option>
-                    </CSelect>
-                  </div>
-                </CCol>
-                <CCol xs={5}>
-                  <div className="text-right">
-                    <CButton
-                      color="primary"
-                      variant="outline"
-                      shape="square"
-                      onClick={toggleCreate}
-                    >
-                      {t('user.create')}
-                    </CButton>
-                  </div>
-                </CCol>
-                <CCol xs={2}>
-                  <div className="text-center">
-                    <CPopover content={t('common.refresh')}>
-                      <CButton onClick={refreshUsers} color="primary" variant="outline">
-                        <CIcon name="cil-sync" content={cilSync} />
-                      </CButton>
-                    </CPopover>
-                  </div>
-                </CCol>
-              </CRow>
+            <CCol xs={1}>
+              <div className="text-right">
+                <CSelect
+                  custom
+                  defaultValue={usersPerPage}
+                  onChange={(e) => setUsersPerPage(e.target.value)}
+                  disabled={loading}
+                >
+                  <option value="10">10</option>
+                  <option value="25">25</option>
+                  <option value="50">50</option>
+                </CSelect>
+              </div>
+            </CCol>
+            <CCol xs={1}>
+              <div className="text-right">
+                <CButton
+                  color="primary"
+                  variant="outline"
+                  shape="square"
+                  onClick={toggleCreate}
+                  block
+                >
+                  {t('user.create')}
+                </CButton>
+              </div>
             </CCol>
           </CRow>
         </CCardHeader>
         <CCardBody>
+          <CRow className="pb-3 pr-2">
+            <CCol />
+            <CCol xs={1} className="text-right">
+              <div>
+                <CPopover content={t('common.refresh')}>
+                  <CButton onClick={refreshUsers} color="primary" variant="outline">
+                    <CIcon name="cil-sync" content={cilSync} />
+                  </CButton>
+                </CPopover>
+              </div>
+            </CCol>
+          </CRow>
           <CDataTable
             items={users}
             fields={fields}

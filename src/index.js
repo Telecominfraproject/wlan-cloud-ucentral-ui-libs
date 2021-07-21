@@ -13,6 +13,7 @@ export { default as ConfirmFooter } from './components/ConfirmFooter';
 export { default as EditUserModal } from './components/EditUserModal';
 export { default as EditUserForm } from './components/EditUserForm';
 export { default as EditMyProfile } from './components/EditMyProfile';
+export { default as Avatar } from './components/Avatar';
 
 // Pages
 export { default as LoginPage } from './components/LoginPage';

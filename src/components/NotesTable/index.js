@@ -46,6 +46,7 @@ const NotesTable = ({ t, notes, addNote, loading, size }) => {
         </CCol>
       </CRow>
       <CRow className="pt-3">
+        <CCol sm="2" />
         <CCol>
           <div className="overflow-auto" style={{ height: '200px' }}>
             <CDataTable
