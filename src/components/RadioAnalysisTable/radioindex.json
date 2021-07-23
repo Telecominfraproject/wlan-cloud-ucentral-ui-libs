@@ -1,0 +1,229 @@
+{
+  "UUID": 1626408268,
+  "data": {
+      "interfaces": [
+          {
+              "counters": {
+                  "collisions": 0,
+                  "multicast": 2234,
+                  "rx_bytes": 258222,
+                  "rx_dropped": 0,
+                  "rx_errors": 0,
+                  "rx_packets": 2574,
+                  "tx_bytes": 1254,
+                  "tx_dropped": 0,
+                  "tx_errors": 0,
+                  "tx_packets": 1
+              },
+              "location": null,
+              "name": "up_none",
+              "uptime": 387758
+          },
+          {
+              "clients": [
+                  {
+                      "ipv6_addresses": [
+                          "fe80:0:0:0:1e98:c1ff:fe4f:1add"
+                      ],
+                      "mac": "1c:98:c1:4f:1a:dd",
+                      "ports": [
+                          "eth1"
+                      ]
+                  },
+                  {
+                      "ipv6_addresses": [
+                          "fe80:0:0:0:1050:3814:a6a0:fcd8"
+                      ],
+                      "mac": "46:e6:b2:59:9d:6b",
+                      "ports": [
+                          "eth1"
+                      ]
+                  },
+                  {
+                      "ipv6_addresses": [
+                          "fe80:0:0:0:1849:6d1f:1bde:c932"
+                      ],
+                      "mac": "6e:45:97:3d:ad:fc",
+                      "ports": [
+                          "eth1"
+                      ]
+                  },
+                  {
+                      "ipv6_addresses": [
+                          "fe80:0:0:0:1879:8133:b53a:e191"
+                      ],
+                      "mac": "78:4f:43:5f:37:e0",
+                      "ports": [
+                          "eth1"
+                      ]
+                  },
+                  {
+                      "ipv4_addresses": [
+                          "10.0.0.1"
+                      ],
+                      "ipv6_addresses": [
+                          "fe80:0:0:0:9a9d:5dff:fea3:f4bd",
+                          "fe80:0:0:0:226:86ff:fee8:5c16"
+                      ],
+                      "mac": "98:9d:5d:a3:f4:bd",
+                      "ports": [
+                          "eth1"
+                      ]
+                  },
+                  {
+                      "ipv6_addresses": [
+                          "fe80:0:0:0:a677:33ff:febb:acb2"
+                      ],
+                      "mac": "a4:77:33:bb:ac:b2",
+                      "ports": [
+                          "eth1"
+                      ]
+                  },
+                  {
+                      "ipv6_addresses": [
+                          "fe80:0:0:0:141e:c84:e2ac:7416"
+                      ],
+                      "mac": "ca:1c:85:a9:ed:24",
+                      "ports": [
+                          "eth1"
+                      ]
+                  },
+                  {
+                      "ipv6_addresses": [
+                          "fe80:0:0:0:f882:1877:a036:b28d"
+                      ],
+                      "mac": "dc:41:a9:f0:1d:0b",
+                      "ports": [
+                          "eth1"
+                      ]
+                  },
+                  {
+                      "ipv6_addresses": [
+                          "fe80:0:0:0:105b:f1b8:883b:11d8"
+                      ],
+                      "mac": "f2:6c:fa:68:95:05",
+                      "ports": [
+                          "eth1"
+                      ]
+                  }
+              ],
+              "counters": {
+                  "collisions": 0,
+                  "multicast": 2234,
+                  "rx_bytes": 258222,
+                  "rx_dropped": 0,
+                  "rx_errors": 0,
+                  "rx_packets": 2574,
+                  "tx_bytes": 1254,
+                  "tx_dropped": 0,
+                  "tx_errors": 0,
+                  "tx_packets": 1
+              },
+              "dns_servers": [
+                  "24.201.245.77",
+                  "24.200.0.1",
+                  "24.53.0.2"
+              ],
+              "ipv4": {
+                  "addresses": [
+                      "10.0.0.99/24"
+                  ],
+                  "leasetime": 172800
+              },
+              "location": "/interfaces/0",
+              "name": "up0v0",
+              "ssids": [
+                  {
+                      "mode": "ap",
+                      "radio": {
+                          "$ref": "#/radios/0"
+                      },
+                      "ssid": "OpenWifi"
+                  },
+                  {
+                      "mode": "ap",
+                      "radio": {
+                          "$ref": "#/radios/2"
+                      },
+                      "ssid": "OpenWifi"
+                  }
+              ],
+              "uptime": 387753
+          },
+          {
+              "counters": {
+                  "collisions": 0,
+                  "multicast": 0,
+                  "rx_bytes": 0,
+                  "rx_dropped": 0,
+                  "rx_errors": 0,
+                  "rx_packets": 0,
+                  "tx_bytes": 1058,
+                  "tx_dropped": 0,
+                  "tx_errors": 0,
+                  "tx_packets": 5
+              },
+              "ipv4": {
+                  "addresses": [
+                      "192.168.1.1/24"
+                  ]
+              },
+              "location": "/interfaces/1",
+              "name": "down1v0",
+              "ssids": [
+                  {
+                      "mode": "ap",
+                      "radio": {
+                          "$ref": "#/radios/0"
+                      },
+                      "ssid": "OpenWifi"
+                  },
+                  {
+                      "mode": "ap",
+                      "radio": {
+                          "$ref": "#/radios/2"
+                      },
+                      "ssid": "OpenWifi"
+                  }
+              ],
+              "uptime": 387761
+          }
+      ],
+      "radios": [
+          {
+              "active_ms": 387751448,
+              "busy_ms": 2637879,
+              "channel": 100,
+              "channel_width": "80",
+              "noise": 4294967193,
+              "receive_ms": 485,
+              "transmit_ms": 2634150,
+              "tx_power": 24
+          },
+          {
+              "active_ms": 387751962,
+              "busy_ms": 4379945,
+              "channel": 36,
+              "channel_width": "80",
+              "noise": 4294967192,
+              "receive_ms": 1119,
+              "transmit_ms": 2642485,
+              "tx_power": 23
+          }
+      ],
+      "unit": {
+          "load": [
+              7680,
+              3136,
+              576
+          ],
+          "localtime": 1627043604,
+          "memory": {
+              "free": 100302848,
+              "total": 254529536
+          },
+          "uptime": 387785
+      }
+  },
+  "recorded": 1627043604
+}

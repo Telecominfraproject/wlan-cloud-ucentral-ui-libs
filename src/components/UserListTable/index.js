@@ -77,32 +77,36 @@ const UserListTable = ({
         <CCardHeader>
           <CRow>
             <CCol />
-            <CCol xs={1}>
-              <div className="text-right">
-                <CSelect
-                  custom
-                  defaultValue={usersPerPage}
-                  onChange={(e) => setUsersPerPage(e.target.value)}
-                  disabled={loading}
-                >
-                  <option value="10">10</option>
-                  <option value="25">25</option>
-                  <option value="50">50</option>
-                </CSelect>
-              </div>
-            </CCol>
-            <CCol xs={1}>
-              <div className="text-right">
-                <CButton
-                  color="primary"
-                  variant="outline"
-                  shape="square"
-                  onClick={toggleCreate}
-                  block
-                >
-                  {t('user.create')}
-                </CButton>
-              </div>
+            <CCol xs={3}>
+              <CRow>
+                <CCol xs={6}>
+                  <div className="text-right">
+                    <CSelect
+                      custom
+                      defaultValue={usersPerPage}
+                      onChange={(e) => setUsersPerPage(e.target.value)}
+                      disabled={loading}
+                    >
+                      <option value="10">10</option>
+                      <option value="25">25</option>
+                      <option value="50">50</option>
+                    </CSelect>
+                  </div>
+                </CCol>
+                <CCol xs={6}>
+                  <div className="text-right">
+                    <CButton
+                      color="primary"
+                      variant="outline"
+                      shape="square"
+                      onClick={toggleCreate}
+                      block
+                    >
+                      {t('user.create')}
+                    </CButton>
+                  </div>
+                </CCol>
+              </CRow>
             </CCol>
           </CRow>
         </CCardHeader>

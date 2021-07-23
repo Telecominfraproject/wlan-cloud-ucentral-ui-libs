@@ -15,6 +15,8 @@ export { default as EditUserForm } from './components/EditUserForm';
 export { default as EditMyProfile } from './components/EditMyProfile';
 export { default as Avatar } from './components/Avatar';
 export { default as WifiAnalysisTable } from './components/WifiAnalysisTable';
+export { default as RadioAnalysisTable } from './components/RadioAnalysisTable';
+export { default as ApiStatusCard } from './components/ApiStatusCard';
 
 // Pages
 export { default as LoginPage } from './components/LoginPage';

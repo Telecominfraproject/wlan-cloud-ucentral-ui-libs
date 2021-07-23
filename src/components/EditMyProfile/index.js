@@ -118,7 +118,7 @@ const EditMyProfile = ({
         </CLabel>
         <CCol sm="4">
           <CRow>
-            <CCol sm="2" className="pt-2">
+            <CCol sm="3" className="pt-2">
               {t('common.current')}
               <div className="pt-5">Preview</div>
             </CCol>
@@ -128,7 +128,7 @@ const EditMyProfile = ({
                 <Avatar src={newAvatar} fallback={user.email.value} />
               </div>
             </CCol>
-            <CCol sm="4" className="pt-2">
+            <CCol className="pt-2">
               <div className="mt-1 mb-4">
                 <LoadingButton
                   label={t('user.delete_avatar')}
@@ -165,7 +165,7 @@ const EditMyProfile = ({
       </CFormGroup>
       <CRow>
         <CCol />
-        <CCol xs={1} className="mt-2 text-right">
+        <CCol xs={2} className="mt-2 text-right">
           <CLink
             className="c-subheader-nav-link"
             aria-current="page"
