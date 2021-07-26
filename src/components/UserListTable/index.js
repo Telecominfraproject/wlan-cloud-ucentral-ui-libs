@@ -49,12 +49,12 @@ const UserListTable = ({
   };
 
   const fields = [
-    { key: 'email', label: t('user.login_id'), _style: { width: '20%' } },
-    { key: 'name', label: t('user.name'), _style: { width: '20%' } },
+    { key: 'email', label: t('user.login_id'), _style: { width: '10%' } },
+    { key: 'name', label: t('user.name'), _style: { width: '10%' } },
     { key: 'userRole', label: t('user.user_role'), _style: { width: '5%' } },
-    { key: 'description', label: t('user.description'), _style: { width: '24%' } },
+    { key: 'lastLogin', label: t('user.last_login'), _style: { width: '10%' } },
     { key: 'validated', label: t('user.validated'), _style: { width: '5%' } },
-    { key: 'lastLogin', label: t('user.last_login'), _style: { width: '20%' } },
+    { key: 'description', label: t('user.description') },
     {
       key: 'user_details',
       label: '',
@@ -130,6 +130,13 @@ const UserListTable = ({
             hover
             border
             scopedSlots={{
+              name: (item) => (
+                <td>
+                  <p style={{ width: 'calc(10vw)' }} className="text-truncate">
+                    {item.name}
+                  </p>
+                </td>
+              ),
               validated: (item) => (
                 <td className="text-center">
                   <CPopover
@@ -143,8 +150,20 @@ const UserListTable = ({
               userRole: (item) => (
                 <td>{item.userRole ? capitalizeFirstLetter(item.userRole) : ''}</td>
               ),
+              description: (item) => (
+                <td>
+                  <CPopover
+                    content={item.description ? item.description : t('common.na')}
+                    placement="top"
+                  >
+                    <p style={{ width: 'calc(20vw)' }} className="text-truncate">
+                      {item.description}
+                    </p>
+                  </CPopover>
+                </td>
+              ),
               user_details: (item) => (
-                <td className="py-2 text-center">
+                <td className="text-center">
                   <CPopover content={t('common.edit')}>
                     <CButton
                       color="primary"
@@ -159,7 +178,7 @@ const UserListTable = ({
                 </td>
               ),
               user_delete: (item) => (
-                <td className="py-2 text-center">
+                <td className="text-center">
                   <CPopover content={t('common.delete')}>
                     <CButton
                       onClick={() => handleDeleteClick(item.Id)}

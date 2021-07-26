@@ -7,15 +7,15 @@ const WifiAnalysisTable = ({ t, data, loading }) => {
     { key: 'radio', label: 'R', _style: { width: '5%' } },
     { key: 'bssid', label: 'BSSID', _style: { width: '14%' } },
     { key: 'mode', label: t('wifi_analysis.mode'), _style: { width: '9%' }, sorter: false },
-    { key: 'ssid', label: 'SSID', _style: { width: '14%' } },
+    { key: 'ssid', label: 'SSID', _style: { width: '17%' } },
     { key: 'rssi', label: 'RSSI', _style: { width: '5%' }, sorter: false },
     { key: 'rxRate', label: 'Rx Rate', _style: { width: '7%' }, sorter: false },
     { key: 'rxBytes', label: 'Rx Bytes', _style: { width: '7%' }, sorter: false },
-    { key: 'rxMcs', label: 'Rx MCS', _style: { width: '7%' }, sorter: false },
-    { key: 'rxNss', label: 'Rx NSS', _style: { width: '7%' }, sorter: false },
+    { key: 'rxMcs', label: 'Rx MCS', _style: { width: '6%' }, sorter: false },
+    { key: 'rxNss', label: 'Rx NSS', _style: { width: '6%' }, sorter: false },
     { key: 'txRate', label: 'Tx Rate', _style: { width: '7%' }, sorter: false },
     { key: 'txBytes', label: 'Tx Bytes', _style: { width: '7%' }, sorter: false },
-    { key: 'ips', label: 'Ip Addr.', _style: { width: '7%' }, sorter: false },
+    { key: 'ips', label: 'Ip Addr.', _style: { width: '6%' }, sorter: false },
   ];
 
   const centerIfEmpty = (value) => (
@@ -40,7 +40,13 @@ const WifiAnalysisTable = ({ t, data, loading }) => {
     return (
       <td className="text-center">
         {count > 0 ? (
-          <CPopover header="Ipv4 - Ipv6 Addresses" content={content} trigger="click" interactive>
+          <CPopover
+            placement="bottom"
+            header="Ipv4 - Ipv6 Addresses"
+            content={content}
+            trigger="click"
+            interactive
+          >
             <CButton color="primary" size="sm">
               {count}
             </CButton>
@@ -54,6 +60,7 @@ const WifiAnalysisTable = ({ t, data, loading }) => {
 
   return (
     <CDataTable
+      addTableClasses="ignore-overflow"
       fields={columns}
       items={data}
       hover
