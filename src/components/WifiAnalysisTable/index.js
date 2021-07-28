@@ -72,6 +72,7 @@ const WifiAnalysisTable = ({ t, data, loading }) => {
         radio: (item) => <td className="text-center">{item.radio.radio}</td>,
         rxMcs: (item) => centerIfEmpty(item.rxMcs),
         rxNss: (item) => centerIfEmpty(item.rxNss),
+        rssi: (item) => centerIfEmpty(item.rssi),
         ips: (item) => displayIp(item.ipV4, item.ipV6),
       }}
     />

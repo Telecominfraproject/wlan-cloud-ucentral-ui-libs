@@ -16,6 +16,7 @@ import { cilBan, cilCheckCircle, cilPencil, cilSync, cilTrash } from '@coreui/ic
 import CIcon from '@coreui/icons-react';
 import { capitalizeFirstLetter, prettyDate } from '../../utils/formatting';
 import DeleteModal from '../DeleteModal';
+import Avatar from '../Avatar';
 
 const UserListTable = ({
   t,
@@ -49,6 +50,7 @@ const UserListTable = ({
   };
 
   const fields = [
+    { key: 'avatar', label: t(''), _style: { width: '5%' } },
     { key: 'email', label: t('user.login_id'), _style: { width: '10%' } },
     { key: 'name', label: t('user.name'), _style: { width: '10%' } },
     { key: 'userRole', label: t('user.user_role'), _style: { width: '5%' } },
@@ -130,6 +132,11 @@ const UserListTable = ({
             hover
             border
             scopedSlots={{
+              avatar: (item) => (
+                <td className="text-center">
+                  <Avatar src={item.avatar} fallback={item.email} />
+                </td>
+              ),
               name: (item) => (
                 <td>
                   <p style={{ width: 'calc(10vw)' }} className="text-truncate">

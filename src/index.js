@@ -17,6 +17,7 @@ export { default as Avatar } from './components/Avatar';
 export { default as WifiAnalysisTable } from './components/WifiAnalysisTable';
 export { default as RadioAnalysisTable } from './components/RadioAnalysisTable';
 export { default as ApiStatusCard } from './components/ApiStatusCard';
+export { default as FirmwareList } from './components/FirmwareList';
 
 // Pages
 export { default as LoginPage } from './components/LoginPage';

@@ -4,7 +4,7 @@ import { CDataTable, CRow, CCol, CLabel, CInput } from '@coreui/react';
 import { prettyDate } from '../../utils/formatting';
 import LoadingButton from '../LoadingButton';
 
-const NotesTable = ({ t, notes, addNote, loading, size }) => {
+const NotesTable = ({ t, notes, addNote, loading, size, extraFunctionParameter }) => {
   const [currentNote, setCurrentNote] = useState('');
 
   const columns = [
@@ -14,7 +14,7 @@ const NotesTable = ({ t, notes, addNote, loading, size }) => {
   ];
 
   const saveNote = () => {
-    addNote(currentNote);
+    addNote(currentNote, extraFunctionParameter);
   };
 
   useEffect(() => {
@@ -79,10 +79,12 @@ NotesTable.propTypes = {
   addNote: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   size: PropTypes.string,
+  extraFunctionParameter: PropTypes.string,
 };
 
 NotesTable.defaultProps = {
   size: 'm',
+  extraFunctionParameter: '',
 };
 
 export default NotesTable;

@@ -24,6 +24,7 @@ const Header = ({
   t,
   i18n,
   logout,
+  logo,
   authToken,
   endpoints,
   user,
@@ -50,7 +51,7 @@ const Header = ({
       <CToggler inHeader className="ml-md-3 d-lg-none" onClick={toggleSidebarMobile} />
       <CToggler inHeader className="ml-3 d-md-down-none" onClick={toggleSidebar} />
       <CHeaderBrand className="mx-auto d-lg-none" to="/">
-        <CIcon name="logo" height="48" alt="Logo" />
+        <img src={logo} alt="OpenWifi" />
       </CHeaderBrand>
 
       <CHeaderNav className="d-md-down-none mr-auto" />
@@ -94,6 +95,7 @@ Header.propTypes = {
   i18n: PropTypes.instanceOf(Object).isRequired,
   logout: PropTypes.func.isRequired,
   authToken: PropTypes.string.isRequired,
+  logo: PropTypes.string.isRequired,
   endpoints: PropTypes.instanceOf(Object).isRequired,
   user: PropTypes.instanceOf(Object).isRequired,
   avatar: PropTypes.string.isRequired,
