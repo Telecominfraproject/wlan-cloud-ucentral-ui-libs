@@ -1,0 +1,25 @@
+.icon {
+  height: 24px;
+  width: 24px;
+}
+
+.certificateWrapper {
+  position: relative;
+}
+
+.badge {
+  position: absolute;
+  left: 31%;
+  margin-top: 8%;
+}
+
+.badCertificate {
+  position: absolute;
+  z-index: 99;
+  left: 22%;
+  color: #e55353;
+}
+
+.mismatchBackground {
+  background-color: #ffff5c;
+}

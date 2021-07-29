@@ -18,9 +18,12 @@ export { default as WifiAnalysisTable } from './components/WifiAnalysisTable';
 export { default as RadioAnalysisTable } from './components/RadioAnalysisTable';
 export { default as ApiStatusCard } from './components/ApiStatusCard';
 export { default as FirmwareList } from './components/FirmwareList';
+export { default as DeviceFirmwareModal } from './components/DeviceFirmwareModal';
+export { default as DeviceListTable } from './components/DeviceListTable';
 
 // Pages
 export { default as LoginPage } from './components/LoginPage';
+export { default as DeviceDashboard } from './components/DeviceDashboard';
 
 // Hooks
 export { default as useFormFields } from './hooks/useFormFields';

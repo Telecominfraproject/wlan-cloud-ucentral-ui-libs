@@ -34,7 +34,7 @@ const FirmwareList = ({
 }) => {
   const [detailsShown, setDetailsShown] = useState([]);
   const fields = [
-    { key: 'created', label: t('common.created'), _style: { width: '12%' } },
+    { key: 'imageDate', label: t('firmware.image_date'), _style: { width: '12%' } },
     { key: 'size', label: t('firmware.size'), _style: { width: '8%' } },
     { key: 'revision', label: t('firmware.revision'), _style: { width: '30%' } },
     { key: 'uri', label: 'URI' },
@@ -110,7 +110,7 @@ const FirmwareList = ({
           hover
           border
           scopedSlots={{
-            created: (item) => <td>{prettyDate(item.created)}</td>,
+            imageDate: (item) => <td>{prettyDate(item.imageDate)}</td>,
             size: (item) => <td>{cleanBytesString(item.size)}</td>,
             show_details: (item, index) => (
               <td className="text-center">
