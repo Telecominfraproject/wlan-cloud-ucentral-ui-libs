@@ -4,7 +4,15 @@ import { CDataTable, CRow, CCol, CLabel, CInput } from '@coreui/react';
 import { prettyDate } from '../../utils/formatting';
 import LoadingButton from '../LoadingButton';
 
-const NotesTable = ({ t, notes, addNote, loading, size, extraFunctionParameter }) => {
+const NotesTable = ({
+  t,
+  notes,
+  addNote,
+  loading,
+  size,
+  extraFunctionParameter,
+  descriptionColumn,
+}) => {
   const [currentNote, setCurrentNote] = useState('');
 
   const columns = [
@@ -20,6 +28,57 @@ const NotesTable = ({ t, notes, addNote, loading, size, extraFunctionParameter }
   useEffect(() => {
     setCurrentNote('');
   }, [notes]);
+
+  if (!descriptionColumn) {
+    return (
+      <div>
+        <CRow>
+          <CCol>
+            <CInput
+              id="notes-input"
+              name="text-input"
+              value={currentNote}
+              onChange={(e) => setCurrentNote(e.target.value)}
+            />
+          </CCol>
+          <CCol sm={size === 'm' ? '3' : '2'}>
+            <LoadingButton
+              label={t('common.add')}
+              isLoadingLabel={t('common.adding_ellipsis')}
+              isLoading={loading}
+              action={saveNote}
+              disabled={loading || currentNote === ''}
+            />
+          </CCol>
+        </CRow>
+        <CRow className="pt-3">
+          <CCol>
+            <div className="overflow-auto" style={{ height: '200px' }}>
+              <CDataTable
+                striped
+                responsive
+                border
+                loading={loading}
+                fields={columns}
+                items={notes || []}
+                noItemsView={{ noItems: t('common.no_items') }}
+                sorterValue={{ column: 'created', desc: 'true' }}
+                scopedSlots={{
+                  created: (item) => (
+                    <td>
+                      {item.created && item.created !== 0
+                        ? prettyDate(item.created)
+                        : t('common.na')}
+                    </td>
+                  ),
+                }}
+              />
+            </div>
+          </CCol>
+        </CRow>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -80,11 +139,13 @@ NotesTable.propTypes = {
   loading: PropTypes.bool.isRequired,
   size: PropTypes.string,
   extraFunctionParameter: PropTypes.string,
+  descriptionColumn: PropTypes.bool,
 };
 
 NotesTable.defaultProps = {
   size: 'm',
   extraFunctionParameter: '',
+  descriptionColumn: true,
 };
 
 export default NotesTable;

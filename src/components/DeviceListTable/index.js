@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactPaginate from 'react-paginate';
 import {
-  CBadge,
   CCardBody,
   CDataTable,
   CButton,
@@ -17,14 +16,25 @@ import {
   CDropdownToggle,
   CDropdownMenu,
   CDropdownDivider,
+  CDropdownItem,
+  CButtonGroup,
 } from '@coreui/react';
-import { cilSync, cilInfo, cilBadge, cilBan, cilNotes, cilSave } from '@coreui/icons';
+import {
+  cilSync,
+  cilNotes,
+  cilArrowCircleTop,
+  cilCheckCircle,
+  cilWifiSignal2,
+  cilTerminal,
+  cilTrash,
+} from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
-import styles from './index.module.scss';
 import { cleanBytesString } from '../../utils/formatting';
+import DeviceBadge from '../DeviceBadge';
 import LoadingButton from '../LoadingButton';
 
 const DeviceListTable = ({
+  currentPage,
   devices,
   devicesPerPage,
   loading,
@@ -34,118 +44,37 @@ const DeviceListTable = ({
   refreshDevice,
   t,
   toggleFirmwareModal,
+  toggleHistoryModal,
   upgradeToLatest,
   upgradeStatus,
-  meshIcon,
-  apIcon,
-  internetSwitch,
-  iotIcon,
+  deviceIcons,
+  connectRtty,
+  deleteDevice,
+  deleteStatus,
 }) => {
   const columns = [
     { key: 'deviceType', label: '', filter: false, sorter: false, _style: { width: '3%' } },
-    { key: 'verifiedCertificate', label: t('common.certificate'), _style: { width: '1%' } },
     { key: 'serialNumber', label: t('common.serial_number'), _style: { width: '6%' } },
-    { key: 'UUID', label: t('common.config_id'), _style: { width: '6%' } },
-    { key: 'firmware', label: t('firmware.revision'), filter: false, _style: { width: '28%' } },
+    { key: 'firmware', label: t('firmware.revision') },
     { key: 'firmware_button', label: '', filter: false, _style: { width: '4%' } },
-    { key: 'compatible', label: t('firmware.device_type'), filter: false, _style: { width: '6%' } },
-    { key: 'txBytes', label: 'Tx', filter: false, _style: { width: '11%' } },
-    { key: 'rxBytes', label: 'Rx', filter: false, _style: { width: '11%' } },
-    { key: 'ipAddress', label: t('common.ip_address'), _style: { width: '8%' } },
-    { key: 'wifi_analysis', label: t(''), _style: { width: '4%' } },
-    { key: 'show_details', label: t(''), _style: { width: '4%' } },
-    { key: 'refresh_device', label: t(''), _style: { width: '4%' } },
+    { key: 'compatible', label: t('common.type'), filter: false, _style: { width: '6%' } },
+    { key: 'txBytes', label: 'Tx', filter: false, _style: { width: '8%' } },
+    { key: 'rxBytes', label: 'Rx', filter: false, _style: { width: '8%' } },
+    { key: 'ipAddress', label: t('IP'), _style: { width: '8%' } },
+    { key: 'actions', label: '', _style: { width: '1%' } },
   ];
-
-  const getDeviceIcon = (deviceType) => {
-    if (deviceType === 'AP_Default' || deviceType === 'AP') {
-      return <img src={apIcon} className={styles.icon} alt="AP" />;
-    }
-    if (deviceType === 'MESH') {
-      return <img src={meshIcon} className={styles.icon} alt="MESH" />;
-    }
-    if (deviceType === 'SWITCH') {
-      return <img src={internetSwitch} className={styles.icon} alt="SWITCH" />;
-    }
-    if (deviceType === 'IOT') {
-      return <img src={iotIcon} className={styles.icon} alt="SWITCH" />;
-    }
-    return null;
-  };
-
-  const getCertBadge = (cert) => {
-    if (cert === 'NO_CERTIFICATE') {
-      return (
-        <div className={styles.certificateWrapper}>
-          <CIcon className={styles.badge} name="cil-badge" content={cilBadge} size="2xl" alt="AP" />
-          <CIcon
-            className={styles.badCertificate}
-            name="cil-ban"
-            content={cilBan}
-            size="3xl"
-            alt="AP"
-          />
-        </div>
-      );
-    }
-
-    let color = 'transparent';
-    switch (cert) {
-      case 'VALID_CERTIFICATE':
-        color = 'danger';
-        break;
-      case 'MISMATCH_SERIAL':
-        return (
-          <CBadge color={color} className={styles.mismatchBackground}>
-            <CIcon name="cil-badge" content={cilBadge} size="2xl" alt="AP" />
-          </CBadge>
-        );
-      case 'VERIFIED':
-        color = 'success';
-        break;
-      default:
-        return (
-          <div className={styles.certificateWrapper}>
-            <CIcon
-              className={styles.badge}
-              name="cil-badge"
-              content={cilBadge}
-              size="2xl"
-              alt="AP"
-            />
-            <CIcon
-              className={styles.badCertificate}
-              name="cil-ban"
-              content={cilBan}
-              size="3xl"
-              alt="AP"
-            />
-          </div>
-        );
-    }
-    return (
-      <CBadge color={color}>
-        <CIcon name="cil-badge" content={cilBadge} size="2xl" alt="AP" />
-      </CBadge>
-    );
-  };
-
-  const getStatusBadge = (status) => {
-    if (status) {
-      return 'success';
-    }
-    return 'danger';
-  };
 
   const getFirmwareButton = (latest, device) => {
     let text = t('firmware.unknown_firmware_status');
     let upgradeText = t('firmware.upgrade_to_latest');
+    let icon = <CIcon size="lg" name="cil-arrow-circle-top" content={cilArrowCircleTop} />;
     let color = 'secondary';
     if (latest !== undefined) {
       text = t('firmware.newer_firmware_available');
       color = 'warning';
 
       if (latest) {
+        icon = <CIcon size="lg" name="cil-check-circle" content={cilCheckCircle} />;
         text = t('firmware.latest_version_installed');
         upgradeText = t('firmware.reinstall_latest');
         color = 'success';
@@ -154,14 +83,14 @@ const DeviceListTable = ({
     return (
       <CDropdown>
         <CDropdownToggle caret={false} color={color}>
-          <CIcon size="sm" content={cilSave} />
+          {icon}
         </CDropdownToggle>
         <CDropdownMenu style={{ width: '250px' }} className="mt-2 mb-2 mx-5" placement="bottom">
-          <CRow className="pl-3">
+          <CRow color="secondary" className="pl-3">
             <CCol>{text}</CCol>
           </CRow>
           <CDropdownDivider />
-          <CRow className="pl-3 mt-1">
+          <CRow className="pl-3 mt-3">
             <CCol>
               <LoadingButton
                 label={upgradeText}
@@ -185,10 +114,54 @@ const DeviceListTable = ({
               </CButton>
             </CCol>
           </CRow>
+          <CRow className="pl-3 mt-3">
+            <CCol>
+              <CButton
+                color="primary"
+                onClick={() => {
+                  toggleHistoryModal(device);
+                }}
+              >
+                {t('firmware.history_title')}
+              </CButton>
+            </CCol>
+          </CRow>
         </CDropdownMenu>
       </CDropdown>
     );
   };
+
+  const deleteButton = (serialNumber) => (
+    <CPopover content={t('common.delete_device')}>
+      <CDropdown>
+        <CDropdownToggle className="btn-outline-primary btn-sm btn-square" caret={false}>
+          <CIcon name="cil-trash" content={cilTrash} size="sm" />
+        </CDropdownToggle>
+        <CDropdownMenu
+          style={{ width: '250px' }}
+          className="mt-2 mb-2 mx-5"
+          placement="bottom-start"
+        >
+          <CRow className="pl-3">
+            <CCol>{t('common.device_delete', { serialNumber })}</CCol>
+          </CRow>
+          <CDropdownDivider />
+          <CDropdownItem>
+            <LoadingButton
+              data-toggle="dropdown"
+              color="danger"
+              label={t('common.confirm')}
+              isLoadingLabel={t('user.deleting')}
+              isLoading={deleteStatus.loading}
+              action={() => deleteDevice(serialNumber)}
+              block
+              disabled={deleteStatus.loading}
+            />
+          </CDropdownItem>
+        </CDropdownMenu>
+      </CDropdown>
+    </CPopover>
+  );
 
   return (
     <>
@@ -219,8 +192,13 @@ const DeviceListTable = ({
             border
             loading={loading}
             scopedSlots={{
+              deviceType: (item) => (
+                <td className="pt-3 text-center">
+                  <DeviceBadge t={t} device={item} deviceIcons={deviceIcons} />
+                </td>
+              ),
               serialNumber: (item) => (
-                <td className="text-center">
+                <td className="text-center align-middle">
                   <CLink
                     className="c-subheader-nav-link"
                     aria-current="page"
@@ -230,115 +208,99 @@ const DeviceListTable = ({
                   </CLink>
                 </td>
               ),
-              deviceType: (item) => (
-                <td className="pt-3 text-center">
-                  <CPopover
-                    content={item.connected ? t('common.connected') : t('common.not_connected')}
-                    placement="top"
-                  >
-                    <CBadge size="sm" color={getStatusBadge(item.connected)}>
-                      {getDeviceIcon(item.deviceType) ?? item.deviceType}
-                    </CBadge>
-                  </CPopover>
-                </td>
-              ),
-              verifiedCertificate: (item) => (
-                <td className="text-center">
-                  <CPopover
-                    content={item.verifiedCertificate ?? t('common.unknown')}
-                    placement="top"
-                  >
-                    {getCertBadge(item.verifiedCertificate)}
-                  </CPopover>
-                </td>
-              ),
               firmware: (item) => (
-                <td>
+                <td className="align-middle">
                   <CPopover
                     content={item.firmware ? item.firmware : t('common.na')}
                     placement="top"
                   >
-                    <p style={{ width: 'calc(20vw)' }} className="text-truncate">
+                    <div style={{ width: 'calc(22vw)' }} className="text-truncate align-middle">
                       {item.firmware}
-                    </p>
+                    </div>
                   </CPopover>
                 </td>
               ),
               firmware_button: (item) => (
-                <td className="text-center">
+                <td className="text-center align-middle">
                   {item.firmwareInfo
                     ? getFirmwareButton(item.firmwareInfo.latest, item)
                     : getFirmwareButton(undefined, item)}
                 </td>
               ),
               compatible: (item) => (
-                <td>
+                <td className="align-middle">
                   <CPopover
                     content={item.compatible ? item.compatible : t('common.na')}
                     placement="top"
                   >
-                    <p style={{ width: 'calc(6vw)' }} className="text-truncate">
+                    <div style={{ width: 'calc(8vw)' }} className="text-truncate align-middle">
                       {item.compatible}
-                    </p>
+                    </div>
                   </CPopover>
                 </td>
               ),
-              txBytes: (item) => <td>{cleanBytesString(item.txBytes)}</td>,
-              rxBytes: (item) => <td>{cleanBytesString(item.rxBytes)}</td>,
+              txBytes: (item) => <td className="align-middle">{cleanBytesString(item.txBytes)}</td>,
+              rxBytes: (item) => <td className="align-middle">{cleanBytesString(item.rxBytes)}</td>,
               ipAddress: (item) => (
-                <td>
+                <td className="align-middle">
                   <CPopover
                     content={item.ipAddress ? item.ipAddress : t('common.na')}
                     placement="top"
                   >
-                    <p style={{ width: 'calc(8vw)' }} className="text-truncate">
+                    <div style={{ width: 'calc(7vw)' }} className="text-truncate align-middle">
                       {item.ipAddress}
-                    </p>
+                    </div>
                   </CPopover>
                 </td>
               ),
-              wifi_analysis: (item) => (
-                <td className="text-center">
-                  <CPopover content={t('configuration.details')}>
-                    <CLink
-                      className="c-subheader-nav-link"
-                      aria-current="page"
-                      to={() => `/devices/${item.serialNumber}`}
-                    >
-                      <CButton color="primary" variant="outline" shape="square" size="sm">
-                        <CIcon name="cil-info" content={cilInfo} size="sm" />
+              actions: (item) => (
+                <td className="text-center align-middle">
+                  <CButtonGroup role="group">
+                    <CPopover content={t('wifi_analysis.title')}>
+                      <CLink
+                        className="c-subheader-nav-link"
+                        aria-current="page"
+                        to={() => `/devices/${item.serialNumber}/wifianalysis`}
+                      >
+                        <CButton color="primary" variant="outline" shape="square" size="sm">
+                          <CIcon name="cil-wifi-signal-2" content={cilWifiSignal2} size="sm" />
+                        </CButton>
+                      </CLink>
+                    </CPopover>
+                    <CPopover content={t('actions.connect')}>
+                      <CButton
+                        color="primary"
+                        variant="outline"
+                        shape="square"
+                        size="sm"
+                        onClick={() => connectRtty(item.serialNumber)}
+                      >
+                        <CIcon name="cil-terminal" content={cilTerminal} size="sm" />
                       </CButton>
-                    </CLink>
-                  </CPopover>
-                </td>
-              ),
-              show_details: (item) => (
-                <td className="text-center">
-                  <CPopover content={t('wifi_analysis.title')}>
-                    <CLink
-                      className="c-subheader-nav-link"
-                      aria-current="page"
-                      to={() => `/devices/${item.serialNumber}/wifianalysis`}
-                    >
-                      <CButton color="primary" variant="outline" shape="square" size="sm">
-                        <CIcon name="cil-notes" content={cilNotes} size="sm" />
+                    </CPopover>
+                    {deleteButton(item.serialNumber)}
+                    <CPopover content={t('configuration.details')}>
+                      <CLink
+                        className="c-subheader-nav-link"
+                        aria-current="page"
+                        to={() => `/devices/${item.serialNumber}`}
+                      >
+                        <CButton color="primary" variant="outline" shape="square" size="sm">
+                          <CIcon name="cil-notes" content={cilNotes} size="sm" />
+                        </CButton>
+                      </CLink>
+                    </CPopover>
+                    <CPopover content={t('common.refresh_device')}>
+                      <CButton
+                        onClick={() => refreshDevice(item.serialNumber)}
+                        color="primary"
+                        variant="outline"
+                        size="sm"
+                      >
+                        <CIcon name="cil-sync" content={cilSync} size="sm" />
                       </CButton>
-                    </CLink>
-                  </CPopover>
-                </td>
-              ),
-              refresh_device: (item) => (
-                <td className="text-center">
-                  <CPopover content={t('common.refresh_device')}>
-                    <CButton
-                      onClick={() => refreshDevice(item.serialNumber)}
-                      color="primary"
-                      variant="outline"
-                      size="sm"
-                    >
-                      <CIcon name="cil-sync" content={cilSync} size="sm" />
-                    </CButton>
-                  </CPopover>
+                    </CPopover>
+                  </CButtonGroup>
                 </td>
               ),
             }}
@@ -348,6 +310,7 @@ const DeviceListTable = ({
             nextLabel="Next →"
             pageCount={pageCount}
             onPageChange={updatePage}
+            forcePage={Number(currentPage)}
             breakClassName="page-item"
             breakLinkClassName="page-link"
             containerClassName="pagination"
@@ -366,6 +329,7 @@ const DeviceListTable = ({
 };
 
 DeviceListTable.propTypes = {
+  currentPage: PropTypes.string,
   devices: PropTypes.instanceOf(Array).isRequired,
   updateDevicesPerPage: PropTypes.func.isRequired,
   pageCount: PropTypes.number.isRequired,
@@ -375,12 +339,17 @@ DeviceListTable.propTypes = {
   t: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   toggleFirmwareModal: PropTypes.func.isRequired,
+  toggleHistoryModal: PropTypes.func.isRequired,
   upgradeToLatest: PropTypes.func.isRequired,
   upgradeStatus: PropTypes.instanceOf(Object).isRequired,
-  meshIcon: PropTypes.string.isRequired,
-  apIcon: PropTypes.string.isRequired,
-  internetSwitch: PropTypes.string.isRequired,
-  iotIcon: PropTypes.string.isRequired,
+  deviceIcons: PropTypes.instanceOf(Object).isRequired,
+  connectRtty: PropTypes.func.isRequired,
+  deleteDevice: PropTypes.func.isRequired,
+  deleteStatus: PropTypes.instanceOf(Object).isRequired,
+};
+
+DeviceListTable.defaultProps = {
+  currentPage: '0',
 };
 
 export default React.memo(DeviceListTable);

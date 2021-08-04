@@ -1,16 +1,80 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CCard, CCardBody, CCardHeader, CCol, CRow } from '@coreui/react';
+import { CCard, CCardBody, CCardHeader, CCol, CRow, CWidgetIcon } from '@coreui/react';
 import { CChartBar, CChartPie } from '@coreui/react-chartjs';
+import { cilClock, cilMedicalCross, cilThumbUp, cilWarning } from '@coreui/icons';
+import CIcon from '@coreui/icons-react';
+import { prettyDate } from '../../utils/formatting';
+
+const getColor = (health) => {
+  const numberHealth = health ? Number(health.replace('%', '')) : 0;
+  if (numberHealth >= 90) return 'success';
+  if (numberHealth >= 60) return 'warning';
+  return 'danger';
+};
+
+const getIcon = (health) => {
+  const numberHealth = health ? Number(health.replace('%', '')) : 0;
+  if (numberHealth >= 90) return <CIcon width={36} name="cil-thumbs-up" content={cilThumbUp} />;
+  if (numberHealth >= 60) return <CIcon width={36} name="cil-warning" content={cilWarning} />;
+  return <CIcon width={36} name="cil-medical-cross" content={cilMedicalCross} />;
+};
 
 const DeviceDashboard = ({ t, data }) => (
   <div>
     <CRow>
       <CCol>
+        <CWidgetIcon
+          text={t('common.last_dashboard_refresh')}
+          header={<h2>{data.snapshot ? prettyDate(data.snapshot) : ''}</h2>}
+          color="info"
+          iconPadding={false}
+        >
+          <CIcon width={36} name="cil-clock" content={cilClock} />
+        </CWidgetIcon>
+      </CCol>
+      <CCol>
+        <CWidgetIcon
+          text={t('common.overall_health')}
+          header={<h2>{data.overallHealth}</h2>}
+          color={getColor(data.overallHealth)}
+          iconPadding={false}
+        >
+          {getIcon(data.overallHealth)}
+        </CWidgetIcon>
+      </CCol>
+      <CCol>
+        <CWidgetIcon
+          text={t('common.devices')}
+          header={<h2>{data.numberOfDevices}</h2>}
+          color="primary"
+          iconPadding={false}
+        >
+          <CIcon width={36} name="cil-router" />
+        </CWidgetIcon>
+      </CCol>
+    </CRow>
+    <CRow>
+      <CCol>
         <CCard>
           <CCardHeader>{t('common.device_status')}</CCardHeader>
           <CCardBody>
-            <CChartPie datasets={data.status.datasets} labels={data.status.labels} />
+            <CChartPie
+              datasets={data.status.datasets}
+              labels={data.status.labels}
+              options={{
+                tooltips: {
+                  callbacks: {
+                    title: (item, ds) => ds.labels[item[0].index],
+                    label: (item, ds) => `${ds.datasets[0].data[item.index]}%`,
+                  },
+                },
+                legend: {
+                  display: true,
+                  position: 'right',
+                },
+              }}
+            />
           </CCardBody>
         </CCard>
       </CCol>
@@ -18,15 +82,49 @@ const DeviceDashboard = ({ t, data }) => (
         <CCard>
           <CCardHeader>{t('common.device_health')}</CCardHeader>
           <CCardBody>
-            <CChartPie datasets={data.healths.datasets} labels={data.healths.labels} />
+            <CChartPie
+              datasets={data.healths.datasets}
+              labels={data.healths.labels}
+              options={{
+                tooltips: {
+                  callbacks: {
+                    title: (item, ds) => ds.labels[item[0].index],
+                    label: (item, ds) =>
+                      `${ds.datasets[0].data[item.index]}${t('common.of_connected')}`,
+                  },
+                },
+                legend: {
+                  display: true,
+                  position: 'right',
+                },
+              }}
+            />
           </CCardBody>
         </CCard>
       </CCol>
       <CCol>
         <CCard>
-          <CCardHeader>{t('common.uptimes')}</CCardHeader>
+          <CCardHeader>{t('wifi_analysis.associations')}</CCardHeader>
           <CCardBody>
-            <CChartBar datasets={data.upTimes.datasets} labels={data.upTimes.labels} />
+            <CChartPie
+              datasets={data.associations.datasets}
+              labels={data.associations.labels}
+              options={{
+                tooltips: {
+                  callbacks: {
+                    title: (item, ds) => ds.labels[item[0].index],
+                    label: (item, ds) =>
+                      `${ds.datasets[0].data[item.index]}% of ${
+                        data.totalAssociations
+                      } associations`,
+                  },
+                },
+                legend: {
+                  display: true,
+                  position: 'right',
+                },
+              }}
+            />
           </CCardBody>
         </CCard>
       </CCol>
@@ -36,7 +134,24 @@ const DeviceDashboard = ({ t, data }) => (
         <CCard>
           <CCardHeader>{t('common.vendors')}</CCardHeader>
           <CCardBody>
-            <CChartBar datasets={data.vendors.datasets} labels={data.vendors.labels} />
+            <CChartBar
+              datasets={data.vendors.datasets}
+              labels={data.vendors.labels}
+              options={{
+                tooltips: {
+                  mode: 'index',
+                  intersect: false,
+                },
+                hover: {
+                  mode: 'index',
+                  intersect: false,
+                },
+                legend: {
+                  display: false,
+                  position: 'right',
+                },
+              }}
+            />
           </CCardBody>
         </CCard>
       </CCol>
@@ -44,7 +159,48 @@ const DeviceDashboard = ({ t, data }) => (
         <CCard>
           <CCardHeader>{t('firmware.device_types')}</CCardHeader>
           <CCardBody>
-            <CChartPie datasets={data.deviceType.datasets} labels={data.deviceType.labels} />
+            <CChartPie
+              datasets={data.deviceType.datasets}
+              labels={data.deviceType.labels}
+              options={{
+                tooltips: {
+                  callbacks: {
+                    title: (item, ds) => ds.labels[item[0].index],
+                    label: (item, ds) =>
+                      `${ds.datasets[0].data[item.index]} ${t('common.devices')}`,
+                  },
+                },
+                legend: {
+                  display: true,
+                  position: 'right',
+                },
+              }}
+            />
+          </CCardBody>
+        </CCard>
+      </CCol>
+      <CCol>
+        <CCard>
+          <CCardHeader>{t('common.uptimes')}</CCardHeader>
+          <CCardBody>
+            <CChartBar
+              datasets={data.upTimes.datasets}
+              labels={data.upTimes.labels}
+              options={{
+                tooltips: {
+                  mode: 'index',
+                  intersect: false,
+                },
+                hover: {
+                  mode: 'index',
+                  intersect: false,
+                },
+                legend: {
+                  display: false,
+                  position: 'right',
+                },
+              }}
+            />
           </CCardBody>
         </CCard>
       </CCol>
@@ -54,7 +210,22 @@ const DeviceDashboard = ({ t, data }) => (
         <CCard>
           <CCardHeader>{t('common.certificates')}</CCardHeader>
           <CCardBody>
-            <CChartPie datasets={data.certificates.datasets} labels={data.certificates.labels} />
+            <CChartPie
+              datasets={data.certificates.datasets}
+              labels={data.certificates.labels}
+              options={{
+                tooltips: {
+                  callbacks: {
+                    title: (item, ds) => ds.labels[item[0].index],
+                    label: (item, ds) => `${ds.datasets[0].data[item.index]}%`,
+                  },
+                },
+                legend: {
+                  display: true,
+                  position: 'right',
+                },
+              }}
+            />
           </CCardBody>
         </CCard>
       </CCol>
@@ -62,7 +233,24 @@ const DeviceDashboard = ({ t, data }) => (
         <CCard>
           <CCardHeader>{t('common.commands')}</CCardHeader>
           <CCardBody>
-            <CChartBar datasets={data.commands.datasets} labels={data.commands.labels} />
+            <CChartBar
+              datasets={data.commands.datasets}
+              labels={data.commands.labels}
+              options={{
+                tooltips: {
+                  mode: 'index',
+                  intersect: false,
+                },
+                hover: {
+                  mode: 'index',
+                  intersect: false,
+                },
+                legend: {
+                  display: false,
+                  position: 'right',
+                },
+              }}
+            />
           </CCardBody>
         </CCard>
       </CCol>
@@ -70,7 +258,24 @@ const DeviceDashboard = ({ t, data }) => (
         <CCard>
           <CCardHeader>{t('common.memory_used')}</CCardHeader>
           <CCardBody>
-            <CChartBar datasets={data.memoryUsed.datasets} labels={data.memoryUsed.labels} />
+            <CChartBar
+              datasets={data.memoryUsed.datasets}
+              labels={data.memoryUsed.labels}
+              options={{
+                tooltips: {
+                  mode: 'index',
+                  intersect: false,
+                },
+                hover: {
+                  mode: 'index',
+                  intersect: false,
+                },
+                legend: {
+                  display: false,
+                  position: 'right',
+                },
+              }}
+            />
           </CCardBody>
         </CCard>
       </CCol>

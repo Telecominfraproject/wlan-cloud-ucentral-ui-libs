@@ -4,7 +4,7 @@ import { CDataTable } from '@coreui/react';
 
 const RadioAnalysisTable = ({ data, loading }) => {
   const columns = [
-    { key: 'radio', label: 'R', _style: { width: '5%' } },
+    { key: 'radio', label: '#', _style: { width: '5%' } },
     { key: 'channel', label: 'Ch', _style: { width: '5%' } },
     { key: 'channelWidth', label: 'C Width', _style: { width: '7%' }, sorter: false },
     { key: 'noise', label: 'Noise', _style: { width: '4%' }, sorter: false },

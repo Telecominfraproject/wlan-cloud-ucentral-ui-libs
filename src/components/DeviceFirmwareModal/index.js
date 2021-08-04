@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
+  CButton,
   CDataTable,
   CModal,
   CModalHeader,
@@ -9,6 +10,7 @@ import {
   CRow,
   CCol,
   CInput,
+  CModalFooter,
 } from '@coreui/react';
 import { cleanBytesString, prettyDate } from '../../utils/formatting';
 import LoadingButton from '../LoadingButton';
@@ -38,7 +40,7 @@ const DeviceFirmwareModal = ({
 
   return (
     <CModal show={show} onClose={toggle} size="xl">
-      <CModalHeader>
+      <CModalHeader closeButton>
         <CModalTitle>#{device?.serialNumber}</CModalTitle>
       </CModalHeader>
       <CModalBody>
@@ -96,6 +98,11 @@ const DeviceFirmwareModal = ({
           <div />
         )}
       </CModalBody>
+      <CModalFooter>
+        <CButton color="secondary" onClick={toggle}>
+          {t('common.close')}
+        </CButton>
+      </CModalFooter>
     </CModal>
   );
 };
