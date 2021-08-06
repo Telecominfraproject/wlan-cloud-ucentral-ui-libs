@@ -9,11 +9,13 @@ import {
   CCardHeader,
   CCol,
   CDataTable,
+  CPopover,
   CRow,
   CSelect,
 } from '@coreui/react';
 import { prettyDate, cleanBytesString } from '../../utils/formatting';
 import FirmwareDetails from '../FirmwareDetails';
+import CopyToClipboardButton from '../CopyToClipboardButton';
 
 const FirmwareList = ({
   t,
@@ -34,9 +36,9 @@ const FirmwareList = ({
 }) => {
   const [detailsShown, setDetailsShown] = useState([]);
   const fields = [
-    { key: 'imageDate', label: t('firmware.image_date'), _style: { width: '12%' } },
-    { key: 'size', label: t('firmware.size'), _style: { width: '8%' } },
-    { key: 'revision', label: t('firmware.revision'), _style: { width: '30%' } },
+    { key: 'imageDate', label: t('firmware.image_date'), _style: { width: '1%' } },
+    { key: 'size', label: t('firmware.size'), _style: { width: '1%' } },
+    { key: 'revision', label: t('firmware.revision'), _style: { width: '1%' } },
     { key: 'uri', label: 'URI' },
     { key: 'show_details', label: '', _style: { width: '5%' } },
   ];
@@ -51,6 +53,13 @@ const FirmwareList = ({
       newDetails = [...newDetails, index];
     }
     setDetailsShown(newDetails);
+  };
+
+  const getShortRevision = (revision) => {
+    if (revision.includes(' / ')) {
+      return revision.split(' / ')[1];
+    }
+    return revision;
   };
 
   const changePage = (newValue) => {
@@ -110,10 +119,39 @@ const FirmwareList = ({
           hover
           border
           scopedSlots={{
-            imageDate: (item) => <td>{prettyDate(item.imageDate)}</td>,
-            size: (item) => <td>{cleanBytesString(item.size)}</td>,
+            imageDate: (item) => (
+              <td className="text-center align-middle">
+                <div style={{ width: '150px' }}>{prettyDate(item.imageDate)}</div>
+              </td>
+            ),
+            size: (item) => (
+              <td className="align-middle">
+                <div style={{ width: '100px' }}>{cleanBytesString(item.size)}</div>
+              </td>
+            ),
+            revision: (item) => (
+              <td className="align-middle">
+                <CPopover content={item.revision}>
+                  <div style={{ width: 'calc(10vw)' }} className="text-truncate align-middle">
+                    {item.revision ? getShortRevision(item.revision) : 'N/A'}
+                  </div>
+                </CPopover>
+              </td>
+            ),
+            uri: (item) => (
+              <td className="align-middle">
+                <div style={{ width: 'calc(45vw)' }}>
+                  <div className="text-truncate align-middle">
+                    <CopyToClipboardButton key={item.uri} t={t} size="md" content={item.uri} />
+                    <CPopover content={item.uri}>
+                      <span>{item.uri}</span>
+                    </CPopover>
+                  </div>
+                </div>
+              </td>
+            ),
             show_details: (item, index) => (
-              <td className="text-center">
+              <td className="text-center align-middle">
                 <CButton
                   color="primary"
                   variant={detailsShown.includes(index) ? '' : 'outline'}

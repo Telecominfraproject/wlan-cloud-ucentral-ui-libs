@@ -1,25 +1,28 @@
-.icon {
-  height: 24px;
-  width: 24px;
+.firmwareTooltip {
+  opacity: 1 !important;
+  padding: 0px 0px 0px 0px !important;
+  border-radius: 1rem !important;
+  background-color: #fff !important;
+  border-color: #321fdb !important;
+  font-size: 0.875rem !important;
+  font-weight: 400 !important;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2) !important;
+  width: 400px;
 }
 
-.certificateWrapper {
-  position: relative;
+.deleteTooltip {
+  opacity: 1 !important;
+  padding: 0px 0px 0px 0px !important;
+  border-radius: 1rem !important;
+  background-color: #fff !important;
+  border-color: #321fdb !important;
+  font-size: 0.875rem !important;
+  font-weight: 400 !important;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 0.2) !important;
+  width: 300px;
 }
 
-.badge {
-  position: absolute;
-  left: 31%;
-  margin-top: 8%;
-}
-
-.badCertificate {
-  position: absolute;
-  z-index: 99;
-  left: 22%;
-  color: #e55353;
-}
-
-.mismatchBackground {
-  background-color: #ffff5c;
+.tooltipHeader {
+  border-top-left-radius: 1rem !important;
+  border-top-right-radius: 1rem !important;
 }

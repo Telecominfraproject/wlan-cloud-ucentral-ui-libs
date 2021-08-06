@@ -9,14 +9,32 @@ const ApiStatusCard = ({ t, info }) => (
       <CRow>
         <CCol sm="4">
           <div block="true">{t('common.endpoint')}:</div>
-          <div block="true">{t('common.start')}:</div>
-          <div block="true">{t('status.uptime')}:</div>
-          <div block="true">{t('footer.version')}:</div>
         </CCol>
         <CCol>
           <div block="true">{info.endpoint}</div>
+        </CCol>
+      </CRow>
+      <CRow>
+        <CCol sm="4">
+          <div block="true">{t('common.start')}:</div>
+        </CCol>
+        <CCol>
           <div block="true">{info.start}</div>
+        </CCol>
+      </CRow>
+      <CRow>
+        <CCol sm="4">
+          <div block="true">{t('status.uptime')}:</div>
+        </CCol>
+        <CCol>
           <div block="true">{info.uptime}</div>
+        </CCol>
+      </CRow>
+      <CRow>
+        <CCol sm="4">
+          <div block="true">{t('footer.version')}:</div>
+        </CCol>
+        <CCol>
           <div block="true">{info.version}</div>
         </CCol>
       </CRow>

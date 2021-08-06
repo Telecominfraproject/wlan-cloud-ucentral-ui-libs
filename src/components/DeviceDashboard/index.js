@@ -104,7 +104,12 @@ const DeviceDashboard = ({ t, data }) => (
       </CCol>
       <CCol>
         <CCard>
-          <CCardHeader>{t('wifi_analysis.associations')}</CCardHeader>
+          <CCardHeader>
+            {data.totalAssociations}{' '}
+            {data.totalAssociations === 1
+              ? t('wifi_analysis.association')
+              : t('wifi_analysis.associations')}
+          </CCardHeader>
           <CCardBody>
             <CChartPie
               datasets={data.associations.datasets}

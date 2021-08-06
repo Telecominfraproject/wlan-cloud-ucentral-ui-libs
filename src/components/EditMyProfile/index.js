@@ -29,11 +29,11 @@ const EditMyProfile = ({
   saveUser,
   policies,
   addNote,
-  uploadAvatar,
   avatar,
   newAvatar,
   deleteAvatar,
   showPreview,
+  fileInputKey,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -145,18 +145,7 @@ const EditMyProfile = ({
                   name="file-input"
                   accept="image/*"
                   onChange={showPreview}
-                />
-              </div>
-              <div className="pt-3">
-                <LoadingButton
-                  label={t('user.save_avatar')}
-                  isLoadingLabel={t('common.saving')}
-                  isLoading={loading}
-                  action={uploadAvatar}
-                  block={false}
-                  disabled={
-                    loading || !newAvatar || newAvatar === '' || newAvatar === 'data:;base64,'
-                  }
+                  key={fileInputKey}
                 />
               </div>
             </CCol>
@@ -199,11 +188,11 @@ EditMyProfile.propTypes = {
   saveUser: PropTypes.func.isRequired,
   policies: PropTypes.instanceOf(Object).isRequired,
   addNote: PropTypes.func.isRequired,
-  uploadAvatar: PropTypes.func.isRequired,
   avatar: PropTypes.string,
   newAvatar: PropTypes.string,
   showPreview: PropTypes.func.isRequired,
   deleteAvatar: PropTypes.func.isRequired,
+  fileInputKey: PropTypes.number.isRequired,
 };
 
 EditMyProfile.defaultProps = {

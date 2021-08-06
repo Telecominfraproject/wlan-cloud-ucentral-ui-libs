@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import ReactPaginate from 'react-paginate';
 import {
@@ -12,12 +12,8 @@ import {
   CCol,
   CPopover,
   CSelect,
-  CDropdown,
-  CDropdownToggle,
-  CDropdownMenu,
-  CDropdownDivider,
-  CDropdownItem,
-  CButtonGroup,
+  CButtonToolbar,
+  CButtonClose,
 } from '@coreui/react';
 import {
   cilSync,
@@ -29,9 +25,12 @@ import {
   cilTrash,
 } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
+import ReactTooltip from 'react-tooltip';
+import { v4 as createUuid } from 'uuid';
 import { cleanBytesString } from '../../utils/formatting';
 import DeviceBadge from '../DeviceBadge';
 import LoadingButton from '../LoadingButton';
+import styles from './index.module.scss';
 
 const DeviceListTable = ({
   currentPage,
@@ -64,7 +63,24 @@ const DeviceListTable = ({
     { key: 'actions', label: '', _style: { width: '1%' } },
   ];
 
+  const hideTooltips = () => ReactTooltip.hide();
+
+  const escFunction = (event) => {
+    if (event.keyCode === 27) {
+      hideTooltips();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', escFunction, false);
+
+    return () => {
+      document.removeEventListener('keydown', escFunction, false);
+    };
+  }, []);
+
   const getFirmwareButton = (latest, device) => {
+    const tooltipId = createUuid();
     let text = t('firmware.unknown_firmware_status');
     let upgradeText = t('firmware.upgrade_to_latest');
     let icon = <CIcon size="lg" name="cil-arrow-circle-top" content={cilArrowCircleTop} />;
@@ -81,87 +97,149 @@ const DeviceListTable = ({
       }
     }
     return (
-      <CDropdown>
-        <CDropdownToggle caret={false} color={color}>
+      <div>
+        <CButton color={color} data-tip data-for={tooltipId} data-event="click">
           {icon}
-        </CDropdownToggle>
-        <CDropdownMenu style={{ width: '250px' }} className="mt-2 mb-2 mx-5" placement="bottom">
-          <CRow color="secondary" className="pl-3">
-            <CCol>{text}</CCol>
-          </CRow>
-          <CDropdownDivider />
-          <CRow className="pl-3 mt-3">
-            <CCol>
-              <LoadingButton
-                label={upgradeText}
-                isLoadingLabel={t('firmware.upgrading')}
-                isLoading={upgradeStatus.loading}
-                action={() => upgradeToLatest(device)}
-                block={false}
-                disabled={upgradeStatus.loading}
-              />
-            </CCol>
-          </CRow>
-          <CRow className="pl-3 mt-3">
-            <CCol>
-              <CButton
-                color="primary"
-                onClick={() => {
-                  toggleFirmwareModal(device);
-                }}
-              >
-                {t('firmware.choose_custom')}
-              </CButton>
-            </CCol>
-          </CRow>
-          <CRow className="pl-3 mt-3">
-            <CCol>
-              <CButton
-                color="primary"
-                onClick={() => {
-                  toggleHistoryModal(device);
-                }}
-              >
-                {t('firmware.history_title')}
-              </CButton>
-            </CCol>
-          </CRow>
-        </CDropdownMenu>
-      </CDropdown>
+        </CButton>
+        <ReactTooltip
+          id={tooltipId}
+          place="top"
+          effect="solid"
+          globalEventOff="click"
+          clickable
+          className={[styles.firmwareTooltip, 'tooltipLeft'].join(' ')}
+          border
+          borderColor="#321fdb"
+          arrowColor="white"
+          overridePosition={({ left, top }) => {
+            const element = document.getElementById(tooltipId);
+            const tooltipWidth = element ? element.offsetWidth : 0;
+            const newLeft = left + tooltipWidth * 0.25;
+            return { top, left: newLeft };
+          }}
+        >
+          <CCardHeader color="primary" className={styles.tooltipHeader}>
+            {text}
+            <CButtonClose
+              style={{ color: 'white' }}
+              onClick={(e) => {
+                e.target.parentNode.parentNode.classList.remove('show');
+                hideTooltips();
+              }}
+            />
+          </CCardHeader>
+          <CCardBody>
+            <CRow>
+              <CCol>
+                <LoadingButton
+                  variant="outline"
+                  label={upgradeText}
+                  isLoadingLabel={t('firmware.upgrading')}
+                  isLoading={upgradeStatus.loading}
+                  action={() => upgradeToLatest(device)}
+                  block
+                  disabled={upgradeStatus.loading}
+                />
+              </CCol>
+              <CCol>
+                <CButton
+                  block
+                  variant="outline"
+                  color="primary"
+                  onClick={() => {
+                    toggleFirmwareModal(device);
+                  }}
+                >
+                  {t('firmware.choose_custom')}
+                </CButton>
+              </CCol>
+              <CCol>
+                <CButton
+                  block
+                  variant="outline"
+                  color="primary"
+                  onClick={() => {
+                    toggleHistoryModal(device);
+                  }}
+                >
+                  {t('firmware.history_title')}
+                </CButton>
+              </CCol>
+            </CRow>
+          </CCardBody>
+        </ReactTooltip>
+      </div>
     );
   };
 
-  const deleteButton = (serialNumber) => (
-    <CPopover content={t('common.delete_device')}>
-      <CDropdown>
-        <CDropdownToggle className="btn-outline-primary btn-sm btn-square" caret={false}>
-          <CIcon name="cil-trash" content={cilTrash} size="sm" />
-        </CDropdownToggle>
-        <CDropdownMenu
-          style={{ width: '250px' }}
-          className="mt-2 mb-2 mx-5"
-          placement="bottom-start"
-        >
-          <CRow className="pl-3">
-            <CCol>{t('common.device_delete', { serialNumber })}</CCol>
-          </CRow>
-          <CDropdownDivider />
-          <CDropdownItem>
-            <LoadingButton
-              data-toggle="dropdown"
-              color="danger"
-              label={t('common.confirm')}
-              isLoadingLabel={t('user.deleting')}
-              isLoading={deleteStatus.loading}
-              action={() => deleteDevice(serialNumber)}
-              block
-              disabled={deleteStatus.loading}
-            />
-          </CDropdownItem>
-        </CDropdownMenu>
-      </CDropdown>
-    </CPopover>
-  );
+  const deleteButton = (serialNumber) => {
+    const tooltipId = createUuid();
+
+    return (
+      <CPopover content={t('common.delete_device')}>
+        <div>
+          <CButton
+            color="primary"
+            variant="outline"
+            shape="square"
+            size="sm"
+            className="mx-1"
+            data-tip
+            data-for={tooltipId}
+            data-event="click"
+            style={{ width: '33px', height: '30px' }}
+          >
+            <CIcon name="cil-trash" content={cilTrash} size="sm" />
+          </CButton>
+          <ReactTooltip
+            id={tooltipId}
+            place="top"
+            effect="solid"
+            globalEventOff="click"
+            clickable
+            className={[styles.deleteTooltip, 'tooltipRight'].join(' ')}
+            border
+            borderColor="#321fdb"
+            arrowColor="white"
+            overridePosition={({ left, top }) => {
+              const element = document.getElementById(tooltipId);
+              const tooltipWidth = element ? element.offsetWidth : 0;
+              const newLeft = left - tooltipWidth * 0.25;
+              return { top, left: newLeft };
+            }}
+          >
+            <CCardHeader color="primary" className={styles.tooltipHeader}>
+              {t('common.device_delete', { serialNumber })}
+              <CButtonClose
+                style={{ color: 'white' }}
+                onClick={(e) => {
+                  e.target.parentNode.parentNode.classList.remove('show');
+                  hideTooltips();
+                }}
+              />
+            </CCardHeader>
+            <CCardBody>
+              <CRow>
+                <CCol>
+                  <LoadingButton
+                    data-toggle="dropdown"
+                    variant="outline"
+                    color="danger"
+                    label={t('common.confirm')}
+                    isLoadingLabel={t('user.deleting')}
+                    isLoading={deleteStatus.loading}
+                    action={() => deleteDevice(serialNumber)}
+                    block
+                    disabled={deleteStatus.loading}
+                  />
+                </CCol>
+              </CRow>
+            </CCardBody>
+          </ReactTooltip>
+        </div>
+      </CPopover>
+    );
+  };
 
   return (
     <>
@@ -255,25 +333,38 @@ const DeviceListTable = ({
               ),
               actions: (item) => (
                 <td className="text-center align-middle">
-                  <CButtonGroup role="group">
+                  <CButtonToolbar
+                    role="group"
+                    className="justify-content-center"
+                    style={{ width: '230px' }}
+                  >
                     <CPopover content={t('wifi_analysis.title')}>
                       <CLink
                         className="c-subheader-nav-link"
                         aria-current="page"
                         to={() => `/devices/${item.serialNumber}/wifianalysis`}
                       >
-                        <CButton color="primary" variant="outline" shape="square" size="sm">
+                        <CButton
+                          color="primary"
+                          variant="outline"
+                          shape="square"
+                          size="sm"
+                          className="mx-1"
+                          style={{ width: '33px', height: '30px' }}
+                        >
                           <CIcon name="cil-wifi-signal-2" content={cilWifiSignal2} size="sm" />
                         </CButton>
                       </CLink>
                     </CPopover>
                     <CPopover content={t('actions.connect')}>
                       <CButton
+                        className="mx-1"
                         color="primary"
                         variant="outline"
                         shape="square"
                         size="sm"
                         onClick={() => connectRtty(item.serialNumber)}
+                        style={{ width: '33px', height: '30px' }}
                       >
                         <CIcon name="cil-terminal" content={cilTerminal} size="sm" />
                       </CButton>
@@ -285,7 +376,14 @@ const DeviceListTable = ({
                         aria-current="page"
                         to={() => `/devices/${item.serialNumber}`}
                       >
-                        <CButton color="primary" variant="outline" shape="square" size="sm">
+                        <CButton
+                          color="primary"
+                          variant="outline"
+                          shape="square"
+                          size="sm"
+                          className="mx-1"
+                          style={{ width: '33px', height: '30px' }}
+                        >
                           <CIcon name="cil-notes" content={cilNotes} size="sm" />
                         </CButton>
                       </CLink>
@@ -295,12 +393,15 @@ const DeviceListTable = ({
                         onClick={() => refreshDevice(item.serialNumber)}
                         color="primary"
                         variant="outline"
+                        shape="square"
                         size="sm"
+                        className="mx-1"
+                        style={{ width: '33px', height: '30px' }}
                       >
                         <CIcon name="cil-sync" content={cilSync} size="sm" />
                       </CButton>
                     </CPopover>
-                  </CButtonGroup>
+                  </CButtonToolbar>
                 </td>
               ),
             }}

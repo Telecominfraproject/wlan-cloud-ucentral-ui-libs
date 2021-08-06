@@ -50,7 +50,7 @@ const UserListTable = ({
   };
 
   const fields = [
-    { key: 'avatar', label: t(''), _style: { width: '5%' } },
+    { key: 'avatar', label: t(''), _style: { width: '1%' } },
     { key: 'email', label: t('user.login_id'), _style: { width: '10%' } },
     { key: 'name', label: t('user.name'), _style: { width: '10%' } },
     { key: 'userRole', label: t('user.user_role'), _style: { width: '5%' } },
@@ -133,19 +133,23 @@ const UserListTable = ({
             border
             scopedSlots={{
               avatar: (item) => (
-                <td className="text-center">
+                <td className="text-center align-middle">
                   <Avatar src={item.avatar} fallback={item.email} />
                 </td>
               ),
+              email: (item) => <td className=" align-middle">{item.email}</td>,
               name: (item) => (
-                <td>
-                  <p style={{ width: 'calc(10vw)' }} className="text-truncate">
+                <td className="align-middle">
+                  <div style={{ width: 'calc(10vw)' }} className="text-truncate align-middle">
                     {item.name}
-                  </p>
+                  </div>
                 </td>
               ),
+              lastLogin: (item) => (
+                <td className="align-middle">{item.lastLogin ? prettyDate(item.lastLogin) : ''}</td>
+              ),
               validated: (item) => (
-                <td className="text-center">
+                <td className="text-center align-middle">
                   <CPopover
                     content={item.validated ? t('user.validated') : t('user.not_validated')}
                   >
@@ -153,24 +157,25 @@ const UserListTable = ({
                   </CPopover>
                 </td>
               ),
-              lastLogin: (item) => <td>{item.lastLogin ? prettyDate(item.lastLogin) : ''}</td>,
               userRole: (item) => (
-                <td>{item.userRole ? capitalizeFirstLetter(item.userRole) : ''}</td>
+                <td className="align-middle">
+                  {item.userRole ? capitalizeFirstLetter(item.userRole) : ''}
+                </td>
               ),
               description: (item) => (
-                <td>
+                <td className="align-middle">
                   <CPopover
                     content={item.description ? item.description : t('common.na')}
                     placement="top"
                   >
-                    <p style={{ width: 'calc(20vw)' }} className="text-truncate">
+                    <div style={{ width: 'calc(20vw)' }} className="text-truncate align-middle">
                       {item.description}
-                    </p>
+                    </div>
                   </CPopover>
                 </td>
               ),
               user_details: (item) => (
-                <td className="text-center">
+                <td className="text-center align-middle">
                   <CPopover content={t('common.edit')}>
                     <CButton
                       color="primary"
@@ -185,7 +190,7 @@ const UserListTable = ({
                 </td>
               ),
               user_delete: (item) => (
-                <td className="text-center">
+                <td className="text-center align-middle">
                   <CPopover content={t('common.delete')}>
                     <CButton
                       onClick={() => handleDeleteClick(item.Id)}
