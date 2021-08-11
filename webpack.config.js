@@ -15,7 +15,6 @@ module.exports = {
     umdNamedDefine: true,
   },
   externals: [nodeExternals()],
-
   module: {
     rules: [
       {
@@ -53,6 +52,11 @@ module.exports = {
       'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
       'prop-types': path.resolve(__dirname, './node_modules/prop-types'),
       'react-router-dom': path.resolve(__dirname, './node_modules/react-router-dom'),
+      '@coreui/coreui': path.resolve(__dirname, './node_modules/@coreui/coreui'),
+      '@coreui/icons': path.resolve(__dirname, './node_modules/@coreui/icons'),
+      '@coreui/icons-react': path.resolve(__dirname, './node_modules/@coreui/icons-react'),
+      '@coreui/react': path.resolve(__dirname, './node_modules/@coreui/react'),
+      '@coreui/react-chartjs': path.resolve(__dirname, './node_modules/@coreui/react-chartjs'),
     },
   },
   plugins: [new CleanWebpackPlugin()],

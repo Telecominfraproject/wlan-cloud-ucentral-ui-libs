@@ -79,9 +79,9 @@ const UserListTable = ({
         <CCardHeader>
           <CRow>
             <CCol />
-            <CCol xs={3}>
+            <CCol xs={4}>
               <CRow>
-                <CCol xs={6}>
+                <CCol xs={4}>
                   <div className="text-right">
                     <CSelect
                       custom
@@ -108,23 +108,18 @@ const UserListTable = ({
                     </CButton>
                   </div>
                 </CCol>
+                <CCol xs={2} className="text-right">
+                  <CPopover content={t('common.refresh')}>
+                    <CButton onClick={refreshUsers} color="primary" variant="outline">
+                      <CIcon name="cil-sync" content={cilSync} />
+                    </CButton>
+                  </CPopover>
+                </CCol>
               </CRow>
             </CCol>
           </CRow>
         </CCardHeader>
-        <CCardBody>
-          <CRow className="pb-3 pr-2">
-            <CCol />
-            <CCol xs={1} className="text-right">
-              <div>
-                <CPopover content={t('common.refresh')}>
-                  <CButton onClick={refreshUsers} color="primary" variant="outline">
-                    <CIcon name="cil-sync" content={cilSync} />
-                  </CButton>
-                </CPopover>
-              </div>
-            </CCol>
-          </CRow>
+        <CCardBody className="p-0">
           <CDataTable
             items={users}
             fields={fields}
@@ -205,22 +200,24 @@ const UserListTable = ({
               ),
             }}
           />
-          <ReactPaginate
-            previousLabel="← Previous"
-            nextLabel="Next →"
-            pageCount={pageCount}
-            onPageChange={setPage}
-            breakClassName="page-item"
-            breakLinkClassName="page-link"
-            containerClassName="pagination"
-            pageClassName="page-item"
-            pageLinkClassName="page-link"
-            previousClassName="page-item"
-            previousLinkClassName="page-link"
-            nextClassName="page-item"
-            nextLinkClassName="page-link"
-            activeClassName="active"
-          />
+          <div className="pl-3">
+            <ReactPaginate
+              previousLabel="← Previous"
+              nextLabel="Next →"
+              pageCount={pageCount}
+              onPageChange={setPage}
+              breakClassName="page-item"
+              breakLinkClassName="page-link"
+              containerClassName="pagination"
+              pageClassName="page-item"
+              pageLinkClassName="page-link"
+              previousClassName="page-item"
+              previousLinkClassName="page-link"
+              nextClassName="page-item"
+              nextLinkClassName="page-link"
+              activeClassName="active"
+            />
+          </div>
         </CCardBody>
       </CCard>
       <DeleteModal

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { CButton, CDataTable, CPopover } from '@coreui/react';
+import { v4 as createUuid } from 'uuid';
 
 const WifiAnalysisTable = ({ t, data, loading }) => {
   const columns = [
@@ -25,8 +26,8 @@ const WifiAnalysisTable = ({ t, data, loading }) => {
   const displayIp = (v4, v6) => {
     const count = v4.length + v6.length;
 
-    const content4 = v4.map((ip) => <li>{ip}</li>);
-    const content6 = v6.map((ip) => <li>{ip}</li>);
+    const content4 = v4.map((ip) => <li key={createUuid()}>{ip}</li>);
+    const content6 = v6.map((ip) => <li key={createUuid()}>{ip}</li>);
 
     const content = (
       <div>

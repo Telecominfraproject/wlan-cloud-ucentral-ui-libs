@@ -71,6 +71,13 @@ const DeviceListTable = ({
     }
   };
 
+  const getShortRevision = (revision) => {
+    if (revision.includes(' / ')) {
+      return revision.split(' / ')[1];
+    }
+    return revision;
+  };
+
   useEffect(() => {
     document.addEventListener('keydown', escFunction, false);
 
@@ -261,7 +268,7 @@ const DeviceListTable = ({
             </CCol>
           </CRow>
         </CCardHeader>
-        <CCardBody>
+        <CCardBody className="p-0">
           <CDataTable
             addTableClasses="ignore-overflow"
             items={devices ?? []}
@@ -293,7 +300,7 @@ const DeviceListTable = ({
                     placement="top"
                   >
                     <div style={{ width: 'calc(22vw)' }} className="text-truncate align-middle">
-                      {item.firmware}
+                      {getShortRevision(item.firmware)}
                     </div>
                   </CPopover>
                 </td>
@@ -406,23 +413,25 @@ const DeviceListTable = ({
               ),
             }}
           />
-          <ReactPaginate
-            previousLabel="← Previous"
-            nextLabel="Next →"
-            pageCount={pageCount}
-            onPageChange={updatePage}
-            forcePage={Number(currentPage)}
-            breakClassName="page-item"
-            breakLinkClassName="page-link"
-            containerClassName="pagination"
-            pageClassName="page-item"
-            pageLinkClassName="page-link"
-            previousClassName="page-item"
-            previousLinkClassName="page-link"
-            nextClassName="page-item"
-            nextLinkClassName="page-link"
-            activeClassName="active"
-          />
+          <div className="pl-3">
+            <ReactPaginate
+              previousLabel="← Previous"
+              nextLabel="Next →"
+              pageCount={pageCount}
+              onPageChange={updatePage}
+              forcePage={Number(currentPage)}
+              breakClassName="page-item"
+              breakLinkClassName="page-link"
+              containerClassName="pagination"
+              pageClassName="page-item"
+              pageLinkClassName="page-link"
+              previousClassName="page-item"
+              previousLinkClassName="page-link"
+              nextClassName="page-item"
+              nextLinkClassName="page-link"
+              activeClassName="active"
+            />
+          </div>
         </CCardBody>
       </CCard>
     </>
