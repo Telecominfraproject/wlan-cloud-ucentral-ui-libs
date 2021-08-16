@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { CCard, CCardBody, CCardHeader, CCol, CDataTable, CRow, CWidgetIcon } from '@coreui/react';
 import { CChartBar, CChartPie } from '@coreui/react-chartjs';
-import { cilClock, cilHappy, cilMeh, cilFrown } from '@coreui/icons';
+import { cilClock, cilHappy, cilMeh, cilFrown, cilBirthdayCake } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import { prettyDate } from '../../utils/formatting';
 
@@ -58,6 +58,21 @@ const FirmwareDashboard = ({ t, data }) => {
             iconPadding={false}
           >
             <CIcon width={36} name="cil-router" />
+          </CWidgetIcon>
+        </CCol>
+        <CCol>
+          <CWidgetIcon
+            text={t('firmware.average_age')}
+            header={
+              <h2>
+                {Math.round(data.averageFirmwareAge)}{' '}
+                {Math.round(data.averageFirmwareAge) > 0 ? t('common.days') : t('common.day')}{' '}
+              </h2>
+            }
+            color="dark"
+            iconPadding={false}
+          >
+            <CIcon width={36} content={cilBirthdayCake} />
           </CWidgetIcon>
         </CCol>
       </CRow>

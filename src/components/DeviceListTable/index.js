@@ -35,6 +35,7 @@ import styles from './index.module.scss';
 const DeviceListTable = ({
   currentPage,
   devices,
+  searchBar,
   devicesPerPage,
   loading,
   updateDevicesPerPage,
@@ -55,12 +56,14 @@ const DeviceListTable = ({
     { key: 'deviceType', label: '', filter: false, sorter: false, _style: { width: '3%' } },
     { key: 'serialNumber', label: t('common.serial_number'), _style: { width: '6%' } },
     { key: 'firmware', label: t('firmware.revision') },
-    { key: 'firmware_button', label: '', filter: false, _style: { width: '4%' } },
-    { key: 'compatible', label: t('common.type'), filter: false, _style: { width: '6%' } },
-    { key: 'txBytes', label: 'Tx', filter: false, _style: { width: '8%' } },
-    { key: 'rxBytes', label: 'Rx', filter: false, _style: { width: '8%' } },
-    { key: 'ipAddress', label: t('IP'), _style: { width: '8%' } },
-    { key: 'actions', label: '', _style: { width: '1%' } },
+    { key: 'firmware_button', label: '', filter: false, _style: { width: '5%' } },
+    { key: 'compatible', label: t('common.type'), filter: false, _style: { width: '13%' } },
+    { key: 'txBytes', label: 'Tx', filter: false, _style: { width: '14%' } },
+    { key: 'rxBytes', label: 'Rx', filter: false, _style: { width: '14%' } },
+    { key: 'ipAddress', label: t('IP'), _style: { width: '10%' } },
+    { key: 'twoG', label: t('2G'), _style: { width: '10%' } },
+    { key: 'fiveG', label: t('5G'), _style: { width: '10%' } },
+    { key: 'actions', label: t('actions.actions'), _style: { width: '10%' } },
   ];
 
   const hideTooltips = () => ReactTooltip.hide();
@@ -253,6 +256,7 @@ const DeviceListTable = ({
       <CCard>
         <CCardHeader>
           <CRow>
+            <CCol sm="3">{searchBar}</CCol>
             <CCol />
             <CCol xs={1}>
               <CSelect
@@ -299,7 +303,7 @@ const DeviceListTable = ({
                     content={item.firmware ? item.firmware : t('common.na')}
                     placement="top"
                   >
-                    <div style={{ width: 'calc(22vw)' }} className="text-truncate align-middle">
+                    <div style={{ width: 'calc(10vw)' }} className="text-truncate align-middle">
                       {getShortRevision(item.firmware)}
                     </div>
                   </CPopover>
@@ -318,7 +322,7 @@ const DeviceListTable = ({
                     content={item.compatible ? item.compatible : t('common.na')}
                     placement="top"
                   >
-                    <div style={{ width: 'calc(8vw)' }} className="text-truncate align-middle">
+                    <div style={{ width: 'calc(10vw)' }} className="text-truncate align-middle">
                       {item.compatible}
                     </div>
                   </CPopover>
@@ -332,12 +336,14 @@ const DeviceListTable = ({
                     content={item.ipAddress ? item.ipAddress : t('common.na')}
                     placement="top"
                   >
-                    <div style={{ width: 'calc(7vw)' }} className="text-truncate align-middle">
+                    <div style={{ width: 'calc(8vw)' }} className="text-truncate align-middle">
                       {item.ipAddress}
                     </div>
                   </CPopover>
                 </td>
               ),
+              twoG: (item) => <td className="align-middle">{item.associations_2G ?? 0}</td>,
+              fiveG: (item) => <td className="align-middle">{item.associations_5G ?? 0}</td>,
               actions: (item) => (
                 <td className="text-center align-middle">
                   <CButtonToolbar
@@ -441,6 +447,7 @@ const DeviceListTable = ({
 DeviceListTable.propTypes = {
   currentPage: PropTypes.string,
   devices: PropTypes.instanceOf(Array).isRequired,
+  searchBar: PropTypes.node.isRequired,
   updateDevicesPerPage: PropTypes.func.isRequired,
   pageCount: PropTypes.number.isRequired,
   updatePage: PropTypes.func.isRequired,

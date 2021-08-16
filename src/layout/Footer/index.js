@@ -9,8 +9,8 @@ const TheFooter = ({ t, version }) => (
     </div>
     <div className="mfs-auto">
       <span className="mr-1">{t('footer.powered_by')}</span>
-      <a href="https://coreui.io/react" target="_blank" rel="noopener noreferrer">
-        {t('footer.coreui_for_react')}
+      <a href="https://www.arilia.com" target="_blank" rel="noopener noreferrer">
+        Arilia
       </a>
     </div>
   </CFooter>

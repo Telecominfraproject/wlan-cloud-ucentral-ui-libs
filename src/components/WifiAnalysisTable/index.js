@@ -39,7 +39,7 @@ const WifiAnalysisTable = ({ t, data, loading }) => {
     );
 
     return (
-      <td className="text-center">
+      <td className="ignore-overflow text-center">
         {count > 0 ? (
           <CPopover
             placement="bottom"
@@ -61,7 +61,7 @@ const WifiAnalysisTable = ({ t, data, loading }) => {
 
   return (
     <CDataTable
-      addTableClasses="ignore-overflow"
+      addTableClasses="ignore-overflow mb-5"
       fields={columns}
       items={data}
       hover

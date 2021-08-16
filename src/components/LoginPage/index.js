@@ -12,6 +12,7 @@ const LoginPage = ({
   signIn,
   loading,
   loginResponse,
+  logo,
   forgotResponse,
   fields,
   updateField,
@@ -81,7 +82,7 @@ const LoginPage = ({
           <CCol md="8">
             <img
               className={[styles.logo, 'c-sidebar-brand-full'].join(' ')}
-              src="assets/OpenWiFi_LogoLockup_DarkGreyColour.svg"
+              src={logo}
               alt="OpenWifi"
             />
             <CCardGroup>
@@ -99,6 +100,7 @@ const LoginPage = ({
 LoginPage.propTypes = {
   t: PropTypes.func.isRequired,
   i18n: PropTypes.instanceOf(Object).isRequired,
+  logo: PropTypes.string.isRequired,
   signIn: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   loginResponse: PropTypes.instanceOf(Object).isRequired,
