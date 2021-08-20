@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Select, { components } from 'react-select';
 
 const DeviceSearchBar = ({ t, search, results, history }) => {
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState('');
   const NoOptionsMessage = (props) => (
     <components.NoOptionsMessage {...props}>
       <span>{t('common.no_devices_found')}</span>
