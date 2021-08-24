@@ -6,14 +6,20 @@ export default (initialState) => {
   return [
     fields,
     (e) => {
-      setFields({
-        ...fields,
-        [e.target.id]: {
-          ...fields[e.target.id],
-          value: e.target.value,
-          error: false,
-        },
-      });
+      if (
+        fields[e.target.id].regex === undefined ||
+        e.target.value === '' ||
+        e.target.value.match(fields[e.target.id].regex)
+      ) {
+        setFields({
+          ...fields,
+          [e.target.id]: {
+            ...fields[e.target.id],
+            value: e.target.value,
+            error: false,
+          },
+        });
+      }
     },
     (field, newValues) => {
       setFields({

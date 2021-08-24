@@ -9,6 +9,7 @@ export { default as Sidebar } from './layout/Sidebar';
 
 // Components
 export { default as AddEntityForm } from './components/AddEntityForm';
+export { default as AddInventoryTagForm } from './components/AddInventoryTagForm';
 export { default as ApiStatusCard } from './components/ApiStatusCard';
 export { default as Avatar } from './components/Avatar';
 export { default as ConfirmFooter } from './components/ConfirmFooter';
@@ -23,6 +24,7 @@ export { default as EditMyProfile } from './components/EditMyProfile';
 export { default as EditUserForm } from './components/EditUserForm';
 export { default as EditUserModal } from './components/EditUserModal';
 export { default as EventQueueModal } from './components/EventQueueModal';
+export { default as InventoryTable } from './components/InventoryTable';
 export { default as FirmwareHistoryTable } from './components/FirmwareHistoryTable';
 export { default as FirmwareList } from './components/FirmwareList';
 export { default as HideTextButton } from './components/HideTextButton';
@@ -47,5 +49,5 @@ export { default as useUser } from './hooks/useUser';
 // Contexts
 export { AuthProvider, useAuth } from './contexts/AuthProvider';
 export { DeviceProvider, useDevice } from './contexts/DeviceProvider';
-export { EntitySidebarProvider, useEntity } from './contexts/EntitySidebarProvider';
+export { EntityProvider, useEntity } from './contexts/EntityProvider';
 export { ToastProvider, useToast } from './contexts/ToastProvider';

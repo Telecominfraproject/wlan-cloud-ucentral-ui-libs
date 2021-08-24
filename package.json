@@ -1,6 +1,6 @@
 {
   "name": "ucentral-libs",
-  "version": "0.8.73",
+  "version": "0.8.78",
   "main": "dist/index.js",
   "source": "src/index.js",
   "engines": {
@@ -15,6 +15,7 @@
     "@coreui/icons-react": "^1.1.0",
     "@coreui/react": "^3.4.6",
     "@coreui/react-chartjs": "^1.1.0",
+    "lodash": "^4.17.21",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
