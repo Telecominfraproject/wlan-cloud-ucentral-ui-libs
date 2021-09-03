@@ -13,7 +13,7 @@ export const AuthProvider = ({ axiosInstance, token, apiEndpoints, children }) =
 
   const logout = () => {
     axiosInstance
-      .delete(`${endpoints.ucentralsec}/api/v1/oauth2/${token}`, {
+      .delete(`${endpoints.owsec}/api/v1/oauth2/${token}`, {
         headers: {
           Accept: 'application/json',
           Authorization: `Bearer ${token}`,
@@ -38,7 +38,7 @@ export const AuthProvider = ({ axiosInstance, token, apiEndpoints, children }) =
 
     axiosInstance
       .get(
-        `${endpoints.ucentralsec}/api/v1/avatar/${
+        `${endpoints.owsec}/api/v1/avatar/${
           newUserId ?? user.Id
         }?timestamp=${new Date().getTime()}`,
         options,
@@ -64,7 +64,7 @@ export const AuthProvider = ({ axiosInstance, token, apiEndpoints, children }) =
     };
 
     axiosInstance
-      .get(`${endpoints.ucentralsec}/api/v1/oauth2?me=true`, options)
+      .get(`${endpoints.owsec}/api/v1/oauth2?me=true`, options)
       .then((response) => {
         setUser(response.data);
         if (response.data.Id && response.data.Id.length > 0) {
@@ -75,7 +75,7 @@ export const AuthProvider = ({ axiosInstance, token, apiEndpoints, children }) =
   };
 
   useEffect(() => {
-    if (currentToken.length > 0 && endpoints?.ucentralsec?.length > 0) {
+    if (currentToken.length > 0 && endpoints?.owsec?.length > 0) {
       getUser();
     }
   }, [currentToken]);

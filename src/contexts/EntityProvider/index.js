@@ -5,7 +5,16 @@ import PropTypes from 'prop-types';
 import { set as lodashSet, get as lodashGet } from 'lodash';
 import { useAuth } from '../AuthProvider';
 
-const navbarOption = (name, uuid, selectEntity, children, childrenIds, path) => {
+const navbarOption = ({
+  name,
+  uuid,
+  selectEntity,
+  path,
+  isVenue,
+  children,
+  childrenEntities,
+  childrenVenues,
+}) => {
   let tag = 'SidebarChildless';
   if (children) tag = 'SidebarDropdown';
 
@@ -15,7 +24,8 @@ const navbarOption = (name, uuid, selectEntity, children, childrenIds, path) => 
     _tag: tag,
     name,
     path,
-    onClick: () => selectEntity(uuid, name, childrenIds, path),
+    isVenue,
+    onClick: () => selectEntity(uuid, name, path, isVenue, childrenEntities, childrenVenues),
     _children: children,
   };
 };
@@ -32,21 +42,23 @@ export const EntityProvider = ({ axiosInstance, selectedEntity, children }) => {
   const [parentsWithChildrenLoaded, setParentsWithChildrenLoaded] = useState([]);
   const [deviceTypes, setDeviceTypes] = useState([]);
 
-  const selectEntity = (uuid, name, childrenIds, path) => {
+  const selectEntity = (uuid, name, path, isVenue, childrenEntities, childrenVenues) => {
     // If we have not yet gotten the information of this entity's children, we get them now
-    if (childrenIds && !parentsWithChildrenLoaded.includes(uuid)) {
-      setEntityToRetrieve({ childrenIds, path, uuid });
+    if (childrenEntities || childrenVenues) {
+      setEntityToRetrieve({ childrenEntities, childrenVenues, path, uuid, isVenue });
     }
-    history.push(`/entity/${uuid}`);
     setEntity({
       uuid,
       name,
-      childrenIds,
+      isVenue,
+      childrenEntities,
+      childrenVenues,
       path,
     });
+    history.push(`/${isVenue ? 'venue' : 'entity'}/${uuid}`);
   };
 
-  const getEntity = async (id) => {
+  const getEntity = async (id, isVenue = false) => {
     const options = {
       headers: {
         Accept: 'application/json',
@@ -55,21 +67,47 @@ export const EntityProvider = ({ axiosInstance, selectedEntity, children }) => {
     };
 
     return axiosInstance
-      .get(`${endpoints.owprov}/api/v1/entity/${id}`, options)
+      .get(`${endpoints.owprov}/api/v1/${isVenue ? 'venue' : 'entity'}/${id}`, options)
       .then((response) => response.data)
+      .catch(() => {
+        history.push(`/entity/0000-0000-0000`);
+      });
+  };
+
+  const getEntities = async (ids, isVenue = false) => {
+    if (!ids || ids.length === 0) return [];
+
+    const options = {
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${currentToken}`,
+      },
+    };
+
+    return axiosInstance
+      .get(
+        `${endpoints.owprov}/api/v1/${isVenue ? 'venue' : 'entity'}?select=${ids.join(',')}`,
+        options,
+      )
+      .then((response) => (isVenue ? response.data.venues : response.data.entities))
       .catch(() => {
         throw new Error('Error while fetching entities');
       });
   };
 
-  const setProviderEntity = async (id) => {
-    const newEntity = await getEntity(id);
-    setEntity({
-      uuid: newEntity.id,
-      name: newEntity.name,
-      childrenIds: newEntity.children,
-      path: null,
-    });
+  const setProviderEntity = async (id, isVenue) => {
+    const newEntity = await getEntity(id, isVenue);
+    if (newEntity) {
+      setEntity({
+        ...newEntity,
+        uuid: newEntity.id,
+        name: newEntity.name,
+        path: null,
+        isVenue,
+        childrenIds: newEntity.children,
+        childrenVenues: newEntity.venues,
+      });
+    }
   };
 
   const getEntityChildren = async (parent) => {
@@ -78,35 +116,33 @@ export const EntityProvider = ({ axiosInstance, selectedEntity, children }) => {
     const parentInfo = lodashGet(entities, parent.path);
     setParentsWithChildrenLoaded([]);
 
-    // Getting the information of each child
-    const promises = [];
-    for (const id of parent.childrenIds) {
-      promises.push(getEntity(id));
-    }
-
     try {
-      const results = await Promise.all(promises);
-      const newOptions = results.map((result, resultIndex) => {
-        if (result.children.length === 0) {
-          return navbarOption(
-            result.name,
-            result.id,
+      const entitiesResult = await getEntities(parent.childrenEntities, false);
+      const venuesResult = await getEntities(parent.childrenVenues, true);
+
+      // Mapping the new child entities
+      let startingVenuesIndex = 0;
+      const newEntityOptions = entitiesResult.map((result, resultIndex) => {
+        startingVenuesIndex += 1;
+        if (result.children.length === 0 && result.venues.length === 0) {
+          return navbarOption({
+            name: result.name,
+            uuid: result.id,
             selectEntity,
-            undefined,
-            undefined,
-            `${basePath}[${resultIndex}]`,
-          );
+            path: `${basePath}[${resultIndex}]`,
+            isVenue: false,
+          });
         }
-        const grandChildrenIds = result.children;
+        const grandChildrenEntities = result.children;
+        const grandChildrenVenues = result.venues;
         let nestedOptions = result.children.map((nested, index) =>
-          navbarOption(
-            '',
-            nested,
+          navbarOption({
+            name: '',
+            uuid: nested,
             selectEntity,
-            undefined,
-            undefined,
-            `${basePath}${resultIndex}.[${index}]`,
-          ),
+            path: `${basePath}${resultIndex}.[${index}]`,
+            isVenue: false,
+          }),
         );
 
         // If there is a child of this function's 'parent' parameter for which we already loaded children, we keep the old values
@@ -117,23 +153,90 @@ export const EntityProvider = ({ axiosInstance, selectedEntity, children }) => {
           }
         }
 
-        return navbarOption(
-          result.name,
-          result.id,
+        return navbarOption({
+          name: result.name,
+          uuid: result.id,
           selectEntity,
-          nestedOptions,
-          grandChildrenIds,
-          `${basePath}[${resultIndex}]`,
-        );
+          path: `${basePath}[${resultIndex}]`,
+          isVenue: false,
+          children: nestedOptions,
+          childrenEntities: grandChildrenEntities,
+          childrenVenues: grandChildrenVenues,
+        });
       });
-      const newEntities = entities;
-      lodashSet(newEntities, `${parent.path}._children`, newOptions);
 
+      // Mapping the new child venues
+      const newVenueOptions = venuesResult.map((result, resultIndex) => {
+        if (result.children.length === 0) {
+          return navbarOption({
+            name: result.name,
+            uuid: result.id,
+            selectEntity,
+            path: `${basePath}[${startingVenuesIndex + resultIndex}]`,
+            isVenue: true,
+          });
+        }
+        const grandChildrenVenues = result.children;
+        let nestedOptions = result.children.map((nested, index) =>
+          navbarOption({
+            name: '',
+            uuid: nested,
+            selectEntity,
+            path: `${basePath}${startingVenuesIndex + resultIndex}.[${index}]`,
+            isVenue: true,
+          }),
+        );
+
+        // If there is a child of this function's 'parent' parameter for which we already loaded children, we keep the old values
+        if (parentsWithChildrenLoaded.includes(result.id)) {
+          const oldInformation = parentInfo._children.find((e) => e.uuid === result.id);
+          if (oldInformation) {
+            nestedOptions = oldInformation._children;
+          }
+        }
+
+        return navbarOption({
+          name: result.name,
+          uuid: result.id,
+          selectEntity,
+          path: `${basePath}[${startingVenuesIndex + resultIndex}]`,
+          isVenue: true,
+          children: nestedOptions,
+          childrenVenues: grandChildrenVenues,
+        });
+      });
+
+      const newEntities = entities;
+      const newOptions = [...newEntityOptions, ...newVenueOptions];
+      lodashSet(newEntities, `${parent.path}._children`, newOptions);
       setEntities([...newEntities]);
       setParentsWithChildrenLoaded([...loadedParents, parent.uuid]);
-    } catch (e) {
+    } catch {
       throw new Error('Error while fetching children');
     }
+  };
+
+  const createRoot = () => {
+    const options = {
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${currentToken}`,
+      },
+    };
+
+    const parameters = {
+      name: 'World',
+      description: 'Root Entity',
+    };
+
+    axiosInstance
+      .post(`${endpoints.owprov}/api/v1/entity/0000-0000-0000`, parameters, options)
+      .then(() => {
+        getRootEntity();
+      })
+      .catch(() => {
+        setRootEntityMissing(true);
+      });
   };
 
   const getRootEntity = () => {
@@ -151,18 +254,25 @@ export const EntityProvider = ({ axiosInstance, selectedEntity, children }) => {
       .get(`${endpoints.owprov}/api/v1/entity/0000-0000-0000`, options)
       .then((response) => {
         const rootChildren = response.data.children.map((nested, index) =>
-          navbarOption('', nested, selectEntity, undefined, undefined, `[0]._children.[${index}]`),
+          navbarOption({
+            name: '',
+            uuid: nested,
+            selectEntity,
+            path: `[0]._children.[${index}]`,
+            isVenue: false,
+          }),
         );
 
         setEntities([
-          navbarOption(
-            response.data.name,
-            '0000-0000-0000',
+          navbarOption({
+            name: response.data.name,
+            uuid: '0000-0000-0000',
             selectEntity,
-            rootChildren,
-            response.data.children,
-            '[0]',
-          ),
+            path: '[0]',
+            isVenue: false,
+            children: rootChildren,
+            childrenEntities: response.data.children,
+          }),
         ]);
       })
       .catch((e) => {
@@ -172,16 +282,16 @@ export const EntityProvider = ({ axiosInstance, selectedEntity, children }) => {
           e.response.data.ErrorCode !== undefined &&
           e.response.data.ErrorCode === 404
         ) {
-          setRootEntityMissing(true);
+          createRoot();
         } else {
           throw new Error('Error while fetching root');
         }
       });
   };
 
-  const refreshEntityChildren = async ({ uuid, path }) => {
+  const refreshEntityChildren = async ({ uuid, path, isVenue }) => {
     const oldInfo = lodashGet(entities, `${path}`);
-    const refreshedInfo = await getEntity(uuid);
+    const refreshedInfo = await getEntity(uuid, isVenue);
 
     // If the button was previously childless, we need to make it be a dropdown
     setParentsWithChildrenLoaded([]);
@@ -189,16 +299,43 @@ export const EntityProvider = ({ axiosInstance, selectedEntity, children }) => {
       getRootEntity();
     } else {
       // eslint-disable-next-line no-underscore-dangle
-      if (oldInfo._tag === 'SidebarChildless' && refreshedInfo.children.length > 0) {
+      if (
+        oldInfo._tag === 'SidebarChildless' &&
+        (refreshedInfo.children.length > 0 || refreshedInfo.venues?.length > 0)
+      ) {
         setEntities([...lodashSet(entities, `${path}`, { ...oldInfo, _tag: 'SidebarDropdown' })]);
       }
-      getEntityChildren({ childrenIds: refreshedInfo.children, path, uuid });
+
+      if (isVenue)
+        getEntityChildren({
+          childrenEntities: [],
+          childrenVenues: refreshedInfo.children,
+          path,
+          uuid,
+        });
+      else
+        getEntityChildren({
+          childrenEntities: refreshedInfo.children,
+          childrenVenues: refreshedInfo.venues,
+          path,
+          uuid,
+        });
     }
   };
 
   const refreshEntity = async (path, newData) => {
     const oldInfo = lodashGet(entities, `${path}`);
-    setEntities(lodashSet(entities, `${path}`, { ...oldInfo, ...newData }));
+    const newInfo = { ...oldInfo, ...newData };
+    newInfo.onClick = () =>
+      selectEntity(
+        newInfo.uuid,
+        newInfo.name,
+        newInfo.path,
+        newInfo.isVenue,
+        newInfo.childrenEntities,
+        newInfo.childrenVenues,
+      );
+    setEntities(lodashSet(entities, `${path}`, newInfo));
   };
 
   const deleteEntity = async ({ path }) => {
@@ -208,15 +345,29 @@ export const EntityProvider = ({ axiosInstance, selectedEntity, children }) => {
     if (!oldInfo || parentPath === '') {
       getRootEntity();
     } else {
-      const parentInfoFromApi = await getEntity(oldInfo.uuid);
-      selectEntity(oldInfo.uuid, oldInfo.name, parentInfoFromApi.children, parentPath);
-      if (parentInfoFromApi.children.length === 0) {
+      const parentInfoFromApi = await getEntity(oldInfo.uuid, oldInfo.isVenue);
+      selectEntity(oldInfo.uuid, oldInfo.name, parentPath, oldInfo.isVenue);
+
+      if (
+        parentInfoFromApi.children.length === 0 &&
+        (parentInfoFromApi.venues === undefined || parentInfoFromApi.venues?.length === 0)
+      ) {
         setEntities(lodashSet(entities, `${parentPath}`, { ...oldInfo, _tag: 'SidebarChildless' }));
-      } else {
+      } else if (oldInfo.isVenue) {
         getEntityChildren({
-          childrenIds: parentInfoFromApi.children,
+          childrenEntities: [],
+          childrenVenues: parentInfoFromApi.children,
           uuid: oldInfo.uuid,
           path: parentPath,
+          isVenue: oldInfo.isVenue,
+        });
+      } else {
+        getEntityChildren({
+          childrenEntities: parentInfoFromApi.children,
+          childrenVenues: parentInfoFromApi.venues,
+          uuid: oldInfo.uuid,
+          path: parentPath,
+          isVenue: oldInfo.isVenue,
         });
       }
     }
@@ -229,7 +380,7 @@ export const EntityProvider = ({ axiosInstance, selectedEntity, children }) => {
     };
 
     axiosInstance
-      .get(`${endpoints.ucentralfms}/api/v1/firmwares?deviceSet=true`, {
+      .get(`${endpoints.owfms}/api/v1/firmwares?deviceSet=true`, {
         headers,
       })
       .then((response) => {
@@ -240,13 +391,14 @@ export const EntityProvider = ({ axiosInstance, selectedEntity, children }) => {
   };
 
   useEffect(() => {
-    if (endpoints?.owprov) getRootEntity();
-    if (endpoints?.ucentralfms) getDeviceTypes();
-  }, [endpoints]);
+    if (currentToken !== '' && endpoints?.owprov) getRootEntity();
+    if (currentToken !== '' && endpoints?.owfms) getDeviceTypes();
+  }, [endpoints, currentToken]);
 
   useEffect(() => {
-    if (entityToRetrieve && !parentsWithChildrenLoaded.includes(entityToRetrieve.uuid))
+    if (entityToRetrieve && !parentsWithChildrenLoaded.includes(entityToRetrieve.uuid)) {
       getEntityChildren(entityToRetrieve);
+    }
   }, [entityToRetrieve]);
 
   return (

@@ -29,6 +29,7 @@ const Header = ({
   endpoints,
   user,
   avatar,
+  hideBreadcrumb,
 }) => {
   const [translatedRoutes, setTranslatedRoutes] = useState(routes);
 
@@ -69,7 +70,7 @@ const Header = ({
             <CDropdownItem to={() => '/myprofile'}>
               <div className="px-3">{t('user.my_profile')}</div>
             </CDropdownItem>
-            <CDropdownItem onClick={() => logout(authToken, endpoints.ucentralsec)}>
+            <CDropdownItem onClick={() => logout(authToken, endpoints.owsec)}>
               <strong className="px-3">{t('common.logout')}</strong>
               <CIcon name="cilAccountLogout" content={cilAccountLogout} />
             </CDropdownItem>
@@ -77,7 +78,7 @@ const Header = ({
         </CDropdown>
       </CHeaderNav>
 
-      <CSubheader className="px-3 justify-content-between">
+      <CSubheader hidden={hideBreadcrumb} className="px-3 justify-content-between">
         <CBreadcrumbRouter
           className="border-0 c-subheader-nav m-0 px-0 px-md-3"
           routes={translatedRoutes}
@@ -99,6 +100,11 @@ Header.propTypes = {
   endpoints: PropTypes.instanceOf(Object).isRequired,
   user: PropTypes.instanceOf(Object).isRequired,
   avatar: PropTypes.string.isRequired,
+  hideBreadcrumb: PropTypes.bool,
+};
+
+Header.defaultProps = {
+  hideBreadcrumb: false,
 };
 
 export default React.memo(Header);

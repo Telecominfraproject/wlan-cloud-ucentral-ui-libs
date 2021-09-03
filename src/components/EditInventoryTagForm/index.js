@@ -1,35 +1,26 @@
 import React from 'react';
-import { CForm, CInput, CLabel, CCol, CFormGroup, CFormText, CSelect } from '@coreui/react';
+import { CForm, CInput, CLabel, CCol, CFormGroup, CFormText, CSelect, CRow } from '@coreui/react';
 import { v4 as createUuid } from 'uuid';
 import PropTypes from 'prop-types';
+import NotesTable from '../NotesTable';
 
-const AddInventoryTagForm = ({ t, disable, fields, updateField, deviceTypes }) => (
-  <CForm className="px-5 pt-5">
-    <CFormGroup row className="pb-3">
-      <CLabel col htmlFor="name">
-        {t('common.serial_number')}
-      </CLabel>
-      <CCol sm="7">
-        <CInput
-          id="serialNumber"
-          type="text"
-          required
-          value={fields.serialNumber.value}
-          onChange={updateField}
-          invalid={fields.serialNumber.error}
-          disabled={disable}
-          maxLength="50"
-        />
-        <CFormText color={fields.serialNumber.error ? 'danger' : ''}>
-          {t('common.required')}, {t('entity.valid_serial')}
-        </CFormText>
+const EditInventoryTagForm = ({ t, disable, fields, updateField, addNote, deviceTypes }) => (
+  <CForm>
+    <CFormGroup row className="pt-3">
+      <CCol>
+        <CLabel htmlFor="serialNumber">{t('common.serial_number')}</CLabel>
+      </CCol>
+      <CCol sm="8">
+        <p id="serialNumber" className="form-control-static">
+          {fields.serialNumber.value}
+        </p>
       </CCol>
     </CFormGroup>
     <CFormGroup row className="pb-3">
       <CLabel col htmlFor="name">
         {t('user.name')}
       </CLabel>
-      <CCol sm="7">
+      <CCol sm="8">
         <CInput
           id="name"
           type="text"
@@ -47,7 +38,7 @@ const AddInventoryTagForm = ({ t, disable, fields, updateField, deviceTypes }) =
       <CLabel col htmlFor="deviceType">
         {t('firmware.device_type')}
       </CLabel>
-      <CCol sm="7">
+      <CCol sm="8">
         <div>
           <CSelect
             custom
@@ -70,28 +61,11 @@ const AddInventoryTagForm = ({ t, disable, fields, updateField, deviceTypes }) =
         </CFormText>
       </CCol>
     </CFormGroup>
-    <CFormGroup row className="pb-3" hidden={fields.entity.hidden}>
-      <CLabel col htmlFor="entity">
-        {t('entity.entity')}
-      </CLabel>
-      <CCol sm="7">
-        <CInput
-          id="entity"
-          type="text"
-          required
-          value={fields.entity.value}
-          onChange={updateField}
-          invalid={fields.entity.error}
-          disabled={true || disable}
-          maxLength="50"
-        />
-      </CCol>
-    </CFormGroup>
     <CFormGroup row className="pb-3">
       <CLabel col htmlFor="description">
         {t('user.description')}
       </CLabel>
-      <CCol sm="7">
+      <CCol sm="8">
         <CInput
           id="description"
           type="text"
@@ -104,31 +78,21 @@ const AddInventoryTagForm = ({ t, disable, fields, updateField, deviceTypes }) =
         />
       </CCol>
     </CFormGroup>
-    <CFormGroup row className="pb-3">
-      <CLabel col htmlFor="note">
-        {t('user.note')}
-      </CLabel>
-      <CCol sm="7">
-        <CInput
-          id="note"
-          type="text"
-          required
-          value={fields.note.value}
-          onChange={updateField}
-          invalid={fields.note.error}
-          disabled={disable}
-        />
+    <CRow>
+      <CCol>
+        <NotesTable t={t} notes={fields.notes.value} addNote={addNote} loading={disable} />
       </CCol>
-    </CFormGroup>
+    </CRow>
   </CForm>
 );
 
-AddInventoryTagForm.propTypes = {
+EditInventoryTagForm.propTypes = {
   t: PropTypes.func.isRequired,
   disable: PropTypes.bool.isRequired,
   fields: PropTypes.instanceOf(Object).isRequired,
   updateField: PropTypes.func.isRequired,
   deviceTypes: PropTypes.instanceOf(Array).isRequired,
+  addNote: PropTypes.func.isRequired,
 };
 
-export default AddInventoryTagForm;
+export default EditInventoryTagForm;

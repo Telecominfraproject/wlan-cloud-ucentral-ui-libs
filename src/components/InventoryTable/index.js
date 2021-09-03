@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import ReactPaginate from 'react-paginate';
 import {
@@ -11,7 +11,15 @@ import {
   CCol,
   CSelect,
   CLink,
+  CPopover,
+  CSwitch,
+  CButtonToolbar,
 } from '@coreui/react';
+import { cilPencil, cilPlus, cilSync } from '@coreui/icons';
+import CIcon from '@coreui/icons-react';
+import ReactTooltip from 'react-tooltip';
+import DeleteButton from './DeleteButton';
+import UnassignButton from './UnassignButton';
 
 const InventoryTable = ({
   t,
@@ -22,67 +30,110 @@ const InventoryTable = ({
   page,
   updatePage,
   pageCount,
-  entityPage,
+  onlyEntity,
   toggleAdd,
-  tagType,
-  setTagType,
+  unassign,
+  title,
+  assignToEntity,
+  entity,
+  toggleEditModal,
+  deleteTag,
+  onlyUnassigned,
+  toggleUnassignedDisplay,
+  refresh,
 }) => {
-  const columns = !entityPage
-    ? [
-        { key: 'serialNumber', label: t('common.serial_number'), _style: { width: '6%' } },
-        { key: 'name', label: t('user.name'), _style: { width: '6%' } },
-        { key: 'entity', label: t('entity.entity'), _style: { width: '24%' } },
-        { key: 'venue', label: t('inventory.venue'), _style: { width: '24%' } },
-        { key: 'subscriber', label: t('inventory.subscriber'), _style: { width: '24%' } },
-        { key: 'actions', label: t('actions.actions'), _style: { width: '8%' } },
-      ]
-    : [
-        { key: 'serialNumber', label: t('common.serial_number'), _style: { width: '6%' } },
-        { key: 'name', label: t('user.name'), _style: { width: '6%' } },
-        { key: 'venue', label: t('inventory.venue'), _style: { width: '24%' } },
-        { key: 'subscriber', label: t('inventory.subscriber'), _style: { width: '24%' } },
-        { key: 'actions', label: t('actions.actions'), _style: { width: '8%' } },
-      ];
+  const columns =
+    onlyEntity || onlyUnassigned
+      ? [
+          { key: 'serialNumber', label: t('common.serial_number'), _style: { width: '6%' } },
+          { key: 'name', label: t('user.name'), _style: { width: '20%' } },
+          { key: 'description', label: t('user.description'), _style: { width: '24%' } },
+          { key: 'actions', label: t('actions.actions'), _style: { width: '1%' } },
+        ]
+      : [
+          { key: 'serialNumber', label: t('common.serial_number'), _style: { width: '6%' } },
+          { key: 'name', label: t('user.name'), _style: { width: '10%' } },
+          { key: 'entity', label: t('entity.entity'), _style: { width: '24%' } },
+          { key: 'venue', label: t('inventory.venue'), _style: { width: '24%' } },
+          { key: 'actions', label: t('actions.actions'), _style: { width: '1%' } },
+        ];
+
+  const hideTooltips = () => ReactTooltip.hide();
+
+  const escFunction = (event) => {
+    if (event.keyCode === 27) {
+      hideTooltips();
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('keydown', escFunction, false);
+
+    return () => {
+      document.removeEventListener('keydown', escFunction, false);
+    };
+  }, []);
 
   return (
     <>
       <CCard>
-        <CCardHeader>
+        <CCardHeader className="p-1">
           <CRow>
-            <CCol />
-            <CCol xs={1} hidden={entityPage}>
-              <CSelect
-                custom
-                defaultValue={tagType}
-                onChange={(e) => setTagType(e.target.value)}
-                disabled={loading}
-              >
-                <option value="&unassigned=true">{t('entity.only_unassigned')}</option>
-                <option value="">{t('common.show_all')}</option>
-              </CSelect>
+            <CCol sm="6">
+              <div className="text-value-lg">{title}</div>
             </CCol>
-            <CCol xs={1}>
-              <CSelect
-                custom
-                defaultValue={tagsPerPage}
-                onChange={(e) => updateTagsPerPage(e.target.value)}
-                disabled={loading}
-              >
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-              </CSelect>
+            <CCol sm="2" className="pt-2 text-right">
+              <div hidden={onlyEntity || entity !== null}>{t('entity.only_unassigned')}</div>
             </CCol>
-            <CCol xs={2} hidden={toggleAdd === null}>
-              <div className="text-right">
-                <CButton color="primary" variant="outline" shape="square" onClick={toggleAdd} block>
-                  {t('inventory.add_tag')}
-                </CButton>
+            <CCol sm="1" className="pt-1 text-center">
+              <div hidden={onlyEntity || entity !== null}>
+                <CSwitch
+                  id="showUnassigned"
+                  color="primary"
+                  defaultChecked={onlyUnassigned}
+                  onClick={toggleUnassignedDisplay}
+                  size="lg"
+                />
               </div>
+            </CCol>
+            <CCol sm="3">
+              <CRow>
+                <CCol>
+                  <CSelect
+                    custom
+                    defaultValue={tagsPerPage}
+                    onChange={(e) => updateTagsPerPage(e.target.value)}
+                    disabled={loading}
+                  >
+                    <option value="10">10</option>
+                    <option value="25">25</option>
+                    <option value="50">50</option>
+                  </CSelect>
+                </CCol>
+                <CCol>
+                  <CButtonToolbar role="group" className="justify-content-end">
+                    <CPopover content={t('inventory.add_tag')}>
+                      <CButton
+                        color="primary"
+                        variant="outline"
+                        onClick={toggleAdd}
+                        className="mx-1"
+                      >
+                        <CIcon content={cilPlus} />
+                      </CButton>
+                    </CPopover>
+                    <CPopover content={t('common.refresh')}>
+                      <CButton color="primary" variant="outline" onClick={refresh} className="ml-1">
+                        <CIcon content={cilSync} />
+                      </CButton>
+                    </CPopover>
+                  </CButtonToolbar>
+                </CCol>
+              </CRow>
             </CCol>
           </CRow>
         </CCardHeader>
-        <CCardBody>
+        <CCardBody className="p-0">
           <CDataTable
             addTableClasses="ignore-overflow"
             items={tags ?? []}
@@ -91,13 +142,12 @@ const InventoryTable = ({
             border
             loading={loading}
             scopedSlots={{
-              serialNumber: (item) => (
-                <td className="text-center align-middle">{item.serialNumber}</td>
-              ),
-              name: (item) => <td className="text-center align-middle">{item.name}</td>,
+              serialNumber: (item) => <td className="align-middle">{item.serialNumber}</td>,
+              name: (item) => <td className="align-middle">{item.name}</td>,
+              description: (item) => <td className="align-middle">{item.description}</td>,
               entity: (item) => (
-                <td className="text-center align-middle">
-                  {entityPage ? (
+                <td className="align-middle">
+                  {onlyEntity ? (
                     item.entity
                   ) : (
                     <CLink
@@ -110,9 +160,72 @@ const InventoryTable = ({
                   )}
                 </td>
               ),
-              venue: (item) => <td className="text-center align-middle">{item.venue}</td>,
-              subscriber: (item) => <td className="text-center align-middle">{item.subscriber}</td>,
-              actions: (item) => <td className="text-center align-middle">{item.actions}</td>,
+              venue: (item) => (
+                <td className="align-middle">
+                  {onlyEntity ? (
+                    item.venue
+                  ) : (
+                    <CLink
+                      className="c-subheader-nav-link"
+                      aria-current="page"
+                      to={() => `/venue/${item.venue}`}
+                    >
+                      {item.venue_info ? item.venue_info.name : item.venue}
+                    </CLink>
+                  )}
+                </td>
+              ),
+              actions: (item) => (
+                <td className="text-center align-middle py-0">
+                  <CButtonToolbar
+                    role="group"
+                    className="justify-content-flex-end"
+                    style={{ width: '200px' }}
+                  >
+                    <CPopover content={t('inventory.assign_to_entity')}>
+                      <div>
+                        <CButton
+                          disabled={onlyEntity || item.entity !== '' || item.venue !== ''}
+                          color="primary"
+                          variant="outline"
+                          shape="square"
+                          size="sm"
+                          className="mx-2"
+                          onClick={() => assignToEntity(item.serialNumber)}
+                          style={{ width: '33px', height: '30px' }}
+                        >
+                          <CIcon content={cilPlus} />
+                        </CButton>
+                      </div>
+                    </CPopover>
+                    <UnassignButton
+                      t={t}
+                      tag={item}
+                      unassignTag={unassign}
+                      hideTooltips={hideTooltips}
+                    />
+                    <DeleteButton
+                      t={t}
+                      tag={item}
+                      deleteTag={deleteTag}
+                      hideTooltips={hideTooltips}
+                    />
+                    <CPopover content="Edit Tag">
+                      <CButton
+                        color="primary"
+                        variant="outline"
+                        shape="square"
+                        size="sm"
+                        className="mx-2"
+                        onClick={() => toggleEditModal(item.serialNumber)}
+                        style={{ width: '33px', height: '30px' }}
+                      >
+                        <CIcon name="cil-pencil" content={cilPencil} size="sm" />
+                      </CButton>
+                    </CPopover>
+                  </CButtonToolbar>
+                </td>
+              ),
             }}
           />
           <div className="pl-3">
@@ -150,15 +263,24 @@ InventoryTable.propTypes = {
   updatePage: PropTypes.func.isRequired,
   pageCount: PropTypes.number.isRequired,
   toggleAdd: PropTypes.func,
-  entityPage: PropTypes.bool,
-  tagType: PropTypes.string.isRequired,
-  setTagType: PropTypes.func.isRequired,
+  onlyEntity: PropTypes.bool,
+  assignToEntity: PropTypes.func.isRequired,
+  unassign: PropTypes.func.isRequired,
+  title: PropTypes.string,
+  entity: PropTypes.instanceOf(Object),
+  toggleEditModal: PropTypes.func.isRequired,
+  deleteTag: PropTypes.func.isRequired,
+  onlyUnassigned: PropTypes.bool.isRequired,
+  toggleUnassignedDisplay: PropTypes.func.isRequired,
+  refresh: PropTypes.func.isRequired,
 };
 
 InventoryTable.defaultProps = {
   page: '0',
   toggleAdd: null,
-  entityPage: false,
+  onlyEntity: false,
+  title: null,
+  entity: null,
 };
 
 export default InventoryTable;

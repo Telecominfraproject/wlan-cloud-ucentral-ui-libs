@@ -10,6 +10,7 @@ export { default as Sidebar } from './layout/Sidebar';
 // Components
 export { default as AddEntityForm } from './components/AddEntityForm';
 export { default as AddInventoryTagForm } from './components/AddInventoryTagForm';
+export { default as AddVenueForm } from './components/AddVenueForm';
 export { default as ApiStatusCard } from './components/ApiStatusCard';
 export { default as Avatar } from './components/Avatar';
 export { default as ConfirmFooter } from './components/ConfirmFooter';
@@ -20,9 +21,11 @@ export { default as DeviceListTable } from './components/DeviceListTable';
 export { default as DeviceStatusCard } from './components/DeviceStatusCard';
 export { default as DeviceSearchBar } from './components/DeviceSearchBar';
 export { default as EditEntityForm } from './components/EditEntityForm';
+export { default as EditInventoryTagForm } from './components/EditInventoryTagForm';
 export { default as EditMyProfile } from './components/EditMyProfile';
 export { default as EditUserForm } from './components/EditUserForm';
 export { default as EditUserModal } from './components/EditUserModal';
+export { default as EditVenueForm } from './components/EditVenueForm';
 export { default as EventQueueModal } from './components/EventQueueModal';
 export { default as InventoryTable } from './components/InventoryTable';
 export { default as FirmwareHistoryTable } from './components/FirmwareHistoryTable';
@@ -35,6 +38,7 @@ export { default as NetworkDiagram } from './components/NetworkDiagram';
 export { default as NotesTable } from './components/NotesTable';
 export { default as RadioAnalysisTable } from './components/RadioAnalysisTable';
 export { default as UserListTable } from './components/UserListTable';
+export { default as VenueTable } from './components/VenueTable';
 export { default as WifiAnalysisTable } from './components/WifiAnalysisTable';
 
 // Pages
