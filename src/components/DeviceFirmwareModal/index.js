@@ -10,8 +10,10 @@ import {
   CRow,
   CCol,
   CInput,
-  CModalFooter,
+  CPopover,
 } from '@coreui/react';
+import CIcon from '@coreui/icons-react';
+import { cilX } from '@coreui/icons';
 import { cleanBytesString, prettyDate } from '../../utils/formatting';
 import LoadingButton from '../LoadingButton';
 
@@ -40,8 +42,15 @@ const DeviceFirmwareModal = ({
 
   return (
     <CModal show={show} onClose={toggle} size="xl">
-      <CModalHeader closeButton>
-        <CModalTitle>#{device?.serialNumber}</CModalTitle>
+      <CModalHeader className="p-1">
+        <CModalTitle className="pl-1 pt-1">#{device?.serialNumber}</CModalTitle>
+        <div className="text-right">
+          <CPopover content={t('common.close')}>
+            <CButton color="primary" variant="outline" className="ml-2" onClick={toggle}>
+              <CIcon content={cilX} />
+            </CButton>
+          </CPopover>
+        </div>
       </CModalHeader>
       <CModalBody>
         {show ? (
@@ -98,11 +107,6 @@ const DeviceFirmwareModal = ({
           <div />
         )}
       </CModalBody>
-      <CModalFooter>
-        <CButton color="secondary" onClick={toggle}>
-          {t('common.close')}
-        </CButton>
-      </CModalFooter>
     </CModal>
   );
 };

@@ -18,9 +18,8 @@ import {
 import PropTypes from 'prop-types';
 import CIcon from '@coreui/icons-react';
 import NotesTable from '../NotesTable';
-import LoadingButton from '../LoadingButton';
 
-const EditUserForm = ({ t, user, updateUserWithId, loading, saveUser, policies, addNote }) => {
+const EditUserForm = ({ t, user, updateUserWithId, loading, policies, addNote }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const toggleShowPassword = () => {
@@ -121,16 +120,6 @@ const EditUserForm = ({ t, user, updateUserWithId, loading, saveUser, policies, 
             {t('common.password_policy')}
           </CLink>
         </CCol>
-        <CCol xs={2} className="text-center">
-          <LoadingButton
-            label={t('common.save')}
-            isLoadingLabel={t('common.saving')}
-            isLoading={loading}
-            action={saveUser}
-            block={false}
-            disabled={loading}
-          />
-        </CCol>
       </CRow>
     </CForm>
   );
@@ -141,7 +130,6 @@ EditUserForm.propTypes = {
   user: PropTypes.instanceOf(Object).isRequired,
   updateUserWithId: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
-  saveUser: PropTypes.func.isRequired,
   policies: PropTypes.instanceOf(Object).isRequired,
   addNote: PropTypes.func.isRequired,
 };

@@ -6,13 +6,11 @@ import {
   CCard,
   CCardBody,
   CCardHeader,
-  CCol,
   CDataTable,
   CPopover,
-  CRow,
   CSelect,
 } from '@coreui/react';
-import { cilBan, cilCheckCircle, cilPencil, cilSync, cilTrash } from '@coreui/icons';
+import { cilBan, cilCheckCircle, cilPencil, cilPlus, cilSync, cilTrash } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import { capitalizeFirstLetter, prettyDate } from '../../utils/formatting';
 import DeleteModal from '../DeleteModal';
@@ -24,6 +22,7 @@ const UserListTable = ({
   loading,
   usersPerPage,
   setUsersPerPage,
+  currentPage,
   pageCount,
   setPage,
   deleteUser,
@@ -77,47 +76,22 @@ const UserListTable = ({
     <div>
       <CCard>
         <CCardHeader>
-          <CRow>
-            <CCol />
-            <CCol xs={4}>
-              <CRow>
-                <CCol xs={4}>
-                  <div className="text-right">
-                    <CSelect
-                      custom
-                      defaultValue={usersPerPage}
-                      onChange={(e) => setUsersPerPage(e.target.value)}
-                      disabled={loading}
-                    >
-                      <option value="10">10</option>
-                      <option value="25">25</option>
-                      <option value="50">50</option>
-                    </CSelect>
-                  </div>
-                </CCol>
-                <CCol xs={6}>
-                  <div className="text-right">
-                    <CButton
-                      color="primary"
-                      variant="outline"
-                      shape="square"
-                      onClick={toggleCreate}
-                      block
-                    >
-                      {t('user.create')}
-                    </CButton>
-                  </div>
-                </CCol>
-                <CCol xs={2} className="text-right">
-                  <CPopover content={t('common.refresh')}>
-                    <CButton onClick={refreshUsers} color="primary" variant="outline">
-                      <CIcon name="cil-sync" content={cilSync} />
-                    </CButton>
-                  </CPopover>
-                </CCol>
-              </CRow>
-            </CCol>
-          </CRow>
+          <div className="d-flex flex-row-reverse">
+            <div className="pl-2">
+              <CPopover content={t('common.refresh')}>
+                <CButton onClick={refreshUsers} color="primary" variant="outline">
+                  <CIcon name="cil-sync" content={cilSync} />
+                </CButton>
+              </CPopover>
+            </div>
+            <div className="pl-2">
+              <CPopover content={t('user.create')}>
+                <CButton color="primary" variant="outline" onClick={toggleCreate} block>
+                  <CIcon name="cil-plus" content={cilPlus} />
+                </CButton>
+              </CPopover>
+            </div>
+          </div>
         </CCardHeader>
         <CCardBody className="p-0">
           <CDataTable
@@ -200,23 +174,39 @@ const UserListTable = ({
               ),
             }}
           />
-          <div className="pl-3">
-            <ReactPaginate
-              previousLabel="← Previous"
-              nextLabel="Next →"
-              pageCount={pageCount}
-              onPageChange={setPage}
-              breakClassName="page-item"
-              breakLinkClassName="page-link"
-              containerClassName="pagination"
-              pageClassName="page-item"
-              pageLinkClassName="page-link"
-              previousClassName="page-item"
-              previousLinkClassName="page-link"
-              nextClassName="page-item"
-              nextLinkClassName="page-link"
-              activeClassName="active"
-            />
+          <div className="d-flex flex-row pl-3">
+            <div className="pr-3">
+              <ReactPaginate
+                previousLabel="← Previous"
+                nextLabel="Next →"
+                pageCount={pageCount}
+                onPageChange={setPage}
+                forcePage={currentPage}
+                breakClassName="page-item"
+                breakLinkClassName="page-link"
+                containerClassName="pagination"
+                pageClassName="page-item"
+                pageLinkClassName="page-link"
+                previousClassName="page-item"
+                previousLinkClassName="page-link"
+                nextClassName="page-item"
+                nextLinkClassName="page-link"
+                activeClassName="active"
+              />
+            </div>
+            <p className="pr-2 mt-1">{t('common.items_per_page')}</p>
+            <div style={{ width: '100px' }} className="px-2">
+              <CSelect
+                custom
+                defaultValue={usersPerPage}
+                onChange={(e) => setUsersPerPage(e.target.value)}
+                disabled={loading}
+              >
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+              </CSelect>
+            </div>
           </div>
         </CCardBody>
       </CCard>
@@ -242,12 +232,17 @@ UserListTable.propTypes = {
   usersPerPage: PropTypes.string.isRequired,
   setUsersPerPage: PropTypes.func.isRequired,
   pageCount: PropTypes.number.isRequired,
+  currentPage: PropTypes.number,
   setPage: PropTypes.func.isRequired,
   deleteUser: PropTypes.func.isRequired,
   deleteLoading: PropTypes.bool.isRequired,
   toggleCreate: PropTypes.func.isRequired,
   toggleEdit: PropTypes.func.isRequired,
   refreshUsers: PropTypes.func.isRequired,
+};
+
+UserListTable.defaultProps = {
+  currentPage: 0,
 };
 
 export default React.memo(UserListTable);

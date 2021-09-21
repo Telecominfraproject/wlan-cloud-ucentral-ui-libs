@@ -7,13 +7,18 @@ import {
   CModal,
   CModalBody,
   CModalHeader,
+  CModalTitle,
   CNav,
   CNavLink,
   CRow,
   CSpinner,
   CTabContent,
   CTabPane,
+  CPopover,
+  CButton,
 } from '@coreui/react';
+import CIcon from '@coreui/icons-react';
+import { cilX } from '@coreui/icons';
 import { cleanBytesString } from 'utils/formatting';
 
 const LifetimeStatsModal = ({ t, loading, show, toggle, data }) => {
@@ -22,7 +27,7 @@ const LifetimeStatsModal = ({ t, loading, show, toggle, data }) => {
   if (loading) {
     return (
       <CModal size="lg" show={show} onClose={toggle}>
-        <CModalHeader>{t('statistics.lifetime_stats')}</CModalHeader>
+        <CModalHeader className="p-1">{t('statistics.lifetime_stats')}</CModalHeader>
         <CModalBody className="text-center align-middle">
           <CSpinner color="primary" size="lg" />
         </CModalBody>
@@ -33,7 +38,7 @@ const LifetimeStatsModal = ({ t, loading, show, toggle, data }) => {
   if (data.interfaces && data.interfaces.length === 0) {
     return (
       <CModal size="lg" show={show} onClose={toggle}>
-        <CModalHeader>{t('statistics.lifetime_stats')}</CModalHeader>
+        <CModalHeader className="p-1">{t('statistics.lifetime_stats')}</CModalHeader>
         <CModalBody>
           <CAlert color="danger" className="text-center">
             {t('statistics.no_interfaces')}
@@ -45,7 +50,16 @@ const LifetimeStatsModal = ({ t, loading, show, toggle, data }) => {
 
   return (
     <CModal size="lg" show={show} onClose={toggle}>
-      <CModalHeader>{t('statistics.lifetime_stats')}</CModalHeader>
+      <CModalHeader className="p-1">
+        <CModalTitle className="pl-1 pt-1">{t('statistics.lifetime_stats')}</CModalTitle>
+        <div className="text-right">
+          <CPopover content={t('common.close')}>
+            <CButton color="primary" variant="outline" className="ml-2" onClick={toggle}>
+              <CIcon content={cilX} />
+            </CButton>
+          </CPopover>
+        </div>
+      </CModalHeader>
       <CModalBody>
         <CNav variant="tabs">
           {data.interfaces?.map((inter, index) => (

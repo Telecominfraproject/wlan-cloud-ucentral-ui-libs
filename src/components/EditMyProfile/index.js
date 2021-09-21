@@ -26,7 +26,6 @@ const EditMyProfile = ({
   user,
   updateUserWithId,
   loading,
-  saveUser,
   policies,
   addNote,
   avatar,
@@ -165,16 +164,6 @@ const EditMyProfile = ({
             {t('common.password_policy')}
           </CLink>
         </CCol>
-        <CCol xs={1} className="text-center">
-          <LoadingButton
-            label={t('common.save')}
-            isLoadingLabel={t('common.saving')}
-            isLoading={loading}
-            action={saveUser}
-            block={false}
-            disabled={loading}
-          />
-        </CCol>
       </CRow>
     </CForm>
   );
@@ -185,7 +174,6 @@ EditMyProfile.propTypes = {
   user: PropTypes.instanceOf(Object).isRequired,
   updateUserWithId: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
-  saveUser: PropTypes.func.isRequired,
   policies: PropTypes.instanceOf(Object).isRequired,
   addNote: PropTypes.func.isRequired,
   avatar: PropTypes.string,

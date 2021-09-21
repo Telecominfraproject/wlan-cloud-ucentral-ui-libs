@@ -16,18 +16,9 @@ import {
   CSwitch,
 } from '@coreui/react';
 import PropTypes from 'prop-types';
-import LoadingButton from 'components/LoadingButton';
 import CIcon from '@coreui/icons-react';
 
-const CreateUserForm = ({
-  t,
-  fields,
-  updateField,
-  createUser,
-  loading,
-  policies,
-  toggleChange,
-}) => {
+const CreateUserForm = ({ t, fields, updateField, policies, toggleChange }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const toggleShowPassword = () => {
@@ -134,7 +125,7 @@ const CreateUserForm = ({
       </CFormGroup>
       <CRow>
         <CCol />
-        <CCol xs={2} className="mt-2 text-right">
+        <CCol xs={2} className="text-right">
           <CLink
             className="c-subheader-nav-link"
             aria-current="page"
@@ -144,16 +135,6 @@ const CreateUserForm = ({
           >
             {t('common.password_policy')}
           </CLink>
-        </CCol>
-        <CCol xs={2} className="text-center">
-          <LoadingButton
-            label={t('user.create')}
-            isLoadingLabel={t('user.creating')}
-            isLoading={loading}
-            action={createUser}
-            block={false}
-            disabled={loading}
-          />
         </CCol>
       </CRow>
     </CForm>
@@ -165,8 +146,6 @@ CreateUserForm.propTypes = {
   policies: PropTypes.instanceOf(Object).isRequired,
   fields: PropTypes.instanceOf(Object).isRequired,
   updateField: PropTypes.func.isRequired,
-  createUser: PropTypes.func.isRequired,
-  loading: PropTypes.bool.isRequired,
   toggleChange: PropTypes.func.isRequired,
 };
 

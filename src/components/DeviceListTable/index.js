@@ -255,22 +255,9 @@ const DeviceListTable = ({
     <>
       <CCard>
         <CCardHeader>
-          <CRow>
-            <CCol sm="3">{searchBar}</CCol>
-            <CCol />
-            <CCol xs={1}>
-              <CSelect
-                custom
-                defaultValue={devicesPerPage}
-                onChange={(e) => updateDevicesPerPage(e.target.value)}
-                disabled={loading}
-              >
-                <option value="10">10</option>
-                <option value="25">25</option>
-                <option value="50">50</option>
-              </CSelect>
-            </CCol>
-          </CRow>
+          <div className="float-left" style={{ width: '400px' }}>
+            {searchBar}
+          </div>
         </CCardHeader>
         <CCardBody className="p-0">
           <CDataTable
@@ -419,24 +406,39 @@ const DeviceListTable = ({
               ),
             }}
           />
-          <div className="pl-3">
-            <ReactPaginate
-              previousLabel="← Previous"
-              nextLabel="Next →"
-              pageCount={pageCount}
-              onPageChange={updatePage}
-              forcePage={Number(currentPage)}
-              breakClassName="page-item"
-              breakLinkClassName="page-link"
-              containerClassName="pagination"
-              pageClassName="page-item"
-              pageLinkClassName="page-link"
-              previousClassName="page-item"
-              previousLinkClassName="page-link"
-              nextClassName="page-item"
-              nextLinkClassName="page-link"
-              activeClassName="active"
-            />
+          <div className="d-flex flex-row pl-3">
+            <div className="pr-3">
+              <ReactPaginate
+                previousLabel="← Previous"
+                nextLabel="Next →"
+                pageCount={pageCount}
+                onPageChange={updatePage}
+                forcePage={Number(currentPage)}
+                breakClassName="page-item"
+                breakLinkClassName="page-link"
+                containerClassName="pagination"
+                pageClassName="page-item"
+                pageLinkClassName="page-link"
+                previousClassName="page-item"
+                previousLinkClassName="page-link"
+                nextClassName="page-item"
+                nextLinkClassName="page-link"
+                activeClassName="active"
+              />
+            </div>
+            <p className="pr-2 mt-1">{t('common.items_per_page')}</p>
+            <div style={{ width: '100px' }} className="px-2">
+              <CSelect
+                custom
+                defaultValue={devicesPerPage}
+                onChange={(e) => updateDevicesPerPage(e.target.value)}
+                disabled={loading}
+              >
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+              </CSelect>
+            </div>
           </div>
         </CCardBody>
       </CCard>

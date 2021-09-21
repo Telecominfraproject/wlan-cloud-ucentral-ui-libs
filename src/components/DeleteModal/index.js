@@ -21,8 +21,8 @@ const DeleteModal = ({
 
   return (
     <CModal show={show} onClose={toggleShow}>
-      <CModalHeader>
-        <CModalTitle>{title}</CModalTitle>
+      <CModalHeader className="p-1">
+        <CModalTitle className="pl-1 pt-1">{title}</CModalTitle>
       </CModalHeader>
       <CModalBody>
         <CAlert color="danger">{warning}</CAlert>

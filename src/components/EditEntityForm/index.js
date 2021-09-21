@@ -84,7 +84,7 @@ const EditEntityForm = ({ t, disable, fields, updateField, addNote, editing }) =
           </CCol>
         </CRow>
       </CCol>
-      <CCol>
+      <CCol className="mt-2">
         <NotesTable
           t={t}
           notes={fields.notes.value}

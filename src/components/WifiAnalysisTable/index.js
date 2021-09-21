@@ -1,9 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { CButton, CDataTable, CPopover } from '@coreui/react';
+import {
+  CButton,
+  CDataTable,
+  CPopover,
+  CModal,
+  CModalHeader,
+  CModalTitle,
+  CModalBody,
+} from '@coreui/react';
+import CIcon from '@coreui/icons-react';
+import { cilX } from '@coreui/icons';
 import { v4 as createUuid } from 'uuid';
 
 const WifiAnalysisTable = ({ t, data, loading }) => {
+  const [show, setShow] = useState(false);
+  const [ips, setIps] = useState(null);
+
+  const toggle = (ssid, v4, v6) => {
+    if (v4 && v6) setIps({ ssid, v4, v6 });
+    setShow(!show);
+  };
   const columns = [
     { key: 'radio', label: '#', _style: { width: '5%' } },
     { key: 'bssid', label: 'BSSID', _style: { width: '14%' } },
@@ -23,32 +40,14 @@ const WifiAnalysisTable = ({ t, data, loading }) => {
     <td className={!value || value === '' || value === '-' ? 'text-center' : ''}>{value}</td>
   );
 
-  const displayIp = (v4, v6) => {
+  const displayIp = (ssid, v4, v6) => {
     const count = v4.length + v6.length;
-
-    const content4 = v4.map((ip) => <li key={createUuid()}>{ip}</li>);
-    const content6 = v6.map((ip) => <li key={createUuid()}>{ip}</li>);
-
-    const content = (
-      <div>
-        IpV4
-        <ul>{content4}</ul>
-        IpV6
-        <ul>{content6}</ul>
-      </div>
-    );
 
     return (
       <td className="ignore-overflow text-center">
         {count > 0 ? (
-          <CPopover
-            placement="bottom"
-            header="Ipv4 - Ipv6 Addresses"
-            content={content}
-            trigger="click"
-            interactive
-          >
-            <CButton color="primary" size="sm">
+          <CPopover content="View">
+            <CButton color="primary" size="sm" onClick={() => toggle(ssid, v4, v6)}>
               {count}
             </CButton>
           </CPopover>
@@ -60,23 +59,53 @@ const WifiAnalysisTable = ({ t, data, loading }) => {
   };
 
   return (
-    <CDataTable
-      addTableClasses="ignore-overflow mb-5"
-      fields={columns}
-      items={data}
-      hover
-      border
-      loading={loading}
-      sorter
-      sorterValue={{ column: 'radio', asc: true }}
-      scopedSlots={{
-        radio: (item) => <td className="text-center">{item.radio.radio}</td>,
-        rxMcs: (item) => centerIfEmpty(item.rxMcs),
-        rxNss: (item) => centerIfEmpty(item.rxNss),
-        rssi: (item) => centerIfEmpty(item.rssi),
-        ips: (item) => displayIp(item.ipV4, item.ipV6),
-      }}
-    />
+    <div>
+      <CDataTable
+        addTableClasses="ignore-overflow mb-5"
+        fields={columns}
+        items={data}
+        hover
+        border
+        loading={loading}
+        sorter
+        sorterValue={{ column: 'radio', asc: true }}
+        scopedSlots={{
+          radio: (item) => <td className="text-center">{item.radio.radio}</td>,
+          rxMcs: (item) => centerIfEmpty(item.rxMcs),
+          rxNss: (item) => centerIfEmpty(item.rxNss),
+          rssi: (item) => centerIfEmpty(item.rssi),
+          ips: (item) => displayIp(item.ssid, item.ipV4, item.ipV6),
+        }}
+      />
+      <CModal size="lg" show={show} onClose={toggle}>
+        <CModalHeader className="p-1">
+          <CModalTitle className="pl-1 pt-1">{ips?.ssid}</CModalTitle>
+          <div className="text-right">
+            <CPopover content={t('common.close')}>
+              <CButton color="primary" variant="outline" className="ml-2" onClick={toggle}>
+                <CIcon content={cilX} />
+              </CButton>
+            </CPopover>
+          </div>
+        </CModalHeader>
+        <CModalBody>
+          <div>
+            IpV4
+            <ul>
+              {ips?.v4?.map((ip) => (
+                <li key={createUuid()}>{ip}</li>
+              ))}
+            </ul>
+            IpV6
+            <ul>
+              {ips?.v6?.map((ip) => (
+                <li key={createUuid()}>{ip}</li>
+              ))}
+            </ul>
+          </div>
+        </CModalBody>
+      </CModal>
+    </div>
   );
 };
 

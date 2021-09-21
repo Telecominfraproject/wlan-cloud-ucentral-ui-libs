@@ -1,19 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  CButton,
   CModal,
   CModalBody,
-  CModalFooter,
   CModalHeader,
   CModalTitle,
   CSpinner,
+  CPopover,
+  CButton,
 } from '@coreui/react';
+import CIcon from '@coreui/icons-react';
+import { cilX } from '@coreui/icons';
 
 const EventQueueModal = ({ t, show, toggle, loading, result }) => (
   <CModal size="lg" show={show} onClose={toggle}>
-    <CModalHeader>
-      <CModalTitle>{t('commands.event_queue')}</CModalTitle>
+    <CModalHeader className="p-1">
+      <CModalTitle className="pl-1 pt-1">{t('commands.event_queue')}</CModalTitle>
+      <div className="text-right">
+        <CPopover content={t('common.close')}>
+          <CButton color="primary" variant="outline" className="ml-2" onClick={toggle}>
+            <CIcon content={cilX} />
+          </CButton>
+        </CPopover>
+      </div>
     </CModalHeader>
     <CModalBody className="text-center">
       {loading ? (
@@ -22,11 +31,6 @@ const EventQueueModal = ({ t, show, toggle, loading, result }) => (
         <pre className="ignore text-left">{JSON.stringify(result, null, 4)}</pre>
       )}
     </CModalBody>
-    <CModalFooter>
-      <CButton color="secondary" onClick={toggle}>
-        {t('common.close')}
-      </CButton>
-    </CModalFooter>
   </CModal>
 );
 

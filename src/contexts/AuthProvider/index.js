@@ -13,10 +13,10 @@ export const AuthProvider = ({ axiosInstance, token, apiEndpoints, children }) =
 
   const logout = () => {
     axiosInstance
-      .delete(`${endpoints.owsec}/api/v1/oauth2/${token}`, {
+      .delete(`${endpoints.owsec}/api/v1/oauth2/${currentToken}`, {
         headers: {
           Accept: 'application/json',
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${currentToken}`,
         },
       })
       .then(() => {})

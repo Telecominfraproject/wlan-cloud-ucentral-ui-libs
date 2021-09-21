@@ -9,8 +9,6 @@ import {
   CDataTable,
   CCard,
   CCardHeader,
-  CRow,
-  CCol,
   CSelect,
   CLink,
   CPopover,
@@ -64,48 +62,23 @@ const VenueTable = ({
     <>
       <CCard>
         <CCardHeader className="p-1">
-          <CRow>
-            <CCol sm="9" className="align-middle">
-              <div className="text-value-lg">{title}</div>
-            </CCol>
-            <CCol sm="3">
-              <CRow>
-                <CCol>
-                  <CSelect
-                    custom
-                    defaultValue={venuesPerPage}
-                    onChange={(e) => updateVenuesPerPage(e.target.value)}
-                    disabled={loading}
-                  >
-                    <option value="10">10</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                  </CSelect>
-                </CCol>
-                <CCol>
-                  <CButtonToolbar role="group" className="justify-content-end">
-                    <CPopover
-                      content={t('inventory.add_child_venue', { entityName: entity?.name })}
-                    >
-                      <CButton
-                        color="primary"
-                        variant="outline"
-                        onClick={toggleAdd}
-                        className="mx-1"
-                      >
-                        <CIcon content={cilPlus} />
-                      </CButton>
-                    </CPopover>
-                    <CPopover content={t('common.refresh')}>
-                      <CButton color="primary" variant="outline" onClick={refresh} className="ml-1">
-                        <CIcon content={cilSync} />
-                      </CButton>
-                    </CPopover>
-                  </CButtonToolbar>
-                </CCol>
-              </CRow>
-            </CCol>
-          </CRow>
+          <div style={{ fontWeight: '600' }} className=" text-value-lg float-left">
+            {title}
+          </div>
+          <div className="float-right">
+            <CButtonToolbar role="group" className="justify-content-end">
+              <CPopover content={t('inventory.add_child_venue', { entityName: entity?.name })}>
+                <CButton color="primary" variant="outline" onClick={toggleAdd} className="mx-1">
+                  <CIcon content={cilPlus} />
+                </CButton>
+              </CPopover>
+              <CPopover content={t('common.refresh')}>
+                <CButton color="primary" variant="outline" onClick={refresh} className="ml-1">
+                  <CIcon content={cilSync} />
+                </CButton>
+              </CPopover>
+            </CButtonToolbar>
+          </div>
         </CCardHeader>
         <CCardBody className="p-0">
           <CDataTable
@@ -164,23 +137,38 @@ const VenueTable = ({
             }}
           />
           <div className="pl-3">
-            <ReactPaginate
-              previousLabel="← Previous"
-              nextLabel="Next →"
-              pageCount={pageCount}
-              onPageChange={updatePage}
-              forcePage={Number(page)}
-              breakClassName="page-item"
-              breakLinkClassName="page-link"
-              containerClassName="pagination"
-              pageClassName="page-item"
-              pageLinkClassName="page-link"
-              previousClassName="page-item"
-              previousLinkClassName="page-link"
-              nextClassName="page-item"
-              nextLinkClassName="page-link"
-              activeClassName="active"
-            />
+            <div className="pr-3 float-left">
+              <ReactPaginate
+                previousLabel="← Previous"
+                nextLabel="Next →"
+                pageCount={pageCount}
+                onPageChange={updatePage}
+                forcePage={Number(page)}
+                breakClassName="page-item"
+                breakLinkClassName="page-link"
+                containerClassName="pagination"
+                pageClassName="page-item"
+                pageLinkClassName="page-link"
+                previousClassName="page-item"
+                previousLinkClassName="page-link"
+                nextClassName="page-item"
+                nextLinkClassName="page-link"
+                activeClassName="active"
+              />
+            </div>
+            <p className="float-left pr-2 pt-1">{t('common.items_per_page')}</p>
+            <div style={{ width: '100px' }} className="float-left px-2">
+              <CSelect
+                custom
+                defaultValue={venuesPerPage}
+                onChange={(e) => updateVenuesPerPage(e.target.value)}
+                disabled={loading}
+              >
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+              </CSelect>
+            </div>
           </div>
         </CCardBody>
       </CCard>

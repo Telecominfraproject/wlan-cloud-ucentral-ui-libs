@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CModal, CModalBody, CModalHeader, CModalTitle } from '@coreui/react';
+import { CButton, CModal, CModalBody, CModalHeader, CModalTitle, CPopover } from '@coreui/react';
+import CIcon from '@coreui/icons-react';
+import { cilSave, cilX } from '@coreui/icons';
 import EditUserForm from '../EditUserForm';
 
 const EditUserModal = ({
@@ -15,17 +17,28 @@ const EditUserModal = ({
   addNote,
 }) => (
   <CModal show={show} onClose={toggle} size="xl">
-    <CModalHeader>
-      <CModalTitle>
+    <CModalHeader className="p-1">
+      <CModalTitle className="pl-1 pt-1">
         {t('user.edit')} {user.email.value}
       </CModalTitle>
+      <div className="text-right">
+        <CPopover content={t('common.save')}>
+          <CButton color="primary" variant="outline" onClick={saveUser} disabled={loading}>
+            <CIcon content={cilSave} />
+          </CButton>
+        </CPopover>
+        <CPopover content={t('common.close')}>
+          <CButton color="primary" variant="outline" className="ml-2" onClick={toggle}>
+            <CIcon content={cilX} />
+          </CButton>
+        </CPopover>
+      </div>
     </CModalHeader>
     <CModalBody>
       <EditUserForm
         t={t}
         user={user}
         updateUserWithId={updateUserWithId}
-        saveUser={saveUser}
         loading={loading}
         policies={policies}
         addNote={addNote}

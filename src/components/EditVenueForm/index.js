@@ -51,7 +51,7 @@ const EditVenueForm = ({ t, disable, fields, updateField, addNote }) => (
       </CCol>
     </CFormGroup>
     <CRow>
-      <CCol>
+      <CCol className="mt-2">
         <NotesTable t={t} notes={fields.notes.value} addNote={addNote} loading={disable} />
       </CCol>
     </CRow>

@@ -7,10 +7,8 @@ import {
   CCard,
   CCardBody,
   CCardHeader,
-  CCol,
   CDataTable,
   CPopover,
-  CRow,
   CSelect,
   CSwitch,
 } from '@coreui/react';
@@ -77,58 +75,33 @@ const FirmwareList = ({
   return (
     <CCard>
       <CCardHeader className="py-2 px-3">
-        <CRow>
-          <CCol />
-          <CCol sm="7">
-            <CRow>
-              <CCol sm="2" className="pt-2 text-right">
-                {t('firmware.device_type')}
-              </CCol>
-              <CCol sm="4" className="text-right">
-                <div>
-                  <CSelect
-                    custom
-                    value={selectedDeviceType}
-                    onChange={(e) => setSelectedDeviceType(e.target.value)}
-                    disabled={loading}
-                  >
-                    {deviceTypes.map((deviceType) => (
-                      <option key={createUuid()} value={deviceType}>
-                        {deviceType}
-                      </option>
-                    ))}
-                  </CSelect>
-                </div>
-              </CCol>
-              <CCol sm="3" className="pt-2 text-center">
-                {t('firmware.show_dev')}
-              </CCol>
-              <CCol sm="1" className="pt-1 text-center">
-                <CSwitch
-                  id="showDev"
-                  color="primary"
-                  defaultChecked={displayDev}
-                  onClick={toggleDevDisplay}
-                  size="lg"
-                />
-              </CCol>
-              <CCol sm="2">
-                <div className="text-right">
-                  <CSelect
-                    custom
-                    defaultValue={firmwarePerPage}
-                    onChange={(e) => setFirmwarePerPage(e.target.value)}
-                    disabled={loading}
-                  >
-                    <option value="10">10</option>
-                    <option value="25">25</option>
-                    <option value="50">50</option>
-                  </CSelect>
-                </div>
-              </CCol>
-            </CRow>
-          </CCol>
-        </CRow>
+        <div className="d-flex flex-row-reverse">
+          <div className="px-3">
+            <CSwitch
+              id="showDev"
+              color="primary"
+              defaultChecked={displayDev}
+              onClick={toggleDevDisplay}
+              size="lg"
+            />
+          </div>
+          <div className="pr-2 pt-1">{t('firmware.show_dev')}</div>
+          <div className="px-3">
+            <CSelect
+              custom
+              value={selectedDeviceType}
+              onChange={(e) => setSelectedDeviceType(e.target.value)}
+              disabled={loading}
+            >
+              {deviceTypes.map((deviceType) => (
+                <option key={createUuid()} value={deviceType}>
+                  {deviceType}
+                </option>
+              ))}
+            </CSelect>
+          </div>
+          <div className="pr-2 pt-1">{t('firmware.device_type')}</div>
+        </div>
       </CCardHeader>
       <CCardBody className="p-0">
         <CDataTable
@@ -193,24 +166,39 @@ const FirmwareList = ({
             ),
           }}
         />
-        <div className="pl-3">
-          <ReactPaginate
-            previousLabel="← Previous"
-            nextLabel="Next →"
-            pageCount={pageCount}
-            onPageChange={changePage}
-            forcePage={page.selected}
-            breakClassName="page-item"
-            breakLinkClassName="page-link"
-            containerClassName="pagination"
-            pageClassName="page-item"
-            pageLinkClassName="page-link"
-            previousClassName="page-item"
-            previousLinkClassName="page-link"
-            nextClassName="page-item"
-            nextLinkClassName="page-link"
-            activeClassName="active"
-          />
+        <div className="d-flex flex-row pl-3">
+          <div className="pr-3">
+            <ReactPaginate
+              previousLabel="← Previous"
+              nextLabel="Next →"
+              pageCount={pageCount}
+              onPageChange={changePage}
+              forcePage={page.selected}
+              breakClassName="page-item"
+              breakLinkClassName="page-link"
+              containerClassName="pagination"
+              pageClassName="page-item"
+              pageLinkClassName="page-link"
+              previousClassName="page-item"
+              previousLinkClassName="page-link"
+              nextClassName="page-item"
+              nextLinkClassName="page-link"
+              activeClassName="active"
+            />
+          </div>
+          <p className="pr-2 mt-1">{t('common.items_per_page')}</p>
+          <div style={{ width: '100px' }} className="px-2">
+            <CSelect
+              custom
+              defaultValue={firmwarePerPage}
+              onChange={(e) => setFirmwarePerPage(e.target.value)}
+              disabled={loading}
+            >
+              <option value="10">10</option>
+              <option value="25">25</option>
+              <option value="50">50</option>
+            </CSelect>
+          </div>
         </div>
       </CCardBody>
     </CCard>
