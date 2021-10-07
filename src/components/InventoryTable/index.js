@@ -2,11 +2,12 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import ReactPaginate from 'react-paginate';
 import { CButton, CDataTable, CLink, CPopover, CButtonToolbar, CSelect } from '@coreui/react';
-import { cilPencil, cilPlus } from '@coreui/icons';
+import { cilPencil, cilPlus, cilSpreadsheet } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import ReactTooltip from 'react-tooltip';
 import DeleteButton from './DeleteButton';
 import UnassignButton from './UnassignButton';
+import FormattedDate from '../FormattedDate';
 
 const InventoryTable = ({
   t,
@@ -24,20 +25,27 @@ const InventoryTable = ({
   toggleEditModal,
   deleteTag,
   onlyUnassigned,
+  toggleAssociate,
+  toggleAssocEntity,
+  toggleComputed,
 }) => {
   const columns =
     onlyEntity || onlyUnassigned
       ? [
           { key: 'serialNumber', label: t('common.serial_number'), _style: { width: '6%' } },
-          { key: 'name', label: t('user.name'), _style: { width: '20%' } },
+          { key: 'name', label: t('user.name'), _style: { width: '10%' } },
+          { key: 'deviceConfiguration', label: t('configuration.title'), _style: { width: '10%' } },
           { key: 'description', label: t('user.description'), _style: { width: '24%' } },
+          { key: 'created', label: t('common.created'), _style: { width: '10%' } },
           { key: 'actions', label: t('actions.actions'), _style: { width: '1%' } },
         ]
       : [
-          { key: 'serialNumber', label: t('common.serial_number'), _style: { width: '6%' } },
-          { key: 'name', label: t('user.name'), _style: { width: '10%' } },
+          { key: 'serialNumber', label: t('common.serial_number'), _style: { width: '10%' } },
+          { key: 'name', label: t('user.name'), _style: { width: '15%' } },
+          { key: 'deviceConfiguration', label: t('configuration.title'), _style: { width: '10%' } },
           { key: 'entity', label: t('entity.entity'), _style: { width: '24%' } },
           { key: 'venue', label: t('inventory.venue'), _style: { width: '24%' } },
+          { key: 'created', label: t('common.created'), _style: { width: '10%' } },
           { key: 'actions', label: t('actions.actions'), _style: { width: '1%' } },
         ];
 
@@ -69,7 +77,32 @@ const InventoryTable = ({
         scopedSlots={{
           serialNumber: (item) => <td className="align-middle">{item.serialNumber}</td>,
           name: (item) => <td className="align-middle">{item.name}</td>,
+          created: (item) => (
+            <td className="align-middle">
+              <FormattedDate date={item.created} />
+            </td>
+          ),
           description: (item) => <td className="align-middle">{item.description}</td>,
+          deviceConfiguration: (item) => (
+            <td className="align-middle">
+              <CButton
+                id={item.serialNumber}
+                className="pl-0 text-left"
+                color="link"
+                onClick={() =>
+                  toggleAssociate({
+                    serialNumber: item.serialNumber,
+                    uuid: item.deviceConfiguration,
+                    value: item.deviceConfigurationName,
+                  })
+                }
+              >
+                {item.deviceConfigurationName === ''
+                  ? t('configuration.add_or_link')
+                  : item.deviceConfigurationName}
+              </CButton>
+            </td>
+          ),
           entity: (item) => (
             <td className="align-middle">
               {onlyEntity ? (
@@ -105,20 +138,22 @@ const InventoryTable = ({
               <CButtonToolbar
                 role="group"
                 className="justify-content-flex-end"
-                style={{ width: '200px' }}
+                style={{ width: '250px' }}
               >
-                <CPopover content={t('inventory.assign_to_entity')}>
+                <CPopover content={t('inventory.assign_ent_ven')}>
                   <div>
                     <CButton
-                      disabled={
-                        entity === null || onlyEntity || item.entity !== '' || item.venue !== ''
-                      }
+                      disabled={onlyEntity || item.entity !== '' || item.venue !== ''}
                       color="primary"
                       variant="outline"
                       shape="square"
                       size="sm"
                       className="mx-2"
-                      onClick={() => assignToEntity(item.serialNumber)}
+                      onClick={() =>
+                        entity !== null
+                          ? assignToEntity(item.serialNumber)
+                          : toggleAssocEntity({ serialNumber: item.serialNumber })
+                      }
                       style={{ width: '33px', height: '30px' }}
                     >
                       <CIcon content={cilPlus} />
@@ -132,6 +167,19 @@ const InventoryTable = ({
                   hideTooltips={hideTooltips}
                 />
                 <DeleteButton t={t} tag={item} deleteTag={deleteTag} hideTooltips={hideTooltips} />
+                <CPopover content="See Computed Configuration">
+                  <CButton
+                    color="primary"
+                    variant="outline"
+                    shape="square"
+                    size="sm"
+                    className="mx-2"
+                    onClick={() => toggleComputed(item.serialNumber)}
+                    style={{ width: '33px', height: '30px' }}
+                  >
+                    <CIcon name="cil-spreadsheet" content={cilSpreadsheet} size="sm" />
+                  </CButton>
+                </CPopover>
                 <CPopover content="Edit Tag">
                   <CButton
                     color="primary"
@@ -204,6 +252,9 @@ InventoryTable.propTypes = {
   toggleEditModal: PropTypes.func.isRequired,
   deleteTag: PropTypes.func.isRequired,
   onlyUnassigned: PropTypes.bool.isRequired,
+  toggleAssociate: PropTypes.func.isRequired,
+  toggleAssocEntity: PropTypes.func.isRequired,
+  toggleComputed: PropTypes.func.isRequired,
 };
 
 InventoryTable.defaultProps = {

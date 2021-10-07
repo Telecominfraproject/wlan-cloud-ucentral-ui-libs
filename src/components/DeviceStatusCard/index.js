@@ -52,11 +52,6 @@ const DeviceStatusCard = ({
     setShowPassword(!showPassword);
   };
 
-  const transformLoad = (load) => {
-    if (load === undefined) return t('common.na');
-    return `${((load / 65536) * 100).toFixed(2)}%`;
-  };
-
   const getPassword = () => {
     const password =
       deviceConfig?.devicePassword === '' ? 'openwifi' : deviceConfig?.devicePassword;
@@ -96,30 +91,36 @@ const DeviceStatusCard = ({
             <div className={styles.overlayContainer} hidden={!loading}>
               <CSpinner className={styles.spinner} />
             </div>
-            <CRow className="my-2">
-              <CCol md="2">{t('status.connection_status')}:</CCol>
-              <CCol md="2">
+            <CRow>
+              <CCol md="2" xl="2" xxl="1">
+                {t('status.connection_status')}:
+              </CCol>
+              <CCol md="2" xl="2" xxl="3">
                 {status?.connected ? (
                   <CBadge color="success">{t('common.connected')}</CBadge>
                 ) : (
                   <CBadge color="danger">{t('common.not_connected')}</CBadge>
                 )}
               </CCol>
-              <CCol md="2">
+              <CCol className="border-left" md="2" xl="2" xxl="1">
                 <CLabel>{t('common.serial_number')}: </CLabel>
               </CCol>
-              <CCol md="2">
+              <CCol className="border-right" md="2" xl="2" xxl="3">
                 {deviceConfig?.serialNumber}
                 <CopyToClipboardButton t={t} size="sm" content={deviceConfig?.serialNumber} />
               </CCol>
-              <CCol md="2">
+              <CCol md="2" xl="2" xxl="1">
                 <CLabel>{t('configuration.location')}:</CLabel>
               </CCol>
-              <CCol md="2">{deviceConfig?.location}</CCol>
+              <CCol md="2" xl="2" xxl="3">
+                {deviceConfig?.location}
+              </CCol>
             </CRow>
-            <CRow className="my-2">
-              <CCol md="2">{t('status.uptime')}:</CCol>
-              <CCol md="2">
+            <CRow>
+              <CCol md="2" xl="2" xxl="1">
+                {t('status.uptime')}:
+              </CCol>
+              <CCol md="2" xl="2" xxl="3">
                 {error
                   ? errorField(t)
                   : compactSecondsToDetailed(
@@ -129,22 +130,30 @@ const DeviceStatusCard = ({
                       t('common.seconds'),
                     )}
               </CCol>
-              <CCol md="2">
+              <CCol className="border-left" md="2" xl="2" xxl="1">
                 <CLabel>{t('configuration.type')}: </CLabel>
               </CCol>
-              <CCol md="2">{deviceConfig?.deviceType}</CCol>
-              <CCol md="2">
+              <CCol className="border-right" md="2" xl="2" xxl="3">
+                {deviceConfig?.deviceType}
+              </CCol>
+              <CCol md="2" xl="2" xxl="1">
                 <CLabel>{t('configuration.owner')}:</CLabel>
               </CCol>
-              <CCol md="2">{deviceConfig?.owner}</CCol>
+              <CCol md="2" xl="2" xxl="3">
+                {deviceConfig?.owner}
+              </CCol>
             </CRow>
-            <CRow className="my-2">
-              <CCol md="2">{t('status.last_contact')}:</CCol>
-              <CCol md="2">{error ? errorField(t) : prettyDate(status?.lastContact)}</CCol>
-              <CCol md="2">
+            <CRow>
+              <CCol md="2" xl="2" xxl="1">
+                {t('status.last_contact')}:
+              </CCol>
+              <CCol md="2" xl="2" xxl="3">
+                {error ? errorField(t) : prettyDate(status?.lastContact)}
+              </CCol>
+              <CCol className="border-left" md="2" xl="2" xxl="1">
                 <CLabel className="align-middle">{t('configuration.device_password')}: </CLabel>
               </CCol>
-              <CCol md="2">
+              <CCol className="border-right" md="2" xl="2" xxl="3">
                 {getPassword()}
                 <HideTextButton t={t} toggle={toggleShowPassword} show={showPassword} />
                 <CopyToClipboardButton
@@ -155,18 +164,29 @@ const DeviceStatusCard = ({
                   }
                 />
               </CCol>
-              <CCol md="2">
-                <CLabel>{t('inventory.venue')}:</CLabel>
+              <CCol md="2" xl="2" xxl="1">
+                <CLabel>
+                  {deviceConfig?.venue?.substring(0, 3) === 'ent'
+                    ? t('entity.entity')
+                    : t('inventory.venue')}
+                  :
+                </CLabel>
               </CCol>
-              <CCol md="2">{deviceConfig?.venue}</CCol>
+              <CCol md="2" xl="2" xxl="3">
+                {deviceConfig?.venue?.split(':')[1]}
+              </CCol>
             </CRow>
-            <CRow className="my-2">
-              <CCol md="2">{t('status.localtime')}:</CCol>
-              <CCol md="2">{error ? errorField(t) : prettyDate(lastStats?.unit?.localtime)}</CCol>
-              <CCol md="2">
+            <CRow>
+              <CCol md="2" xl="2" xxl="1">
+                {t('status.localtime')}:
+              </CCol>
+              <CCol md="2" xl="2" xxl="3">
+                {error ? errorField(t) : prettyDate(lastStats?.unit?.localtime)}
+              </CCol>
+              <CCol className="border-left" md="2" xl="2" xxl="1">
                 <CLabel>{t('firmware.revision')}: </CLabel>
               </CCol>
-              <CCol md="2">
+              <CCol className="border-right" md="2" xl="2" xxl="3">
                 <CPopover content={deviceConfig?.firmware}>
                   <CLabel>
                     {deviceConfig?.firmware?.split(' / ').length > 1
@@ -175,38 +195,48 @@ const DeviceStatusCard = ({
                   </CLabel>
                 </CPopover>
               </CCol>
-              <CCol md="2">
-                <CLabel>{t('configuration.last_configuration_change')} : </CLabel>
+              <CCol md="2" xl="2" xxl="1">
+                <CLabel>{t('configuration.last_configuration_change')}: </CLabel>
               </CCol>
-              <CCol md="2">{prettyDate(deviceConfig?.lastConfigurationChange)}</CCol>
+              <CCol md="2" xl="2" xxl="3">
+                {prettyDate(deviceConfig?.lastConfigurationChange)}
+              </CCol>
             </CRow>
-            <CRow className="my-2">
-              <CCol md="2">{t('status.load_averages')}:</CCol>
-              <CCol md="2">
+            <CRow>
+              <CCol md="2" xl="2" xxl="1">
+                {t('status.load_averages')}:
+              </CCol>
+              <CCol md="2" xl="2" xxl="3">
                 {error ? (
                   errorField(t)
                 ) : (
                   <div>
-                    {transformLoad(lastStats?.unit?.load[0])}
+                    {lastStats?.unit?.load[0] ? (lastStats?.unit?.load[0] * 100).toFixed(2) : '-'}%
                     {' / '}
-                    {transformLoad(lastStats?.unit?.load[1])}
+                    {lastStats?.unit?.load[1] ? (lastStats?.unit?.load[1] * 100).toFixed(2) : '-'}%
                     {' / '}
-                    {transformLoad(lastStats?.unit?.load[2])}
+                    {lastStats?.unit?.load[2] ? (lastStats?.unit?.load[2] * 100).toFixed(2) : '-'}%
                   </div>
                 )}
               </CCol>
-              <CCol md="2">
-                <CLabel>{t('common.mac')} :</CLabel>
+              <CCol className="border-left" md="2" xl="2" xxl="1">
+                <CLabel>{t('common.mac')}:</CLabel>
               </CCol>
-              <CCol md="2">{deviceConfig?.macAddress}</CCol>
-              <CCol md="2">
-                <CLabel>{t('configuration.created')} : </CLabel>
+              <CCol className="border-right" md="2" xl="2" xxl="3">
+                {deviceConfig?.macAddress}
               </CCol>
-              <CCol md="2">{prettyDate(deviceConfig?.createdTimestamp)}</CCol>
+              <CCol md="2" xl="2" xxl="1">
+                <CLabel>{t('configuration.created')}: </CLabel>
+              </CCol>
+              <CCol md="2" xl="2" xxl="3">
+                {prettyDate(deviceConfig?.createdTimestamp)}
+              </CCol>
             </CRow>
-            <CRow className="my-2">
-              <CCol md="2">{t('status.memory')}:</CCol>
-              <CCol md="2" style={{ paddingTop: '5px' }}>
+            <CRow>
+              <CCol md="2" xl="2" xxl="1">
+                {t('status.memory')}:
+              </CCol>
+              <CCol md="2" xl="2" xxl="3" style={{ paddingTop: '5px' }}>
                 {error ? (
                   errorField(t)
                 ) : (
@@ -221,10 +251,12 @@ const DeviceStatusCard = ({
                   />
                 )}
               </CCol>
-              <CCol md="2">
-                <CLabel>{t('common.manufacturer')} :</CLabel>
+              <CCol className="border-left" md="2" xl="2" xxl="1">
+                <CLabel>{t('common.manufacturer')}:</CLabel>
               </CCol>
-              <CCol md="2">{deviceConfig?.manufacturer}</CCol>
+              <CCol className="border-right" md="2" xl="2" xxl="3">
+                {deviceConfig?.manufacturer}
+              </CCol>
             </CRow>
           </div>
         )}

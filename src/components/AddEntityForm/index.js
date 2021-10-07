@@ -7,10 +7,12 @@ import {
   CFormGroup,
   CInvalidFeedback,
   CFormText,
+  CRow,
 } from '@coreui/react';
 import PropTypes from 'prop-types';
+import Select from 'react-select';
 
-const AddEntityForm = ({ t, disable, fields, updateField }) => (
+const AddEntityForm = ({ t, disable, fields, updateField, updateFieldDirectly }) => (
   <CForm>
     <CFormGroup row className="pb-3">
       <CLabel col htmlFor="name">
@@ -48,6 +50,26 @@ const AddEntityForm = ({ t, disable, fields, updateField }) => (
         <CInvalidFeedback>{t('common.required')}</CInvalidFeedback>
       </CCol>
     </CFormGroup>
+    <CRow className="pb-3">
+      <CLabel sm="5" col htmlFor="name">
+        <div>RRM:</div>
+      </CLabel>
+      <CCol sm="7">
+        <div style={{ width: '120px' }}>
+          <Select
+            id="rrm"
+            value={{ value: fields.rrm.value, label: fields.rrm.value }}
+            onChange={(v) => updateFieldDirectly('rrm', { value: v.value })}
+            options={[
+              { label: 'on', value: 'on' },
+              { label: 'off', value: 'off' },
+              { label: 'inherit', value: 'inherit' },
+            ]}
+            isDisabled={disable}
+          />
+        </div>
+      </CCol>
+    </CRow>
     <CFormGroup row className="pb-3">
       <CLabel col htmlFor="note">
         {t('user.note')}
@@ -72,6 +94,7 @@ AddEntityForm.propTypes = {
   disable: PropTypes.bool.isRequired,
   fields: PropTypes.instanceOf(Object).isRequired,
   updateField: PropTypes.func.isRequired,
+  updateFieldDirectly: PropTypes.func.isRequired,
 };
 
 export default AddEntityForm;

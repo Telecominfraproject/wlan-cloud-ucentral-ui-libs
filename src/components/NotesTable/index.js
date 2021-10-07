@@ -86,7 +86,7 @@ const NotesTable = ({
       <div>
         <CRow>
           <CLabel col sm="2">
-            {t('configuration.notes')} :
+            {t('configuration.notes')}:
           </CLabel>
           <CCol sm={size === 'm' ? '7' : '8'}>
             <CInput
@@ -109,11 +109,12 @@ const NotesTable = ({
         <CRow className="pt-3">
           <CCol sm="2" />
           <CCol>
-            <div className="overflow-auto" style={{ height: '200px' }}>
+            <div className="overflow-auto border" style={{ height: '200px' }}>
               <CDataTable
                 striped
                 responsive
                 border
+                addTableClasses="m-0 p-0"
                 loading={loading}
                 fields={columns}
                 items={notes || []}
@@ -140,14 +141,15 @@ const NotesTable = ({
     <div>
       <CRow>
         <CLabel col sm="2">
-          {t('configuration.notes')} :
+          {t('configuration.notes')}:
         </CLabel>
         <CCol>
-          <div className="overflow-auto" style={{ height: '200px' }}>
+          <div className="overflow-auto border" style={{ height: '200px' }}>
             <CDataTable
               striped
               responsive
               border
+              addTableClasses="m-0 p-0"
               loading={loading}
               fields={columns}
               items={notes || []}

@@ -226,7 +226,7 @@ export const EntityProvider = ({ axiosInstance, selectedEntity, children }) => {
 
     const parameters = {
       name: 'World',
-      description: 'Root Entity',
+      description: 'Root',
     };
 
     axiosInstance

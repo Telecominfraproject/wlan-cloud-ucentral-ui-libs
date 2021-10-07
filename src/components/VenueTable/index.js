@@ -15,8 +15,8 @@ import {
 } from '@coreui/react';
 import { cilPencil, cilPlus, cilSync } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
-import { prettyDate } from 'utils/formatting';
 import DeleteButton from './DeleteButton';
+import FormattedDate from '../FormattedDate';
 
 const VenueTable = ({
   t,
@@ -101,8 +101,16 @@ const VenueTable = ({
                 </td>
               ),
               description: (item) => <td className="align-middle">{item.description}</td>,
-              created: (item) => <td className="align-middle">{prettyDate(item.created)}</td>,
-              modified: (item) => <td className="align-middle">{prettyDate(item.modified)}</td>,
+              created: (item) => (
+                <td className="align-middle">
+                  <FormattedDate date={item.created} />
+                </td>
+              ),
+              modified: (item) => (
+                <td className="align-middle">
+                  <FormattedDate date={item.modified} />
+                </td>
+              ),
               children: (item) => <td className="align-middle">{item.children.length}</td>,
               actions: (item) => (
                 <td className="text-center align-middle py-0">

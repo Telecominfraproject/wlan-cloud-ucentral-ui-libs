@@ -8,20 +8,33 @@ import {
   CInvalidFeedback,
   CFormText,
   CRow,
+  CButton,
+  CLink,
 } from '@coreui/react';
 import PropTypes from 'prop-types';
-import { prettyDate } from 'utils/formatting';
+import Select from 'react-select';
 import NotesTable from '../NotesTable';
+import FormattedDate from '../FormattedDate';
 
-const EditEntityForm = ({ t, disable, fields, updateField, addNote, editing }) => (
+const EditEntityForm = ({
+  t,
+  disable,
+  fields,
+  updateField,
+  updateFieldDirectly,
+  addNote,
+  editing,
+  toggleAssociate,
+  toggleIpModal,
+}) => (
   <CForm>
     <CFormGroup row>
       <CCol>
-        <CRow className="py-2">
-          <CLabel xxl="3" col htmlFor="name">
+        <CRow className="pb-0">
+          <CLabel md="4" xxl="3" col htmlFor="name">
             <div>{t('user.name')}:</div>
           </CLabel>
-          <CCol xxl="9">
+          <CCol md="8" xxl="9">
             {editing ? (
               <div>
                 <CInput
@@ -43,11 +56,11 @@ const EditEntityForm = ({ t, disable, fields, updateField, addNote, editing }) =
             )}
           </CCol>
         </CRow>
-        <CRow className="py-2">
-          <CLabel xxl="3" col htmlFor="name">
+        <CRow className="pb-0">
+          <CLabel md="4" xxl="3" col htmlFor="name">
             <div>{t('user.description')}:</div>
           </CLabel>
-          <CCol xxl="9">
+          <CCol md="8" xxl="9">
             {editing ? (
               <div>
                 <CInput
@@ -67,24 +80,98 @@ const EditEntityForm = ({ t, disable, fields, updateField, addNote, editing }) =
             )}
           </CCol>
         </CRow>
-        <CRow className="py-2">
-          <CLabel xxl="3" col htmlFor="name">
-            <div>{t('common.created')}:</div>
+        <CRow className="pb-0">
+          <CLabel md="4" xxl="3" col htmlFor="name">
+            <div>RRM:</div>
           </CLabel>
-          <CCol xxl="9">
-            <p className="mt-2 mb-0">{prettyDate(fields.created.value)}</p>
+          <CCol md="8" xxl="9">
+            <div style={{ width: '120px' }}>
+              <Select
+                id="rrm"
+                value={{ value: fields.rrm.value, label: fields.rrm.value }}
+                onChange={(v) => updateFieldDirectly('rrm', { value: v.value })}
+                options={[
+                  { label: 'on', value: 'on' },
+                  { label: 'off', value: 'off' },
+                  { label: 'inherit', value: 'inherit' },
+                ]}
+                isDisabled={!editing}
+              />
+            </div>
           </CCol>
         </CRow>
-        <CRow className="py-2">
-          <CLabel xxl="3" col htmlFor="name">
-            <div>{t('common.modified')}:</div>
+        <CRow className="pb-0">
+          <CLabel md="4" xxl="3" col htmlFor="name">
+            <div>{t('configuration.title')}:</div>
           </CLabel>
-          <CCol xxl="9">
-            <p className="mt-2 mb-0">{prettyDate(fields.modified.value)}</p>
+          <CCol md="8" xxl="9">
+            {editing ? (
+              <CButton className="pl-0 text-left" color="link" onClick={toggleAssociate}>
+                {fields.deviceConfiguration.value === ''
+                  ? t('configuration.add_configuration')
+                  : fields.deviceConfiguration.value}
+              </CButton>
+            ) : (
+              <div className="mt-2 mb-0">
+                {fields.deviceConfiguration.uuid === '' ? (
+                  <p className="mb-0">{t('configuration.no_associated_config')}</p>
+                ) : (
+                  <CLink
+                    className="c-subheader-nav-link"
+                    aria-current="page"
+                    to={() => `/configuration/${fields.deviceConfiguration.uuid}`}
+                  >
+                    {fields.deviceConfiguration.value}
+                  </CLink>
+                )}
+              </div>
+            )}
+          </CCol>
+        </CRow>
+        <CRow className="pb-0">
+          <CLabel md="4" xxl="3" col htmlFor="sourceIp">
+            <div>{t('entity.ip_detection')}:</div>
+          </CLabel>
+          <CCol md="8" xxl="9">
+            {editing ? (
+              <CButton className="pl-0 text-left" color="link" onClick={toggleIpModal}>
+                {fields.sourceIP.value.length === 0
+                  ? t('entity.add_ips')
+                  : fields.sourceIP.value.join(', ')}
+              </CButton>
+            ) : (
+              <div className="mt-2 mb-0">
+                <p className="mb-0">
+                  {fields.sourceIP.value.length === 0
+                    ? t('entity.no_ips')
+                    : fields.sourceIP.value.join(', ')}
+                </p>
+              </div>
+            )}
+          </CCol>
+        </CRow>
+        <CRow className="pb-0">
+          <CLabel md="4" xxl="3" col htmlFor="name">
+            <div>{t('common.created')}:</div>
+          </CLabel>
+          <CCol md="8" xxl="9">
+            <div className="mt-2 mb-0">
+              <FormattedDate date={fields.created.value} />
+            </div>
           </CCol>
         </CRow>
       </CCol>
-      <CCol className="mt-2">
+      <CCol className="mt-1">
+        <CRow className="pb-0">
+          <CLabel md="4" xxl="3" col htmlFor="name">
+            <div>{t('common.modified')}:</div>
+          </CLabel>
+          <CCol md="8" xxl="9">
+            <div className="mt-2 mb-0">
+              <FormattedDate date={fields.modified.value} />
+            </div>
+          </CCol>
+        </CRow>
         <NotesTable
           t={t}
           notes={fields.notes.value}
@@ -102,8 +189,11 @@ EditEntityForm.propTypes = {
   disable: PropTypes.bool.isRequired,
   fields: PropTypes.instanceOf(Object).isRequired,
   updateField: PropTypes.func.isRequired,
+  updateFieldDirectly: PropTypes.func.isRequired,
   addNote: PropTypes.func.isRequired,
   editing: PropTypes.bool.isRequired,
+  toggleAssociate: PropTypes.func.isRequired,
+  toggleIpModal: PropTypes.func.isRequired,
 };
 
 export default EditEntityForm;

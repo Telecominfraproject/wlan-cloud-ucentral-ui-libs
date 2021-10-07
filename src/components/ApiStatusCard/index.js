@@ -1,12 +1,29 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { CCard, CCardBody, CCardHeader, CRow, CCol, CButton, CPopover } from '@coreui/react';
+import {
+  CCard,
+  CCardBody,
+  CCardHeader,
+  CRow,
+  CCol,
+  CButton,
+  CPopover,
+  CModal,
+  CModalBody,
+  CModalHeader,
+  CModalTitle,
+  CDataTable,
+} from '@coreui/react';
 import Select from 'react-select';
 import CIcon from '@coreui/icons-react';
-import { cilSync } from '@coreui/icons';
+import { cilSync, cilX } from '@coreui/icons';
+import { prettyDate } from '../../utils/formatting';
+import FormattedDate from '../FormattedDate';
+import useToggle from '../../hooks/useToggle';
 
 const ApiStatusCard = ({ t, info, reload }) => {
   const [types, setTypes] = useState([]);
+  const [showCerts, toggleCerts] = useToggle();
 
   const submit = () => {
     reload(
@@ -56,7 +73,9 @@ const ApiStatusCard = ({ t, info, reload }) => {
             <div block="true">{t('common.start')}:</div>
           </CCol>
           <CCol>
-            <div block="true">{info.start}</div>
+            <div block="true">
+              <FormattedDate date={info.start} />
+            </div>
           </CCol>
         </CRow>
         <CRow>
@@ -75,7 +94,23 @@ const ApiStatusCard = ({ t, info, reload }) => {
             <div block="true">{info.version}</div>
           </CCol>
         </CRow>
-        <CRow className="pt-3">
+        <CRow>
+          <CCol sm="4">
+            <div block="true">{t('common.certificates')}:</div>
+          </CCol>
+          <CCol>
+            <div block="true">
+              {info.certificates?.length > 0 ? (
+                <CButton className="ml-0 pl-0 py-0" color="link" onClick={toggleCerts}>
+                  {t('common.details')} ({info.certificates.length})
+                </CButton>
+              ) : (
+                <div>{t('common.unknown')}</div>
+              )}
+            </div>
+          </CCol>
+        </CRow>
+        <CRow>
           <CCol sm="4" className="pt-1">
             <div block="true">{t('system.reload_subsystems')}:</div>
           </CCol>
@@ -115,6 +150,27 @@ const ApiStatusCard = ({ t, info, reload }) => {
           </CCol>
         </CRow>
       </CCardBody>
+      <CModal size="lg" show={showCerts} onClose={toggleCerts}>
+        <CModalHeader className="p-1">
+          <CModalTitle className="pl-1 pt-1">{t('common.certificates')}</CModalTitle>
+          <div className="text-right">
+            <CPopover content={t('common.close')}>
+              <CButton color="primary" variant="outline" className="ml-2" onClick={toggleCerts}>
+                <CIcon content={cilX} />
+              </CButton>
+            </CPopover>
+          </div>
+        </CModalHeader>
+        <CModalBody>
+          <CDataTable
+            border
+            items={info?.certificates.map((cert) => ({
+              ...cert,
+              expiresOn: prettyDate(cert.expiresOn),
+            }))}
+          />
+        </CModalBody>
+      </CModal>
     </CCard>
   );
 };

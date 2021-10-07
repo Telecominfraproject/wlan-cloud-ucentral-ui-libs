@@ -1,27 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CCol, CRow, CSwitch } from '@coreui/react';
+import { CButtonClose } from '@coreui/react';
 
-const SectionToggler = ({ label, active, toggle, disabled }) => (
-  <CRow>
-    <CCol>
-      <h5 className="pr-3 float-left">{label}</h5>
-      <CSwitch
-        color="primary"
-        defaultChecked={active}
-        onClick={toggle}
-        disabled={disabled}
-        className="float-left"
-      />
-    </CCol>
-  </CRow>
-);
+const SectionToggler = ({ id, label, field, updateField }) => {
+  const toggle = () => updateField(id, { enabled: !field.enabled });
+
+  return (
+    <div className="py-1 pb-0 mb-0">
+      <h6 className="mt-1 float-left">{label}</h6>
+      <div className="text-right">
+        <CButtonClose onClick={toggle} style={{ color: 'white' }} />
+      </div>
+    </div>
+  );
+};
 
 SectionToggler.propTypes = {
+  id: PropTypes.string.isRequired,
+  field: PropTypes.instanceOf(Object).isRequired,
   label: PropTypes.string.isRequired,
-  active: PropTypes.bool.isRequired,
-  toggle: PropTypes.func.isRequired,
-  disabled: PropTypes.bool.isRequired,
+  updateField: PropTypes.func.isRequired,
 };
 
 export default SectionToggler;

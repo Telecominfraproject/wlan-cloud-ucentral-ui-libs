@@ -4,8 +4,8 @@ import { CButtonToolbar, CDataTable, CPopover, CButton } from '@coreui/react';
 import { cilPencil, cilMagnifyingGlass } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import ReactTooltip from 'react-tooltip';
-import { prettyDate } from 'utils/formatting';
 import DeleteButton from './DeleteButton';
+import FormattedDate from '../FormattedDate';
 
 const ConfigurationTable = ({ t, history, loading, configs, toggleInUse, deleteConfig }) => {
   const columns = [
@@ -45,8 +45,16 @@ const ConfigurationTable = ({ t, history, loading, configs, toggleInUse, deleteC
         name: (item) => <td className="align-middle">{item.name}</td>,
         description: (item) => <td className="align-middle">{item.description}</td>,
         deviceTypes: (item) => <td className="align-middle">{item.deviceTypes.join(', ')}</td>,
-        created: (item) => <td className="align-middle">{prettyDate(item.created)}</td>,
-        modified: (item) => <td className="align-middle">{prettyDate(item.modified)}</td>,
+        created: (item) => (
+          <td className="align-middle">
+            <FormattedDate date={item.created} />
+          </td>
+        ),
+        modified: (item) => (
+          <td className="align-middle">
+            <FormattedDate date={item.modified} />
+          </td>
+        ),
         actions: (item) => (
           <td className="align-middle">
             <CButtonToolbar

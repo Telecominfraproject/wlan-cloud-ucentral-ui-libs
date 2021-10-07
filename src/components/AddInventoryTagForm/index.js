@@ -1,15 +1,22 @@
 import React from 'react';
-import { CForm, CInput, CLabel, CCol, CFormGroup, CFormText, CSelect } from '@coreui/react';
-import { v4 as createUuid } from 'uuid';
+import { CForm, CInput, CLabel, CCol, CRow, CFormGroup, CFormText } from '@coreui/react';
+import Select from 'react-select';
 import PropTypes from 'prop-types';
 
-const AddInventoryTagForm = ({ t, disable, fields, updateField, deviceTypes }) => (
+const AddInventoryTagForm = ({
+  t,
+  disable,
+  fields,
+  updateField,
+  updateFieldDirectly,
+  deviceTypes,
+}) => (
   <CForm className="px-5 pt-5">
     <CFormGroup row className="pb-3">
       <CLabel col htmlFor="name">
         {t('common.serial_number')}
       </CLabel>
-      <CCol sm="7">
+      <CCol sm="8">
         <CInput
           id="serialNumber"
           type="text"
@@ -29,7 +36,7 @@ const AddInventoryTagForm = ({ t, disable, fields, updateField, deviceTypes }) =
       <CLabel col htmlFor="name">
         {t('user.name')}
       </CLabel>
-      <CCol sm="7">
+      <CCol sm="8">
         <CInput
           id="name"
           type="text"
@@ -47,51 +54,47 @@ const AddInventoryTagForm = ({ t, disable, fields, updateField, deviceTypes }) =
       <CLabel col htmlFor="deviceType">
         {t('firmware.device_type')}
       </CLabel>
-      <CCol sm="7">
-        <div>
-          <CSelect
-            custom
-            value={fields.deviceType.value}
+      <CCol sm="8">
+        <div style={{ width: '250px' }}>
+          <Select
             id="deviceType"
-            onChange={updateField}
-            invalid={fields.deviceType.error}
-            disabled={disable}
-          >
-            <option value=""> </option>
-            {deviceTypes.map((deviceType) => (
-              <option key={createUuid()} value={deviceType}>
-                {deviceType}
-              </option>
-            ))}
-          </CSelect>
+            value={{ value: fields.deviceType.value, label: fields.deviceType.value }}
+            onChange={(v) => updateFieldDirectly('deviceType', { value: v.value })}
+            options={deviceTypes.map((v) => ({ value: v, label: v }))}
+            isDisabled={disable}
+          />
         </div>
         <CFormText color={fields.deviceType.error ? 'danger' : ''}>
           {t('common.required')}
         </CFormText>
       </CCol>
     </CFormGroup>
-    <CFormGroup row className="pb-3" hidden={fields.entity.hidden}>
-      <CLabel col htmlFor="entity">
-        {t('entity.entity')}
+    <CRow className="pb-3">
+      <CLabel sm="4" col htmlFor="name">
+        <div>RRM:</div>
       </CLabel>
-      <CCol sm="7">
-        <CInput
-          id="entity"
-          type="text"
-          required
-          value={fields.entity.value}
-          onChange={updateField}
-          invalid={fields.entity.error}
-          disabled={true || disable}
-          maxLength="50"
-        />
+      <CCol sm="8">
+        <div style={{ width: '120px' }}>
+          <Select
+            id="rrm"
+            value={{ value: fields.rrm.value, label: fields.rrm.value }}
+            onChange={(v) => updateFieldDirectly('rrm', { value: v.value, error: false })}
+            options={[
+              { label: 'on', value: 'on' },
+              { label: 'off', value: 'off' },
+              { label: 'inherit', value: 'inherit' },
+            ]}
+            isDisabled={disable}
+          />
+        </div>
+        <CFormText color={fields.rrm.error ? 'danger' : ''}>{t('common.required')}</CFormText>
       </CCol>
-    </CFormGroup>
+    </CRow>
     <CFormGroup row className="pb-3">
       <CLabel col htmlFor="description">
         {t('user.description')}
       </CLabel>
-      <CCol sm="7">
+      <CCol sm="8">
         <CInput
           id="description"
           type="text"
@@ -108,7 +111,7 @@ const AddInventoryTagForm = ({ t, disable, fields, updateField, deviceTypes }) =
       <CLabel col htmlFor="note">
         {t('user.note')}
       </CLabel>
-      <CCol sm="7">
+      <CCol sm="8">
         <CInput
           id="note"
           type="text"
@@ -128,6 +131,7 @@ AddInventoryTagForm.propTypes = {
   disable: PropTypes.bool.isRequired,
   fields: PropTypes.instanceOf(Object).isRequired,
   updateField: PropTypes.func.isRequired,
+  updateFieldDirectly: PropTypes.func.isRequired,
   deviceTypes: PropTypes.instanceOf(Array).isRequired,
 };
 

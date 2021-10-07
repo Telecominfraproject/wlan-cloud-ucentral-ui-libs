@@ -125,6 +125,27 @@ const AddConfigurationForm = ({
           </CFormText>
         </CCol>
       </CRow>
+      <CRow className="pb-3">
+        <CLabel sm="5" col htmlFor="name">
+          <div>RRM:</div>
+        </CLabel>
+        <CCol sm="7">
+          <div style={{ width: '120px' }}>
+            <Select
+              id="rrm"
+              value={{ value: fields.rrm.value, label: fields.rrm.value }}
+              onChange={(v) => updateFieldWithKey('rrm', { value: v.value })}
+              options={[
+                { label: 'on', value: 'on' },
+                { label: 'off', value: 'off' },
+                { label: 'inherit', value: 'inherit' },
+              ]}
+              isDisabled={disable}
+            />
+          </div>
+          <CFormText color={fields.rrm.error ? 'danger' : ''}>{t('common.required')}</CFormText>
+        </CCol>
+      </CRow>
       <CFormGroup row className="pb-3">
         <CLabel col htmlFor="note">
           {t('user.note')}
