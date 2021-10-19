@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { v4 as createUuid } from 'uuid';
 import { set as lodashSet, get as lodashGet } from 'lodash';
 import { useAuth } from '../AuthProvider';
 
@@ -14,6 +15,7 @@ const navbarOption = ({
   children,
   childrenEntities,
   childrenVenues,
+  extraData = {},
 }) => {
   let tag = 'SidebarChildless';
   if (children) tag = 'SidebarDropdown';
@@ -25,7 +27,8 @@ const navbarOption = ({
     name,
     path,
     isVenue,
-    onClick: () => selectEntity(uuid, name, path, isVenue, childrenEntities, childrenVenues),
+    onClick: () =>
+      selectEntity(uuid, name, path, isVenue, childrenEntities, childrenVenues, extraData),
     _children: children,
   };
 };
@@ -42,7 +45,7 @@ export const EntityProvider = ({ axiosInstance, selectedEntity, children }) => {
   const [parentsWithChildrenLoaded, setParentsWithChildrenLoaded] = useState([]);
   const [deviceTypes, setDeviceTypes] = useState([]);
 
-  const selectEntity = (uuid, name, path, isVenue, childrenEntities, childrenVenues) => {
+  const selectEntity = (uuid, name, path, isVenue, childrenEntities, childrenVenues, extraData) => {
     // If we have not yet gotten the information of this entity's children, we get them now
     if (childrenEntities || childrenVenues) {
       setEntityToRetrieve({ childrenEntities, childrenVenues, path, uuid, isVenue });
@@ -54,6 +57,7 @@ export const EntityProvider = ({ axiosInstance, selectedEntity, children }) => {
       childrenEntities,
       childrenVenues,
       path,
+      extraData,
     });
     history.push(`/${isVenue ? 'venue' : 'entity'}/${uuid}`);
   };
@@ -98,7 +102,7 @@ export const EntityProvider = ({ axiosInstance, selectedEntity, children }) => {
   const setProviderEntity = async (id, isVenue) => {
     const newEntity = await getEntity(id, isVenue);
     if (newEntity) {
-      setEntity({
+      const newObj = {
         ...newEntity,
         uuid: newEntity.id,
         name: newEntity.name,
@@ -106,7 +110,11 @@ export const EntityProvider = ({ axiosInstance, selectedEntity, children }) => {
         isVenue,
         childrenIds: newEntity.children,
         childrenVenues: newEntity.venues,
-      });
+        extraData: newEntity,
+        refreshId: createUuid(),
+      };
+
+      setEntity({ ...newObj });
     }
   };
 
@@ -162,6 +170,7 @@ export const EntityProvider = ({ axiosInstance, selectedEntity, children }) => {
           children: nestedOptions,
           childrenEntities: grandChildrenEntities,
           childrenVenues: grandChildrenVenues,
+          extraData: result,
         });
       });
 

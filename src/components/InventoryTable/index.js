@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import ReactPaginate from 'react-paginate';
 import { CButton, CDataTable, CLink, CPopover, CButtonToolbar, CSelect } from '@coreui/react';
-import { cilPencil, cilPlus, cilSpreadsheet } from '@coreui/icons';
+import { cilPencil, cilPlus, cilRouter, cilSpreadsheet } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import ReactTooltip from 'react-tooltip';
 import DeleteButton from './DeleteButton';
@@ -28,7 +28,9 @@ const InventoryTable = ({
   toggleAssociate,
   toggleAssocEntity,
   toggleComputed,
+  pushConfig,
 }) => {
+  const [gwUi] = useState(localStorage.getItem('owgw-ui'));
   const columns =
     onlyEntity || onlyUnassigned
       ? [
@@ -75,7 +77,19 @@ const InventoryTable = ({
         border
         loading={loading}
         scopedSlots={{
-          serialNumber: (item) => <td className="align-middle">{item.serialNumber}</td>,
+          serialNumber: (item) => (
+            <td className="align-middle">
+              <CLink
+                className="c-subheader-nav-link align-self-center"
+                aria-current="page"
+                href={`${gwUi}/#/devices/${item.serialNumber}`}
+                target="_blank"
+                disabled={!gwUi || gwUi === ''}
+              >
+                {item.serialNumber}
+              </CLink>
+            </td>
+          ),
           name: (item) => <td className="align-middle">{item.name}</td>,
           created: (item) => (
             <td className="align-middle">
@@ -97,9 +111,9 @@ const InventoryTable = ({
                   })
                 }
               >
-                {item.deviceConfigurationName === ''
+                {item.deviceConfiguration === ''
                   ? t('configuration.add_or_link')
-                  : item.deviceConfigurationName}
+                  : item.extendedInfo?.deviceConfiguration?.name ?? item.deviceConfiguration}
               </CButton>
             </td>
           ),
@@ -113,7 +127,7 @@ const InventoryTable = ({
                   aria-current="page"
                   to={() => `/entity/${item.entity}`}
                 >
-                  {item.entity_info ? item.entity_info.name : item.entity}
+                  {item.extendedInfo?.entity?.name ?? item.entity}
                 </CLink>
               )}
             </td>
@@ -128,7 +142,7 @@ const InventoryTable = ({
                   aria-current="page"
                   to={() => `/venue/${item.venue}`}
                 >
-                  {item.venue_info ? item.venue_info.name : item.venue}
+                  {item.extendedInfo?.venue?.name ?? item.venue}
                 </CLink>
               )}
             </td>
@@ -138,7 +152,7 @@ const InventoryTable = ({
               <CButtonToolbar
                 role="group"
                 className="justify-content-flex-end"
-                style={{ width: '250px' }}
+                style={{ width: '300px' }}
               >
                 <CPopover content={t('inventory.assign_ent_ven')}>
                   <div>
@@ -167,6 +181,20 @@ const InventoryTable = ({
                   hideTooltips={hideTooltips}
                 />
                 <DeleteButton t={t} tag={item} deleteTag={deleteTag} hideTooltips={hideTooltips} />
+                <CPopover content="Push Configuration to Device">
+                  <CButton
+                    color="primary"
+                    variant="outline"
+                    shape="square"
+                    size="sm"
+                    className="mx-2"
+                    onClick={() => pushConfig(item.serialNumber)}
+                    style={{ width: '33px', height: '30px' }}
+                    disabled={item.deviceConfigurationName === ''}
+                  >
+                    <CIcon name="cil-router" content={cilRouter} size="sm" />
+                  </CButton>
+                </CPopover>
                 <CPopover content="See Computed Configuration">
                   <CButton
                     color="primary"
@@ -255,6 +283,7 @@ InventoryTable.propTypes = {
   toggleAssociate: PropTypes.func.isRequired,
   toggleAssocEntity: PropTypes.func.isRequired,
   toggleComputed: PropTypes.func.isRequired,
+  pushConfig: PropTypes.func.isRequired,
 };
 
 InventoryTable.defaultProps = {

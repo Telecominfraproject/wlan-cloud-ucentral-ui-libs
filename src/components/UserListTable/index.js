@@ -12,9 +12,10 @@ import {
 } from '@coreui/react';
 import { cilBan, cilCheckCircle, cilPencil, cilPlus, cilSync, cilTrash } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
-import { capitalizeFirstLetter, prettyDate } from '../../utils/formatting';
+import { capitalizeFirstLetter } from '../../utils/formatting';
 import DeleteModal from '../DeleteModal';
 import Avatar from '../Avatar';
+import FormattedDate from '../FormattedDate';
 
 const UserListTable = ({
   t,
@@ -115,7 +116,9 @@ const UserListTable = ({
                 </td>
               ),
               lastLogin: (item) => (
-                <td className="align-middle">{item.lastLogin ? prettyDate(item.lastLogin) : ''}</td>
+                <td className="align-middle">
+                  {item.lastLogin ? <FormattedDate date={item.lastLogin} /> : ''}
+                </td>
               ),
               validated: (item) => (
                 <td className="text-center align-middle">

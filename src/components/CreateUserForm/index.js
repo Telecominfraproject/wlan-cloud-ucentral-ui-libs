@@ -46,8 +46,11 @@ const CreateUserForm = ({ t, fields, updateField, policies, toggleChange }) => {
         </CLabel>
         <CCol sm="4">
           <CSelect custom id="userRole" defaultValue="Admin" onChange={updateField}>
+            <option value="accounting">Accounting</option>
             <option value="admin">Admin</option>
             <option value="csr">CSR</option>
+            <option value="installer">Installer</option>
+            <option value="noc">NOC</option>
             <option value="root">Root</option>
             <option value="special">Special</option>
             <option value="sub">Sub</option>

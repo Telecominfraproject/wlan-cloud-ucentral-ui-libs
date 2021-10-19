@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {
   CFormGroup,
@@ -13,7 +13,7 @@ import {
   CDataTable,
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
-import { cilMinus, cilSave, cilX } from '@coreui/icons';
+import { cilMinus, cilPlus, cilSave, cilX } from '@coreui/icons';
 import useToggle from '../../../hooks/useToggle';
 
 const CustomMultiModal = ({
@@ -28,15 +28,17 @@ const CustomMultiModal = ({
   secondCol,
   length,
   modalSize,
+  itemName,
+  noTable,
+  toggleAdd,
+  reset,
 }) => {
   const [show, toggle] = useToggle();
 
   const getLabel = () => {
-    if (length === 0) return t('common.add_items');
+    if (length === 0) return `Manage ${itemName}`;
 
-    if (length === 1) return `${length} ${t('common.item')}`;
-
-    return `${length} ${t('common.items')}`;
+    return `Manage ${itemName} (${length})`;
   };
 
   const remove = (v) => {
@@ -55,6 +57,10 @@ const CustomMultiModal = ({
     toggle();
   };
 
+  useEffect(() => {
+    if (show && reset !== null) reset();
+  }, [show]);
+
   return (
     <CFormGroup row className="py-1">
       <CLabel col sm={firstCol} htmlFor="name">
@@ -69,6 +75,17 @@ const CustomMultiModal = ({
         <CModalHeader className="p-1">
           <CModalTitle className="pl-1 pt-1">{label}</CModalTitle>
           <div className="text-right">
+            <CPopover content={t('common.add')}>
+              <CButton
+                color="primary"
+                hidden={toggleAdd === null}
+                variant="outline"
+                className="ml-2"
+                onClick={toggleAdd}
+              >
+                <CIcon content={cilPlus} />
+              </CButton>
+            </CPopover>
             <CPopover content={t('common.save')}>
               <CButton color="primary" variant="outline" className="ml-2" onClick={closeAndSave}>
                 <CIcon content={cilSave} />
@@ -83,22 +100,29 @@ const CustomMultiModal = ({
         </CModalHeader>
         <CModalBody>
           {children}
-          <CDataTable
-            addTableClasses="ignore-overflow"
-            items={value ?? []}
-            fields={columns}
-            hover
-            border
-            scopedSlots={{
-              remove: (item) => (
-                <td className="align-middle text-center">
-                  <CButton color="primary" variant="outline" size="sm" onClick={() => remove(item)}>
-                    <CIcon content={cilMinus} />
-                  </CButton>
-                </td>
-              ),
-            }}
-          />
+          {!noTable ? (
+            <CDataTable
+              addTableClasses="ignore-overflow"
+              items={value ?? []}
+              fields={columns}
+              hover
+              border
+              scopedSlots={{
+                remove: (item) => (
+                  <td className="align-middle text-center">
+                    <CButton
+                      color="primary"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => remove(item)}
+                    >
+                      <CIcon content={cilMinus} />
+                    </CButton>
+                  </td>
+                ),
+              }}
+            />
+          ) : null}
         </CModalBody>
       </CModal>
     </CFormGroup>
@@ -117,12 +141,19 @@ CustomMultiModal.propTypes = {
   secondCol: PropTypes.string,
   length: PropTypes.number.isRequired,
   modalSize: PropTypes.string,
+  itemName: PropTypes.string.isRequired,
+  noTable: PropTypes.bool,
+  toggleAdd: PropTypes.func,
+  reset: PropTypes.func,
 };
 
 CustomMultiModal.defaultProps = {
   firstCol: 6,
   secondCol: 6,
   modalSize: 'lg',
+  noTable: false,
+  toggleAdd: null,
+  reset: null,
 };
 
 export default CustomMultiModal;

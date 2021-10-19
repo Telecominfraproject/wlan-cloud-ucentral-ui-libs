@@ -85,10 +85,10 @@ const EditConfigurationForm = ({
       <CFormGroup row>
         <CCol>
           <CRow className="pb-0">
-            <CLabel md="3" col htmlFor="name">
+            <CLabel lg="5" xl="3" col htmlFor="name">
               <div>{t('user.name')}:</div>
             </CLabel>
-            <CCol md="9">
+            <CCol lg="7" xl="9">
               {editing ? (
                 <div>
                   <CInput
@@ -111,10 +111,10 @@ const EditConfigurationForm = ({
             </CCol>
           </CRow>
           <CRow className="pb-0">
-            <CLabel md="3" col htmlFor="name">
+            <CLabel lg="5" xl="3" col htmlFor="name">
               <div>{t('user.description')}:</div>
             </CLabel>
-            <CCol md="9">
+            <CCol lg="7" xl="9">
               {editing ? (
                 <div>
                   <CInput
@@ -135,10 +135,10 @@ const EditConfigurationForm = ({
             </CCol>
           </CRow>
           <CRow className="pt-1">
-            <CLabel md="3" col htmlFor="name">
+            <CLabel lg="5" xl="3" col htmlFor="name">
               <div>{t('configuration.device_types')}:</div>
             </CLabel>
-            <CCol md="9">
+            <CCol lg="7" xl="9">
               <Select
                 isMulti
                 closeMenuOnSelect={false}
@@ -156,10 +156,10 @@ const EditConfigurationForm = ({
             </CCol>
           </CRow>
           <CRow className="pt-1 pb-0">
-            <CLabel md="3" col htmlFor="name">
+            <CLabel lg="5" xl="3" col htmlFor="name">
               <div>RRM:</div>
             </CLabel>
-            <CCol md="9">
+            <CCol lg="7" xl="9">
               <div style={{ width: '120px' }}>
                 <Select
                   id="rrm"
@@ -179,10 +179,10 @@ const EditConfigurationForm = ({
             </CCol>
           </CRow>
           <CRow className="py-1">
-            <CLabel col md="4" xxl="3" htmlFor="firmwareUpgrade">
+            <CLabel col lg="5" xl="3" htmlFor="firmwareUpgrade">
               Firmware Upgrade
             </CLabel>
-            <CCol md="8" xxl="9">
+            <CCol lg="7" xl="9">
               <div style={{ width: '120px' }}>
                 <Select
                   id="rrm"
@@ -202,10 +202,10 @@ const EditConfigurationForm = ({
             </CCol>
           </CRow>
           <CRow className="py-1">
-            <CLabel col md="3" htmlFor="firmwareRCOnly">
+            <CLabel col lg="5" xl="3" htmlFor="firmwareRCOnly">
               Only Release Candidates
             </CLabel>
-            <CCol xxl="9">
+            <CCol lg="7" xl="9">
               <CSwitch
                 id="firmwareRCOnly"
                 color="primary"
@@ -219,10 +219,10 @@ const EditConfigurationForm = ({
             </CCol>
           </CRow>
           <CRow className="pb-0">
-            <CLabel md="3" col htmlFor="name">
+            <CLabel lg="5" xl="3" col htmlFor="name">
               <div>{t('configuration.used_by')}:</div>
             </CLabel>
-            <CCol md="9">
+            <CCol lg="7" xl="9">
               <CButton
                 disabled={fields.inUse.value.length === 0}
                 className="ml-0 pl-0"
@@ -236,20 +236,20 @@ const EditConfigurationForm = ({
         </CCol>
         <CCol className="mt-2">
           <CRow className="pb-0">
-            <CLabel md="3" col htmlFor="name">
+            <CLabel lg="5" xl="3" col htmlFor="name">
               <div>{t('common.created')}:</div>
             </CLabel>
-            <CCol md="9">
+            <CCol lg="7" xl="9">
               <p className="mt-2 mb-0">
                 <FormattedDate date={fields.created.value} />
               </p>
             </CCol>
           </CRow>
           <CRow className="pb-0">
-            <CLabel md="3" col htmlFor="name">
+            <CLabel lg="5" xl="3" col htmlFor="name">
               <div>{t('common.modified')}:</div>
             </CLabel>
-            <CCol md="9">
+            <CCol lg="7" xl="9">
               <p className="mt-2 mb-0">
                 <FormattedDate date={fields.modified.value} />
               </p>

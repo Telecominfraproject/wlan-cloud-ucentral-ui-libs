@@ -106,37 +106,33 @@ const LoginForm = ({
         </CAlert>
       </CCol>
     </CRow>
-    <CRow>
-      <CCol>
-        <CButton color="primary" className="px-4" onClick={signIn} disabled={loading}>
-          {loading ? t('login.logging_in') : t('login.login')}
-          <CSpinner hidden={!loading} color="light" component="span" size="sm" />
-        </CButton>
-        <CLink
-          className="c-subheader-nav-link px-3"
-          aria-current="page"
-          href={policies.accessPolicy}
-          target="_blank"
-          hidden={policies.accessPolicy.length === 0}
-        >
-          {t('common.access_policy')}
-        </CLink>
-        <CLink
-          className="c-subheader-nav-link"
-          aria-current="page"
-          href={policies.passwordPolicy}
-          target="_blank"
-          hidden={policies.passwordPolicy.length === 0}
-        >
-          {t('common.password_policy')}
-        </CLink>
-      </CCol>
-      <CCol xs="5" className="text-right">
-        <CButton variant="ghost" color="primary" onClick={toggleForgotPassword}>
-          {t('common.forgot_password')}
-        </CButton>
-      </CCol>
-    </CRow>
+    <div className="d-flex flex-row align-middle">
+      <CButton color="primary" className="px-4" onClick={signIn} disabled={loading}>
+        {loading ? t('login.logging_in') : t('login.login')}
+        <CSpinner hidden={!loading} color="light" component="span" size="sm" />
+      </CButton>
+      <CLink
+        className="c-subheader-nav-link px-3 align-self-center"
+        aria-current="page"
+        href={policies.accessPolicy}
+        target="_blank"
+        hidden={policies.accessPolicy.length === 0}
+      >
+        {t('common.access_policy')}
+      </CLink>
+      <CLink
+        className="c-subheader-nav-link align-self-center"
+        aria-current="page"
+        href={policies.passwordPolicy}
+        target="_blank"
+        hidden={policies.passwordPolicy.length === 0}
+      >
+        {t('common.password_policy')}
+      </CLink>
+      <CButton className="ml-auto" variant="ghost" color="primary" onClick={toggleForgotPassword}>
+        {t('common.forgot_password')}
+      </CButton>
+    </div>
   </CForm>
 );
 

@@ -8,6 +8,11 @@ const hasError = (e, field) => {
       return `This field has a minimum value of ${field.minimum}`;
     if (field.maximum !== undefined && e.target.value > field.maximum)
       return `This field has a maximum value of ${field.maximum}`;
+  } else if (field.type && field.type === 'string') {
+    if (field.minLength && e.target.value.length < field.minLength)
+      return `This field has a minimum length of ${field.minLength}`;
+    if (field.maxLength && e.target.value.length > field.maxLength)
+      return `This field has a maximum length of ${field.maxLength}`;
   }
   return null;
 };
@@ -43,6 +48,16 @@ export default (initialState) => {
       if (JSON.stringify(formFields) !== JSON.stringify(fields)) {
         setFields({ ...formFields });
       } else if (force) setFields({ ...formFields });
+    },
+    (fieldsList) => {
+      const newFields = { ...fields };
+
+      fieldsList.forEach((field) => {
+        const oldField = lodashGet(newFields, field.id);
+        lodashSet(newFields, field.id, { ...oldField, value: field.value });
+      });
+
+      setFields({ ...newFields });
     },
   ];
 };

@@ -13,6 +13,7 @@ import {
   CLink,
   CPopover,
 } from '@coreui/react';
+import { useHistory } from 'react-router-dom';
 import { cilPencil, cilPlus, cilSync } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import DeleteButton from './DeleteButton';
@@ -33,6 +34,8 @@ const VenueTable = ({
   deleteVenue,
   refresh,
 }) => {
+  const history = useHistory();
+
   const columns = [
     { key: 'name', label: t('user.name'), _style: { width: '20%' } },
     { key: 'description', label: t('user.description'), _style: { width: '25%' } },
@@ -121,13 +124,12 @@ const VenueTable = ({
                   >
                     <CPopover content="Edit Tag">
                       <CButton
-                        disabled
                         color="primary"
                         variant="outline"
                         shape="square"
                         size="sm"
                         className="mx-1"
-                        onClick={() => {}}
+                        onClick={() => history.push(`/venue/${item.id}`)}
                         style={{ width: '33px', height: '30px' }}
                       >
                         <CIcon name="cil-pencil" content={cilPencil} size="sm" />

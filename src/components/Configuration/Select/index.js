@@ -27,6 +27,16 @@ const ConfigurationSelectField = ({
       return null;
     }
 
+    if (typeof field.options[0] === 'number') {
+      for (const opt of field.options) {
+        const value = opt;
+        if (value === field.value) {
+          return { value, label: opt };
+        }
+      }
+      return null;
+    }
+
     if (options !== null) {
       for (const opt of options) {
         if (field.value === opt.value) return opt;
@@ -34,7 +44,10 @@ const ConfigurationSelectField = ({
     }
 
     for (const opt of field.options) {
-      if (field.value === opt.value) return opt;
+      if (field.value === opt.value) {
+        if (field.mergeOptions) return { value: opt.value, label: `${opt.label} (${opt.value})` };
+        return opt;
+      }
     }
 
     return null;
@@ -42,8 +55,20 @@ const ConfigurationSelectField = ({
 
   const parseOptions = () => {
     if (options !== null) return options;
-    if (typeof field.options[0] !== 'string') {
+    if (typeof field.options[0] !== 'string' && typeof field.options[0] !== 'number') {
+      if (field.mergeOptions)
+        return field.options.map((opt) => ({
+          value: opt.value,
+          label: `${opt.label} (${opt.value})`,
+        }));
       return field.options;
+    }
+
+    if (typeof field.options[0] === 'number') {
+      return field.options.map((opt) => ({
+        value: opt,
+        label: `${opt}`,
+      }));
     }
 
     if (field.options[0].includes('(')) {
@@ -54,7 +79,7 @@ const ConfigurationSelectField = ({
     }
     return field.options.map((opt) => ({
       value: opt,
-      label: `opt${field.unit ?? ''}`,
+      label: `${opt}${field.unit ?? ''}`,
     }));
   };
 
@@ -64,7 +89,7 @@ const ConfigurationSelectField = ({
         {label}
       </CLabel>
       <CCol sm={secondCol}>
-        <div style={{ width: width ?? '' }}>
+        <div style={{ maxWidth: width ?? '' }}>
           <Select
             name="Subsystems"
             options={parseOptions()}

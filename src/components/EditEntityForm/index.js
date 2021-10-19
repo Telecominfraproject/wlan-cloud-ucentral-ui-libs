@@ -31,10 +31,10 @@ const EditEntityForm = ({
     <CFormGroup row>
       <CCol>
         <CRow className="pb-0">
-          <CLabel md="4" xxl="3" col htmlFor="name">
+          <CLabel lg="5" xl="3" col htmlFor="name">
             <div>{t('user.name')}:</div>
           </CLabel>
-          <CCol md="8" xxl="9">
+          <CCol lg="7" xxl="9">
             {editing ? (
               <div>
                 <CInput
@@ -57,10 +57,10 @@ const EditEntityForm = ({
           </CCol>
         </CRow>
         <CRow className="pb-0">
-          <CLabel md="4" xxl="3" col htmlFor="name">
+          <CLabel lg="5" xl="3" col htmlFor="name">
             <div>{t('user.description')}:</div>
           </CLabel>
-          <CCol md="8" xxl="9">
+          <CCol lg="7" xxl="9">
             {editing ? (
               <div>
                 <CInput
@@ -81,10 +81,10 @@ const EditEntityForm = ({
           </CCol>
         </CRow>
         <CRow className="pb-0">
-          <CLabel md="4" xxl="3" col htmlFor="name">
+          <CLabel lg="5" xl="3" col htmlFor="name">
             <div>RRM:</div>
           </CLabel>
-          <CCol md="8" xxl="9">
+          <CCol lg="7" xxl="9">
             <div style={{ width: '120px' }}>
               <Select
                 id="rrm"
@@ -101,10 +101,10 @@ const EditEntityForm = ({
           </CCol>
         </CRow>
         <CRow className="pb-0">
-          <CLabel md="4" xxl="3" col htmlFor="name">
+          <CLabel lg="5" xl="3" col htmlFor="name">
             <div>{t('configuration.title')}:</div>
           </CLabel>
-          <CCol md="8" xxl="9">
+          <CCol lg="7" xxl="9">
             {editing ? (
               <CButton className="pl-0 text-left" color="link" onClick={toggleAssociate}>
                 {fields.deviceConfiguration.value === ''
@@ -129,10 +129,10 @@ const EditEntityForm = ({
           </CCol>
         </CRow>
         <CRow className="pb-0">
-          <CLabel md="4" xxl="3" col htmlFor="sourceIp">
+          <CLabel lg="5" xl="3" col htmlFor="sourceIp">
             <div>{t('entity.ip_detection')}:</div>
           </CLabel>
-          <CCol md="8" xxl="9">
+          <CCol lg="7" xxl="9">
             {editing ? (
               <CButton className="pl-0 text-left" color="link" onClick={toggleIpModal}>
                 {fields.sourceIP.value.length === 0
@@ -151,10 +151,10 @@ const EditEntityForm = ({
           </CCol>
         </CRow>
         <CRow className="pb-0">
-          <CLabel md="4" xxl="3" col htmlFor="name">
+          <CLabel lg="5" xl="3" col htmlFor="name">
             <div>{t('common.created')}:</div>
           </CLabel>
-          <CCol md="8" xxl="9">
+          <CCol lg="7" xxl="9">
             <div className="mt-2 mb-0">
               <FormattedDate date={fields.created.value} />
             </div>
@@ -163,10 +163,10 @@ const EditEntityForm = ({
       </CCol>
       <CCol className="mt-1">
         <CRow className="pb-0">
-          <CLabel md="4" xxl="3" col htmlFor="name">
+          <CLabel lg="5" xl="3" col htmlFor="name">
             <div>{t('common.modified')}:</div>
           </CLabel>
-          <CCol md="8" xxl="9">
+          <CCol lg="7" xxl="9">
             <div className="mt-2 mb-0">
               <FormattedDate date={fields.modified.value} />
             </div>

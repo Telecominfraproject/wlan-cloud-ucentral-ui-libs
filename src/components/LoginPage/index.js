@@ -5,6 +5,7 @@ import styles from './index.module.scss';
 import LoginForm from './LoginForm';
 import ForgotPasswordForm from './ForgotPasswordForm';
 import ChangePasswordForm from './ChangePasswordForm';
+import AccountVerificationForm from './AccountVerificationForm';
 
 const LoginPage = ({
   t,
@@ -16,17 +17,32 @@ const LoginPage = ({
   forgotResponse,
   fields,
   updateField,
-  isLogin,
-  isPasswordChange,
+  formType,
   toggleForgotPassword,
   onKeyDown,
   sendForgotPasswordEmail,
   changePasswordResponse,
   cancelPasswordChange,
   policies,
+  validateCode,
+  resendValidationCode,
 }) => {
   const getForm = () => {
-    if (!isLogin) {
+    if (formType.split('-')[0] === 'validation') {
+      return (
+        <AccountVerificationForm
+          t={t}
+          i18n={i18n}
+          onKeyDown={onKeyDown}
+          toggleForgotPassword={toggleForgotPassword}
+          validateVerificationCode={validateCode}
+          resendValidationCode={resendValidationCode}
+          policies={policies}
+          formType={formType}
+        />
+      );
+    }
+    if (formType === 'forgot-password') {
       return (
         <ForgotPasswordForm
           t={t}
@@ -43,7 +59,7 @@ const LoginPage = ({
         />
       );
     }
-    if (isPasswordChange) {
+    if (formType === 'change-password') {
       return (
         <ChangePasswordForm
           t={t}
@@ -86,7 +102,7 @@ const LoginPage = ({
               alt="OpenWifi"
             />
             <CCardGroup>
-              <CCard className="p-4" color={isLogin && isPasswordChange ? 'secondary' : ''}>
+              <CCard className="p-4" color={formType === 'change-password' ? 'secondary' : ''}>
                 <CCardBody>{getForm()}</CCardBody>
               </CCard>
             </CCardGroup>
@@ -107,14 +123,15 @@ LoginPage.propTypes = {
   forgotResponse: PropTypes.instanceOf(Object).isRequired,
   fields: PropTypes.instanceOf(Object).isRequired,
   updateField: PropTypes.func.isRequired,
-  isLogin: PropTypes.bool.isRequired,
-  isPasswordChange: PropTypes.bool.isRequired,
   toggleForgotPassword: PropTypes.func.isRequired,
   onKeyDown: PropTypes.func.isRequired,
   sendForgotPasswordEmail: PropTypes.func.isRequired,
   changePasswordResponse: PropTypes.instanceOf(Object).isRequired,
   cancelPasswordChange: PropTypes.func.isRequired,
   policies: PropTypes.instanceOf(Object).isRequired,
+  formType: PropTypes.string.isRequired,
+  validateCode: PropTypes.func.isRequired,
+  resendValidationCode: PropTypes.func.isRequired,
 };
 
 export default React.memo(LoginPage);

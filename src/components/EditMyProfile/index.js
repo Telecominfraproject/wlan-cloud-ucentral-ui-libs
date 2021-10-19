@@ -16,15 +16,19 @@ import {
   CInputFile,
 } from '@coreui/react';
 import PropTypes from 'prop-types';
+import parsePhoneNumber from 'libphonenumber-js';
 import CIcon from '@coreui/icons-react';
+import ValidatePhoneNumberModal from 'components/ValidatePhoneNumberModal';
 import NotesTable from '../NotesTable';
 import LoadingButton from '../LoadingButton';
 import Avatar from '../Avatar';
+import useToggle from '../../hooks/useToggle';
 
 const EditMyProfile = ({
   t,
   user,
   updateUserWithId,
+  updateWithKey,
   loading,
   policies,
   addNote,
@@ -33,26 +37,49 @@ const EditMyProfile = ({
   deleteAvatar,
   showPreview,
   fileInputKey,
+  sendPhoneNumberTest,
+  testVerificationCode,
 }) => {
+  const [showPhoneModal, togglePhoneModal] = useToggle(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
 
+  const saveNumber = (newNumber) => {
+    const newUserTypeInfo = { ...user.userTypeProprietaryInfo.value };
+    newUserTypeInfo.mobiles[0] = { number: `+${newNumber}` };
+    updateWithKey('userTypeProprietaryInfo', newUserTypeInfo);
+  };
+
+  const parseNumber = () => {
+    if (user.userTypeProprietaryInfo.value.mobiles?.length > 0) {
+      const phoneNumber = parsePhoneNumber(
+        `${user.userTypeProprietaryInfo.value.mobiles[0].number}`,
+      );
+
+      if (phoneNumber) {
+        return phoneNumber.formatInternational();
+      }
+    }
+
+    return t('user.add_phone_number');
+  };
+
   return (
     <CForm>
       <CFormGroup row>
-        <CLabel sm="2" col htmlFor="name">
+        <CLabel lg="2" xxl="1" col htmlFor="name">
           {t('user.name')}
         </CLabel>
-        <CCol sm="4">
+        <CCol lg="4" xxl="5">
           <CInput id="name" value={user.name.value} onChange={updateUserWithId} maxLength="20" />
         </CCol>
-        <CLabel sm="2" col htmlFor="description">
+        <CLabel lg="2" xxl="1" col htmlFor="description">
           {t('user.description')}
         </CLabel>
-        <CCol sm="4">
+        <CCol lg="4" xxl="5">
           <CInput
             id="description"
             value={user.description.value}
@@ -62,11 +89,17 @@ const EditMyProfile = ({
         </CCol>
       </CFormGroup>
       <CFormGroup row>
-        <CLabel sm="2" col htmlFor="userRole">
+        <CLabel lg="2" xxl="1" col htmlFor="userRole">
           {t('user.user_role')}
         </CLabel>
-        <CCol sm="4">
-          <CSelect custom id="userRole" onChange={updateUserWithId} value={user.userRole.value}>
+        <CCol lg="4" xxl="5">
+          <CSelect
+            custom
+            id="userRole"
+            onChange={updateUserWithId}
+            value={user.userRole.value}
+            style={{ width: '100px' }}
+          >
             <option value="admin">Admin</option>
             <option value="csr">CSR</option>
             <option value="root">Root</option>
@@ -75,10 +108,10 @@ const EditMyProfile = ({
             <option value="system">System</option>
           </CSelect>
         </CCol>
-        <CLabel sm="2" col htmlFor="currentPassword">
+        <CLabel lg="2" xxl="1" col htmlFor="currentPassword">
           {t('login.new_password')}
         </CLabel>
-        <CCol sm="4">
+        <CCol lg="4" xxl="5">
           <CInputGroup>
             <CInput
               type={showPassword ? 'text' : 'password'}
@@ -103,25 +136,42 @@ const EditMyProfile = ({
         </CCol>
       </CFormGroup>
       <CFormGroup row>
-        <CCol sm="6">
-          <NotesTable
-            t={t}
-            notes={user.notes.value}
-            addNote={addNote}
-            loading={loading}
-            size="lg"
-          />
+        <CLabel lg="2" xxl="1" col htmlFor="userRole">
+          {t('user.user_role')}
+        </CLabel>
+        <CCol lg="4" xxl="5">
+          <CSelect
+            custom
+            id="mfaMethod"
+            onChange={updateUserWithId}
+            value={user.mfaMethod.value}
+            style={{ width: '100px' }}
+          >
+            <option value="">Off</option>
+            <option value="sms">SMS</option>
+            <option value="email">Email</option>
+          </CSelect>
         </CCol>
-        <CLabel sm="2" col htmlFor="avatar">
+        <CLabel lg="2" xxl="1" col htmlFor="name">
+          {t('user.phone_number')}
+        </CLabel>
+        <CCol lg="4" xxl="5">
+          <CButton color="link" onClick={togglePhoneModal} className="pl-0">
+            {parseNumber()}
+          </CButton>
+        </CCol>
+      </CFormGroup>
+      <CFormGroup row>
+        <CLabel lg="2" xl="1" col htmlFor="avatar" className="pt-2">
           {t('user.avatar')}
         </CLabel>
-        <CCol sm="4">
+        <CCol lg="10" xl="5" className="pt-2">
           <CRow>
-            <CCol sm="3" className="pt-2">
+            <CCol lg="2" xl="2" className="pt-2">
               {t('common.current')}
               <div className="pt-5">Preview</div>
             </CCol>
-            <CCol sm="2">
+            <CCol lg="1" xl="1">
               <Avatar src={avatar} fallback={user.email.value} />
               <div className="pt-3">
                 <Avatar src={newAvatar} fallback={user.email.value} />
@@ -150,6 +200,15 @@ const EditMyProfile = ({
             </CCol>
           </CRow>
         </CCol>
+        <CCol lg="12" xl="6" className="pt-2">
+          <NotesTable
+            t={t}
+            notes={user.notes.value}
+            addNote={addNote}
+            loading={loading}
+            size="lg"
+          />
+        </CCol>
       </CFormGroup>
       <CRow>
         <CCol />
@@ -165,6 +224,14 @@ const EditMyProfile = ({
           </CLink>
         </CCol>
       </CRow>
+      <ValidatePhoneNumberModal
+        t={t}
+        show={showPhoneModal}
+        toggle={togglePhoneModal}
+        sendPhoneNumberTest={sendPhoneNumberTest}
+        save={saveNumber}
+        testVerificationCode={testVerificationCode}
+      />
     </CForm>
   );
 };
@@ -181,6 +248,9 @@ EditMyProfile.propTypes = {
   showPreview: PropTypes.func.isRequired,
   deleteAvatar: PropTypes.func.isRequired,
   fileInputKey: PropTypes.number.isRequired,
+  sendPhoneNumberTest: PropTypes.func.isRequired,
+  testVerificationCode: PropTypes.func.isRequired,
+  updateWithKey: PropTypes.func.isRequired,
 };
 
 EditMyProfile.defaultProps = {
