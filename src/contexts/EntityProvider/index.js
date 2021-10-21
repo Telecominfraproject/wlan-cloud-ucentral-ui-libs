@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { v4 as createUuid } from 'uuid';
-import { set as lodashSet, get as lodashGet } from 'lodash';
+import _, { set as lodashSet, get as lodashGet } from 'lodash';
 import { useAuth } from '../AuthProvider';
 
 const navbarOption = ({
@@ -71,7 +71,10 @@ export const EntityProvider = ({ axiosInstance, selectedEntity, children }) => {
     };
 
     return axiosInstance
-      .get(`${endpoints.owprov}/api/v1/${isVenue ? 'venue' : 'entity'}/${id}`, options)
+      .get(
+        `${endpoints.owprov}/api/v1/${isVenue ? 'venue' : 'entity'}/${id}?withExtendedInfo=true`,
+        options,
+      )
       .then((response) => response.data)
       .catch(() => {
         history.push(`/entity/0000-0000-0000`);
@@ -101,7 +104,7 @@ export const EntityProvider = ({ axiosInstance, selectedEntity, children }) => {
 
   const setProviderEntity = async (id, isVenue) => {
     const newEntity = await getEntity(id, isVenue);
-    if (newEntity) {
+    if (newEntity && !_.isEqual(newEntity, entity)) {
       const newObj = {
         ...newEntity,
         uuid: newEntity.id,
@@ -170,7 +173,6 @@ export const EntityProvider = ({ axiosInstance, selectedEntity, children }) => {
           children: nestedOptions,
           childrenEntities: grandChildrenEntities,
           childrenVenues: grandChildrenVenues,
-          extraData: result,
         });
       });
 
@@ -193,6 +195,7 @@ export const EntityProvider = ({ axiosInstance, selectedEntity, children }) => {
             selectEntity,
             path: `${basePath}${startingVenuesIndex + resultIndex}.[${index}]`,
             isVenue: true,
+            extraData: {},
           }),
         );
 

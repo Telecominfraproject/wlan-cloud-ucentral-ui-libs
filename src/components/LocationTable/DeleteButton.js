@@ -2,21 +2,20 @@ import React, { useState } from 'react';
 import ReactTooltip from 'react-tooltip';
 import { v4 as createUuid } from 'uuid';
 import { CButton, CCardBody, CCardHeader, CRow, CCol, CPopover, CButtonClose } from '@coreui/react';
-import { cilMinus } from '@coreui/icons';
+import { cilTrash } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import PropTypes from 'prop-types';
 import LoadingButton from '../LoadingButton';
 
 import styles from './index.module.scss';
 
-const UnassignButton = ({ t, contact, unassignContact, hideTooltips, disabled }) => {
+const DeleteButton = ({ t, location, deleteLocation, hideTooltips }) => {
   const [tooltipId] = useState(createUuid());
 
   return (
-    <CPopover content={t('inventory.unassign')}>
+    <CPopover content={t('common.delete')}>
       <div className="d-inline">
         <CButton
-          disabled={disabled}
           color="primary"
           variant="outline"
           shape="square"
@@ -27,7 +26,7 @@ const UnassignButton = ({ t, contact, unassignContact, hideTooltips, disabled })
           data-event="click"
           style={{ width: '33px', height: '30px' }}
         >
-          <CIcon name="cil-minus" content={cilMinus} size="sm" />
+          <CIcon name="cil-trash" content={cilTrash} size="sm" />
         </CButton>
         <ReactTooltip
           id={tooltipId}
@@ -35,7 +34,7 @@ const UnassignButton = ({ t, contact, unassignContact, hideTooltips, disabled })
           effect="solid"
           globalEventOff="click"
           clickable
-          className={[styles.unassignTooltip, 'tooltipRight'].join(' ')}
+          className={[styles.deleteTooltip, 'tooltipRight'].join(' ')}
           border
           borderColor="#321fdb"
           arrowColor="white"
@@ -47,7 +46,7 @@ const UnassignButton = ({ t, contact, unassignContact, hideTooltips, disabled })
           }}
         >
           <CCardHeader color="primary" className={styles.tooltipHeader}>
-            {t('inventory.unassign_tag')}
+            {t('location.delete')}
             <CButtonClose
               style={{ color: 'white' }}
               onClick={(e) => {
@@ -66,7 +65,7 @@ const UnassignButton = ({ t, contact, unassignContact, hideTooltips, disabled })
                   label={t('common.confirm')}
                   isLoadingLabel={t('user.deleting')}
                   isLoading={false}
-                  action={() => unassignContact(contact.serialNumber)}
+                  action={() => deleteLocation(location.id)}
                   block
                   disabled={false}
                 />
@@ -79,12 +78,11 @@ const UnassignButton = ({ t, contact, unassignContact, hideTooltips, disabled })
   );
 };
 
-UnassignButton.propTypes = {
+DeleteButton.propTypes = {
   t: PropTypes.func.isRequired,
-  contact: PropTypes.instanceOf(Object).isRequired,
-  unassignContact: PropTypes.func.isRequired,
+  location: PropTypes.instanceOf(Object).isRequired,
+  deleteLocation: PropTypes.func.isRequired,
   hideTooltips: PropTypes.func.isRequired,
-  disabled: PropTypes.bool.isRequired,
 };
 
-export default UnassignButton;
+export default DeleteButton;

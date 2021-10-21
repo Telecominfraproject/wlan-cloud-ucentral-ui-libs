@@ -75,6 +75,22 @@ const AddContactForm = ({ t, disable, fields, updateField, updateFieldWithKey, e
           </div>
           <CFormText color={fields.type.error ? 'danger' : ''}>{t('common.required')}</CFormText>
         </CCol>
+        <CLabel className="mb-5" sm="2" col htmlFor="name">
+          {t('contact.identifier')}
+        </CLabel>
+        <CCol sm="4">
+          <CInput
+            id="name"
+            type="text"
+            required
+            value={fields.name.value}
+            onChange={updateField}
+            invalid={fields.name.error}
+            disabled={disable}
+            maxLength="50"
+          />
+          <CInvalidFeedback>{t('common.required')}</CInvalidFeedback>
+        </CCol>
         <CLabel className="mb-5" sm="2" col htmlFor="title">
           {t('contact.user_title')}
         </CLabel>
@@ -112,22 +128,6 @@ const AddContactForm = ({ t, disable, fields, updateField, updateFieldWithKey, e
               isDisabled={disable}
             />
           </div>
-        </CCol>
-        <CLabel className="mb-5" sm="2" col htmlFor="accessPIN">
-          {t('contact.access_pin')}
-        </CLabel>
-        <CCol sm="4">
-          <CInput
-            id="accessPIN"
-            type="text"
-            required
-            value={fields.accessPIN.value}
-            onChange={updateField}
-            invalid={fields.accessPIN.error}
-            disabled={disable}
-            maxLength="50"
-          />
-          <CInvalidFeedback>{t('common.required')}</CInvalidFeedback>
         </CCol>
         <CLabel className="mb-5" sm="2" col htmlFor="firstname">
           {t('contact.first_name')}
@@ -227,6 +227,22 @@ const AddContactForm = ({ t, disable, fields, updateField, updateFieldWithKey, e
           />
           <CInvalidFeedback>{t('common.required')}</CInvalidFeedback>
         </CCol>
+        <CLabel className="mb-5" sm="2" col htmlFor="accessPIN">
+          {t('contact.access_pin')}
+        </CLabel>
+        <CCol sm="4">
+          <CInput
+            id="accessPIN"
+            type="text"
+            required
+            value={fields.accessPIN.value}
+            onChange={updateField}
+            invalid={fields.accessPIN.error}
+            disabled={disable}
+            maxLength="50"
+          />
+          <CInvalidFeedback>{t('common.required')}</CInvalidFeedback>
+        </CCol>
         <CLabel className="mb-5" sm="2" col htmlFor="phones">
           Landlines
         </CLabel>
@@ -286,57 +302,63 @@ const AddContactForm = ({ t, disable, fields, updateField, updateFieldWithKey, e
           />
         </CCol>
       </CRow>
-      <CFormGroup row className="pt-2 pb-1">
-        <CLabel sm="2" col htmlFor="title">
-          {t('entity.selected_entity')}
-        </CLabel>
-        <CCol sm="4" className="pt-2">
-          <h6>{fields.entity.value === '' ? t('entity.need_select_entity') : selectedEntity}</h6>
-        </CCol>
-      </CFormGroup>
-      <div className="overflow-auto border mb-1" style={{ height: '200px' }}>
-        <CInput
-          className="w-50 mb-2"
-          type="text"
-          placeholder="Search"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        />
-        <CDataTable
-          items={entities}
-          fields={columns}
-          hover
-          tableFilterValue={filter}
-          border
-          scopedSlots={{
-            name: (item) => (
-              <td>
-                <CLink
-                  className="c-subheader-nav-link"
-                  aria-current="page"
-                  to={() => `/configuration/${item.id}`}
-                >
-                  {item.name}
-                </CLink>
-              </td>
-            ),
-            created: (item) => (
-              <td>
-                <FormattedDate date={item.created} />
-              </td>
-            ),
-            actions: (item) => (
-              <td>
-                <CPopover content={t('entity.select_entity')}>
-                  <CButton color="primary" variant="outline" onClick={() => selectEntity(item)}>
-                    <CIcon content={cilPlus} />
-                  </CButton>
-                </CPopover>
-              </td>
-            ),
-          }}
-        />
-      </div>
+      {entities ?
+        <div>
+          <CFormGroup row className="pt-2 pb-1">
+            <CLabel sm="2" col htmlFor="title">
+              {t('entity.selected_entity')}
+            </CLabel>
+            <CCol sm="4" className="pt-2">
+              <h6>{fields.entity.value === '' ? t('entity.need_select_entity') : selectedEntity}</h6>
+            </CCol>
+          </CFormGroup>
+          <div className="overflow-auto border mb-1" style={{ height: '200px' }}>
+            <CInput
+              className="w-50 mb-2"
+              type="text"
+              placeholder="Search"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            />
+            <CDataTable
+              items={entities}
+              fields={columns}
+              hover
+              tableFilterValue={filter}
+              border
+              scopedSlots={{
+                name: (item) => (
+                  <td>
+                    <CLink
+                      className="c-subheader-nav-link"
+                      aria-current="page"
+                      to={() => `/configuration/${item.id}`}
+                    >
+                      {item.name}
+                    </CLink>
+                  </td>
+                ),
+                created: (item) => (
+                  <td>
+                    <FormattedDate date={item.created} />
+                  </td>
+                ),
+                actions: (item) => (
+                  <td>
+                    <CPopover content={t('entity.select_entity')}>
+                      <CButton color="primary" variant="outline" onClick={() => selectEntity(item)}>
+                        <CIcon content={cilPlus} />
+                      </CButton>
+                    </CPopover>
+                  </td>
+                ),
+              }}
+            />
+          </div>
+        </div>
+      :
+        null
+      }
     </CForm>
   );
 };
@@ -348,6 +370,10 @@ AddContactForm.propTypes = {
   updateField: PropTypes.func.isRequired,
   updateFieldWithKey: PropTypes.func.isRequired,
   entities: PropTypes.instanceOf(Array).isRequired,
+};
+
+AddContactForm.defaultProps = {
+  entities: null
 };
 
 export default AddContactForm;

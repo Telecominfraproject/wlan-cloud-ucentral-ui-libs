@@ -7,31 +7,31 @@ import ReactTooltip from 'react-tooltip';
 import DeleteButton from './DeleteButton';
 import FormattedDate from '../FormattedDate';
 
-const ContactTable = ({
+const LocationTable = ({
   t,
   loading,
   entity,
   filterOnEntity,
-  contacts,
+  locations,
   unassign,
   assignToEntity,
   toggleEditModal,
-  deleteContact,
+  deleteLocation,
   perPageSwitcher,
   pageSwitcher,
 }) => {
   const columns = filterOnEntity
     ? [
-        { key: 'primaryEmail', label: t('contact.primary_email'), _style: { width: '15%' } },
-        { key: 'name', label: t('contact.identifier'), _style: { width: '10%' } },
+        { key: 'name', label: t('user.name'), _style: { width: '10%' } },
         { key: 'description', label: t('user.description'), _style: { width: '20%' } },
-        { key: 'modified', label: t('common.modified'), _style: { width: '10%' } },
+        { key: 'country', label: t('location.country'), _style: { width: '10%' } },
+        { key: 'modified', label: t('common.created'), _style: { width: '10%' } },
         { key: 'actions', label: t('actions.actions'), _style: { width: '1%' } },
       ]
     : [
-        { key: 'primaryEmail', label: t('contact.primary_email'), _style: { width: '15%' } },
-        { key: 'name', label: t('contact.identifier'), _style: { width: '10%' } },
+        { key: 'name', label: t('user.name'), _style: { width: '10%' } },
         { key: 'description', label: t('user.description'), _style: { width: '20%' } },
+        { key: 'country', label: t('location.country'), _style: { width: '10%' } },
         { key: 'entity', label: t('entity.entity'), _style: { width: '10%' } },
         { key: 'modified', label: t('common.modified'), _style: { width: '12%' } },
         { key: 'actions', label: t('actions.actions'), _style: { width: '1%' } },
@@ -57,7 +57,7 @@ const ContactTable = ({
     <>
       <CDataTable
         addTableClasses="ignore-overflow"
-        items={contacts}
+        items={locations}
         fields={columns}
         hover
         border
@@ -119,11 +119,11 @@ const ContactTable = ({
                 </CPopover>
                 <DeleteButton
                   t={t}
-                  contact={item}
-                  deleteContact={deleteContact}
+                  location={item}
+                  deleteLocation={deleteLocation}
                   hideTooltips={hideTooltips}
                 />
-                <CPopover content="Edit Tag">
+                <CPopover content={t('common.edit')}>
                   <CButton
                     color="primary"
                     variant="outline"
@@ -150,23 +150,23 @@ const ContactTable = ({
   );
 };
 
-ContactTable.propTypes = {
+LocationTable.propTypes = {
   t: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   entity: PropTypes.instanceOf(Object),
   filterOnEntity: PropTypes.bool,
-  contacts: PropTypes.instanceOf(Array).isRequired,
+  locations: PropTypes.instanceOf(Array).isRequired,
   unassign: PropTypes.func.isRequired,
   assignToEntity: PropTypes.func.isRequired,
   toggleEditModal: PropTypes.func.isRequired,
-  deleteContact: PropTypes.func.isRequired,
+  deleteLocation: PropTypes.func.isRequired,
   perPageSwitcher: PropTypes.node.isRequired,
   pageSwitcher: PropTypes.node.isRequired,
 };
 
-ContactTable.defaultProps = {
+LocationTable.defaultProps = {
   filterOnEntity: false,
   entity: null,
 };
 
-export default ContactTable;
+export default LocationTable;

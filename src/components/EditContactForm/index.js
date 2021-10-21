@@ -87,6 +87,22 @@ const EditContactForm = ({
           </div>
           <CFormText color={fields.type.error ? 'danger' : ''}>{t('common.required')}</CFormText>
         </CCol>
+        <CLabel className="mb-5" sm="2" col htmlFor="name">
+          {t('contact.identifier')}
+        </CLabel>
+        <CCol sm="4">
+          <CInput
+            id="name"
+            type="text"
+            required
+            value={fields.name.value}
+            onChange={updateField}
+            invalid={fields.name.error}
+            disabled={disable}
+            maxLength="50"
+          />
+          <CInvalidFeedback>{t('common.required')}</CInvalidFeedback>
+        </CCol>
         <CLabel className="mb-5" sm="2" col htmlFor="title">
           {t('contact.user_title')}
         </CLabel>
@@ -124,22 +140,6 @@ const EditContactForm = ({
               isDisabled={disable}
             />
           </div>
-        </CCol>
-        <CLabel className="mb-5" sm="2" col htmlFor="accessPIN">
-          {t('contact.access_pin')}
-        </CLabel>
-        <CCol sm="4">
-          <CInput
-            id="accessPIN"
-            type="text"
-            required
-            value={fields.accessPIN.value}
-            onChange={updateField}
-            invalid={fields.accessPIN.error}
-            disabled={disable}
-            maxLength="50"
-          />
-          <CInvalidFeedback>{t('common.required')}</CInvalidFeedback>
         </CCol>
         <CLabel className="mb-5" sm="2" col htmlFor="firstname">
           {t('contact.first_name')}
@@ -234,6 +234,22 @@ const EditContactForm = ({
             value={fields.secondaryEmail.value}
             onChange={updateField}
             invalid={fields.secondaryEmail.error}
+            disabled={disable}
+            maxLength="50"
+          />
+          <CInvalidFeedback>{t('common.required')}</CInvalidFeedback>
+        </CCol>
+        <CLabel className="mb-5" sm="2" col htmlFor="accessPIN">
+          {t('contact.access_pin')}
+        </CLabel>
+        <CCol sm="4">
+          <CInput
+            id="accessPIN"
+            type="text"
+            required
+            value={fields.accessPIN.value}
+            onChange={updateField}
+            invalid={fields.accessPIN.error}
             disabled={disable}
             maxLength="50"
           />

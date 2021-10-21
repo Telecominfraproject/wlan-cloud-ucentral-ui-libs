@@ -12,6 +12,8 @@ export { default as AddConfigurationForm } from './components/AddConfigurationFo
 export { default as AddContactForm } from './components/AddContactForm';
 export { default as AddEntityForm } from './components/AddEntityForm';
 export { default as AddInventoryTagForm } from './components/AddInventoryTagForm';
+export { default as AddLocationForm } from './components/AddLocationForm';
+export { default as AddressEditor } from './components/AddressEditor';
 export { default as AddVenueForm } from './components/AddVenueForm';
 export { default as ApiStatusCard } from './components/ApiStatusCard';
 export { default as Avatar } from './components/Avatar';
@@ -39,6 +41,7 @@ export { default as EditConfigurationForm } from './components/EditConfiguration
 export { default as EditContactForm } from './components/EditContactForm';
 export { default as EditEntityForm } from './components/EditEntityForm';
 export { default as EditInventoryTagForm } from './components/EditInventoryTagForm';
+export { default as EditLocationForm } from './components/EditLocationForm';
 export { default as EditMyProfile } from './components/EditMyProfile';
 export { default as EditUserForm } from './components/EditUserForm';
 export { default as EditUserModal } from './components/EditUserModal';
@@ -52,6 +55,7 @@ export { default as FormattedDate } from './components/FormattedDate';
 export { default as HideTextButton } from './components/HideTextButton';
 export { default as LanguageSwitcher } from './components/LanguageSwitcher';
 export { default as LifetimeStatsModal } from './components/LifetimeStatsModal';
+export { default as LocationTable } from './components/LocationTable';
 export { default as LoadingButton } from './components/LoadingButton';
 export { default as NetworkDiagram } from './components/NetworkDiagram';
 export { default as NotesTable } from './components/NotesTable';

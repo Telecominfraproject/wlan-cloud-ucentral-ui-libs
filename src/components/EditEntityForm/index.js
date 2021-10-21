@@ -25,6 +25,7 @@ const EditEntityForm = ({
   addNote,
   editing,
   toggleAssociate,
+  toggleContact,
   toggleIpModal,
 }) => (
   <CForm>
@@ -128,6 +129,34 @@ const EditEntityForm = ({
             )}
           </CCol>
         </CRow>
+        {fields.contact ? (
+          <CRow className="pb-0">
+            <CLabel lg="5" xl="3" col htmlFor="name">
+              <div>{t('contact.title')}:</div>
+            </CLabel>
+            <CCol lg="7" xxl="9">
+              {editing ? (
+                <CButton className="pl-0 text-left" color="link" onClick={toggleContact}>
+                  {fields.contact.value === '' ? t('contact.add_contact') : fields.contact.value}
+                </CButton>
+              ) : (
+                <div className="mt-2 mb-0">
+                  {fields.contact.uuid === '' ? (
+                    <p className="mb-0">{t('contact.no_associated_contact')}</p>
+                  ) : (
+                    <CLink
+                      className="c-subheader-nav-link"
+                      aria-current="page"
+                      to={() => `/contacts`}
+                    >
+                      {fields.contact.value}
+                    </CLink>
+                  )}
+                </div>
+              )}
+            </CCol>
+          </CRow>
+        ) : null}
         <CRow className="pb-0">
           <CLabel lg="5" xl="3" col htmlFor="sourceIp">
             <div>{t('entity.ip_detection')}:</div>
@@ -193,6 +222,7 @@ EditEntityForm.propTypes = {
   addNote: PropTypes.func.isRequired,
   editing: PropTypes.bool.isRequired,
   toggleAssociate: PropTypes.func.isRequired,
+  toggleContact: PropTypes.func.isRequired,
   toggleIpModal: PropTypes.func.isRequired,
 };
 

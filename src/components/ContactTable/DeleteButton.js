@@ -46,7 +46,7 @@ const DeleteButton = ({ t, contact, deleteContact, hideTooltips }) => {
           }}
         >
           <CCardHeader color="primary" className={styles.tooltipHeader}>
-            {t('inventory.delete_tag')}
+            {t('contact.delete')}
             <CButtonClose
               style={{ color: 'white' }}
               onClick={(e) => {

@@ -129,3 +129,12 @@ export const formatDaysAgo = (d1, d2 = new Date()) => {
 
   return prettyDate(date);
 };
+
+export const checkIfJson = (string) => {
+  try {
+    JSON.parse(string);
+  } catch (e) {
+    return false;
+  }
+  return true;
+};
