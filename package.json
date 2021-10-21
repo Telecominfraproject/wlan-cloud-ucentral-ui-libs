@@ -1,6 +1,6 @@
 {
   "name": "ucentral-libs",
-  "version": "0.9.73",
+  "version": "0.9.74",
   "main": "dist/index.js",
   "source": "src/index.js",
   "engines": {
@@ -33,7 +33,7 @@
   },
   "scripts": {
     "format": "prettier --write 'src/**/*{.js,.scss}'",
-    "build": "NODE_ENV=production webpack --mode production",
+    "build": "set NODE_ENV=production && webpack --mode production",
     "eslint": "eslint 'src/**/*.js'",
     "fix": "eslint --fix 'src/**/*.js'"
   },

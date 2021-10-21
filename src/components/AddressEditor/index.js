@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Select, { components } from 'react-select';
-import { checkIfJson } from '../../utils/formatting';
+import { checkIfJson } from 'utils/formatting';
 import _ from 'lodash';
 import formatGoogleAddress from 'utils/formatGoogleAddress';
 

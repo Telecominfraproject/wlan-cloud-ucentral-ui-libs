@@ -369,7 +369,7 @@ AddContactForm.propTypes = {
   fields: PropTypes.instanceOf(Object).isRequired,
   updateField: PropTypes.func.isRequired,
   updateFieldWithKey: PropTypes.func.isRequired,
-  entities: PropTypes.instanceOf(Array).isRequired,
+  entities: PropTypes.instanceOf(Array),
 };
 
 AddContactForm.defaultProps = {

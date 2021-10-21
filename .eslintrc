@@ -13,11 +13,12 @@
     "no-return-assign": ["off"],
     "react/jsx-props-no-spreading": ["off"],
     "react/destructuring-assignment": ["off"],
-    "no-restricted-syntax": ["error", "ForInStatement", "LabeledStatement", "WithStatement"],
+    "no-restricted-syntax": ["error", "ForInStatement", "WithStatement"],
     "react/jsx-one-expression-per-line": "off",
     "react/jsx-wrap-multilines": "off",
     "react/jsx-curly-newline": "off",
-    "no-underscore-dangle": "off"
+    "no-underscore-dangle": "off",
+    "no-labels": "off"
   },
   "settings": {
     "import/resolver": {

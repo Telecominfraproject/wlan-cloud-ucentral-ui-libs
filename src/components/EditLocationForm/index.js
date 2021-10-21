@@ -124,7 +124,8 @@ const EditLocationForm = ({ t, disable, fields, updateField, updateFieldWithKey,
             disabled={disable}
             maxLength="50"
           />
-        </CCol><CLabel className="mb-3" sm="2" col htmlFor="phones">
+        </CCol>
+        <CLabel className="mb-3" sm="2" col htmlFor="phones">
           Landlines
         </CLabel>
         <CCol sm="4">
