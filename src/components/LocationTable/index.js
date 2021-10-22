@@ -62,11 +62,7 @@ const LocationTable = ({
         border
         loading={loading}
         scopedSlots={{
-          name: (item) => (
-            <td className="align-middle">
-              {item.name}
-            </td>
-          ),
+          name: (item) => <td className="align-middle">{item.name}</td>,
           created: (item) => (
             <td className="align-middle">
               <FormattedDate date={item.created} />

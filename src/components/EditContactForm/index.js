@@ -8,7 +8,6 @@ import {
   CLabel,
   CCol,
   CFormGroup,
-  CInvalidFeedback,
   CFormText,
   CRow,
   CDataTable,
@@ -101,7 +100,7 @@ const EditContactForm = ({
             disabled={disable}
             maxLength="50"
           />
-          <CInvalidFeedback>{t('common.required')}</CInvalidFeedback>
+          <CFormText color={fields.name.error ? 'danger' : ''}>{t('common.required')}</CFormText>
         </CCol>
         <CLabel className="mb-5" sm="2" col htmlFor="title">
           {t('contact.user_title')}
@@ -233,11 +232,9 @@ const EditContactForm = ({
             required
             value={fields.secondaryEmail.value}
             onChange={updateField}
-            invalid={fields.secondaryEmail.error}
             disabled={disable}
             maxLength="50"
           />
-          <CInvalidFeedback>{t('common.required')}</CInvalidFeedback>
         </CCol>
         <CLabel className="mb-5" sm="2" col htmlFor="accessPIN">
           {t('contact.access_pin')}
@@ -249,11 +246,9 @@ const EditContactForm = ({
             required
             value={fields.accessPIN.value}
             onChange={updateField}
-            invalid={fields.accessPIN.error}
             disabled={disable}
             maxLength="50"
           />
-          <CInvalidFeedback>{t('common.required')}</CInvalidFeedback>
         </CCol>
         <CLabel className="mb-5" sm="2" col htmlFor="phones">
           Landlines

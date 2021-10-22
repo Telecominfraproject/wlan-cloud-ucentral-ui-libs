@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  CForm,
-  CInput,
-  CLabel,
-  CCol,
-  CFormGroup,
-  CInvalidFeedback,
-  CFormText,
-  CRow,
-} from '@coreui/react';
+import { CForm, CInput, CLabel, CCol, CFormGroup, CFormText, CRow } from '@coreui/react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 
@@ -43,11 +34,9 @@ const AddEntityForm = ({ t, disable, fields, updateField, updateFieldDirectly })
           required
           value={fields.description.value}
           onChange={updateField}
-          invalid={fields.description.error}
           disabled={disable}
           maxLength="50"
         />
-        <CInvalidFeedback>{t('common.required')}</CInvalidFeedback>
       </CCol>
     </CFormGroup>
     <CRow className="pb-3">

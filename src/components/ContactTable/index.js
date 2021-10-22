@@ -62,11 +62,7 @@ const ContactTable = ({
         border
         loading={loading}
         scopedSlots={{
-          name: (item) => (
-            <td className="align-middle">
-              {item.name}
-            </td>
-          ),
+          name: (item) => <td className="align-middle">{item.name}</td>,
           created: (item) => (
             <td className="align-middle">
               <FormattedDate date={item.created} />
@@ -122,7 +118,7 @@ const ContactTable = ({
                   deleteContact={deleteContact}
                   hideTooltips={hideTooltips}
                 />
-                <CPopover content="Edit Tag">
+                <CPopover content={t('common.edit')}>
                   <CButton
                     color="primary"
                     variant="outline"

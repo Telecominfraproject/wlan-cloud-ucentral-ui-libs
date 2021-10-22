@@ -6,7 +6,6 @@ import {
   CCol,
   CFormGroup,
   CInvalidFeedback,
-  CFormText,
   CRow,
   CButton,
   CLink,
@@ -27,6 +26,7 @@ const EditEntityForm = ({
   toggleAssociate,
   toggleContact,
   toggleIpModal,
+  toggleLocation,
 }) => (
   <CForm>
     <CFormGroup row>
@@ -48,9 +48,7 @@ const EditEntityForm = ({
                   disabled={disable}
                   maxLength="50"
                 />
-                <CFormText hidden={!fields.name.error} color={fields.name.error ? 'danger' : ''}>
-                  {t('common.required')}
-                </CFormText>
+                <CInvalidFeedback>{t('common.required')}</CInvalidFeedback>
               </div>
             ) : (
               <p className="mt-2 mb-0">{fields.name.value}</p>
@@ -70,11 +68,9 @@ const EditEntityForm = ({
                   required
                   value={fields.description.value}
                   onChange={updateField}
-                  invalid={fields.description.error}
                   disabled={disable}
                   maxLength="50"
                 />
-                <CInvalidFeedback>{t('common.required')}</CInvalidFeedback>
               </div>
             ) : (
               <p className="mt-2 mb-0">{fields.description.value}</p>
@@ -157,6 +153,34 @@ const EditEntityForm = ({
             </CCol>
           </CRow>
         ) : null}
+        {fields.location ? (
+          <CRow className="pb-0">
+            <CLabel lg="5" xl="3" col htmlFor="name">
+              <div>{t('location.title')}:</div>
+            </CLabel>
+            <CCol lg="7" xxl="9">
+              {editing ? (
+                <CButton className="pl-0 text-left" color="link" onClick={toggleLocation}>
+                  {fields.location.value === '' ? t('location.add') : fields.location.value}
+                </CButton>
+              ) : (
+                <div className="mt-2 mb-0">
+                  {fields.location.uuid === '' ? (
+                    <p className="mb-0">{t('location.no_associated')}</p>
+                  ) : (
+                    <CLink
+                      className="c-subheader-nav-link"
+                      aria-current="page"
+                      to={() => `/location`}
+                    >
+                      {fields.location.value}
+                    </CLink>
+                  )}
+                </div>
+              )}
+            </CCol>
+          </CRow>
+        ) : null}
         <CRow className="pb-0">
           <CLabel lg="5" xl="3" col htmlFor="sourceIp">
             <div>{t('entity.ip_detection')}:</div>
@@ -222,8 +246,13 @@ EditEntityForm.propTypes = {
   addNote: PropTypes.func.isRequired,
   editing: PropTypes.bool.isRequired,
   toggleAssociate: PropTypes.func.isRequired,
-  toggleContact: PropTypes.func.isRequired,
+  toggleContact: PropTypes.func,
   toggleIpModal: PropTypes.func.isRequired,
+  toggleLocation: PropTypes.func,
 };
 
+EditEntityForm.defaultProps = {
+  toggleContact: null,
+  toggleLocation: null,
+};
 export default EditEntityForm;

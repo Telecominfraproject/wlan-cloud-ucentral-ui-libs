@@ -8,7 +8,6 @@ import {
   CLabel,
   CCol,
   CFormGroup,
-  CInvalidFeedback,
   CFormText,
   CRow,
   CDataTable,
@@ -21,7 +20,15 @@ import { cilPlus } from '@coreui/icons';
 import countryList from 'utils/countryList';
 import FormattedDate from '../FormattedDate';
 
-const AddLocationForm = ({ t, disable, fields, updateField, updateFieldWithKey, entities, locationSearch }) => {
+const AddLocationForm = ({
+  t,
+  disable,
+  fields,
+  updateField,
+  updateFieldWithKey,
+  entities,
+  locationSearch,
+}) => {
   const [filter, setFilter] = useState('');
   const [selectedEntity, setSelectedEntity] = useState('');
 
@@ -62,7 +69,7 @@ const AddLocationForm = ({ t, disable, fields, updateField, updateFieldWithKey, 
             disabled={disable}
             maxLength="50"
           />
-          <CInvalidFeedback>{t('common.required')}</CInvalidFeedback>
+          <CFormText color={fields.name.error ? 'danger' : ''}>{t('common.required')}</CFormText>
         </CCol>
         <CLabel sm="2" col htmlFor="description">
           {t('user.description')}
@@ -117,7 +124,6 @@ const AddLocationForm = ({ t, disable, fields, updateField, updateFieldWithKey, 
               isDisabled={disable}
             />
           </div>
-          <CFormText color={fields.type.error ? 'danger' : ''}>{t('common.required')}</CFormText>
         </CCol>
         <CLabel className="mb-5" sm="2" col htmlFor="phones">
           Landlines
@@ -151,23 +157,23 @@ const AddLocationForm = ({ t, disable, fields, updateField, updateFieldWithKey, 
         </CCol>
         <CCol className="mb-3" sm="12">
           <CRow>
-            <CCol sm="6">
-              {locationSearch}
-            </CCol>
+            <CCol sm="6">{locationSearch}</CCol>
           </CRow>
         </CCol>
-        <CLabel className="mb-5" sm="2" col htmlFor="addressLines.value[0]">
+        <CLabel className="mb-5" sm="2" col htmlFor="addressLines">
           {t('location.street_address')}
         </CLabel>
         <CCol sm="4">
           <CInput
-            id="addressLines.value[0]"
+            id="addressLines"
             type="text"
             required
             value={fields.addressLines.value[0]}
-            onChange={updateField}
-            invalid={fields.addressLines.error}
+            onChange={(e) =>
+              updateFieldWithKey('addressLines', { value: [e.target.value], error: false })
+            }
             disabled={disable}
+            invalid={fields.addressLines.error}
             maxLength="50"
           />
           <CFormText color={fields.addressLines.error ? 'danger' : ''}>
@@ -183,13 +189,17 @@ const AddLocationForm = ({ t, disable, fields, updateField, updateFieldWithKey, 
               id="country"
               value={{
                 value: fields.country.value,
-                label: fields.country.value === '' ? 'None' : countryList.find(c => c.value === fields.country.value).label,
+                label:
+                  fields.country.value === ''
+                    ? 'None'
+                    : countryList.find((c) => c.value === fields.country.value).label,
               }}
               onChange={(v) => updateFieldWithKey('country', { value: v.value })}
               options={countryList}
               isDisabled={disable}
             />
           </div>
+          <CFormText color={fields.country.error ? 'danger' : ''}>{t('common.required')}</CFormText>
         </CCol>
         <CLabel className="mb-5" sm="2" col htmlFor="city">
           {t('location.city')}
@@ -205,9 +215,7 @@ const AddLocationForm = ({ t, disable, fields, updateField, updateFieldWithKey, 
             disabled={disable}
             maxLength="50"
           />
-          <CFormText color={fields.city.error ? 'danger' : ''}>
-            {t('common.required')}
-          </CFormText>
+          <CFormText color={fields.city.error ? 'danger' : ''}>{t('common.required')}</CFormText>
         </CCol>
         <CLabel className="mb-5" sm="2" col htmlFor="state">
           {t('location.state')}
@@ -223,9 +231,7 @@ const AddLocationForm = ({ t, disable, fields, updateField, updateFieldWithKey, 
             disabled={disable}
             maxLength="50"
           />
-          <CFormText color={fields.state.error ? 'danger' : ''}>
-            {t('common.required')}
-          </CFormText>
+          <CFormText color={fields.state.error ? 'danger' : ''}>{t('common.required')}</CFormText>
         </CCol>
         <CLabel className="mb-5" sm="2" col htmlFor="postal">
           {t('location.postal')}
@@ -256,14 +262,16 @@ const AddLocationForm = ({ t, disable, fields, updateField, updateFieldWithKey, 
           />
         </CCol>
       </CRow>
-      {entities ?
+      {entities ? (
         <div>
           <CFormGroup row className="pt-2 pb-1">
             <CLabel sm="2" col htmlFor="title">
               {t('entity.selected_entity')}
             </CLabel>
             <CCol sm="4" className="pt-2">
-              <h6>{fields.entity.value === '' ? t('entity.need_select_entity') : selectedEntity}</h6>
+              <h6 className={fields.entity.error ? 'text-danger' : ''}>
+                {fields.entity.value === '' ? t('entity.need_select_entity') : selectedEntity}
+              </h6>
             </CCol>
           </CFormGroup>
           <div className="overflow-auto border mb-1" style={{ height: '200px' }}>
@@ -310,9 +318,7 @@ const AddLocationForm = ({ t, disable, fields, updateField, updateFieldWithKey, 
             />
           </div>
         </div>
-      :
-        null
-      }
+      ) : null}
     </CForm>
   );
 };
@@ -324,11 +330,11 @@ AddLocationForm.propTypes = {
   updateField: PropTypes.func.isRequired,
   updateFieldWithKey: PropTypes.func.isRequired,
   entities: PropTypes.instanceOf(Array),
-  locationSearch: PropTypes.func.isRequired
+  locationSearch: PropTypes.node.isRequired,
 };
 
 AddLocationForm.defaultProps = {
-  entities: null
+  entities: null,
 };
 
 export default AddLocationForm;

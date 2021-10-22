@@ -45,6 +45,8 @@ export const EntityProvider = ({ axiosInstance, selectedEntity, children }) => {
   const [parentsWithChildrenLoaded, setParentsWithChildrenLoaded] = useState([]);
   const [deviceTypes, setDeviceTypes] = useState([]);
 
+  const resetEntity = () => setEntity(null);
+
   const selectEntity = (uuid, name, path, isVenue, childrenEntities, childrenVenues, extraData) => {
     // If we have not yet gotten the information of this entity's children, we get them now
     if (childrenEntities || childrenVenues) {
@@ -351,37 +353,43 @@ export const EntityProvider = ({ axiosInstance, selectedEntity, children }) => {
   };
 
   const deleteEntity = async ({ path }) => {
-    const splitPath = path.split('.');
-    const parentPath = splitPath.slice(0, splitPath.length - 2).join('.');
-    const oldInfo = lodashGet(entities, `${parentPath}`);
-    if (!oldInfo || parentPath === '') {
-      getRootEntity();
-    } else {
-      const parentInfoFromApi = await getEntity(oldInfo.uuid, oldInfo.isVenue);
-      selectEntity(oldInfo.uuid, oldInfo.name, parentPath, oldInfo.isVenue);
-
-      if (
-        parentInfoFromApi.children.length === 0 &&
-        (parentInfoFromApi.venues === undefined || parentInfoFromApi.venues?.length === 0)
-      ) {
-        setEntities(lodashSet(entities, `${parentPath}`, { ...oldInfo, _tag: 'SidebarChildless' }));
-      } else if (oldInfo.isVenue) {
-        getEntityChildren({
-          childrenEntities: [],
-          childrenVenues: parentInfoFromApi.children,
-          uuid: oldInfo.uuid,
-          path: parentPath,
-          isVenue: oldInfo.isVenue,
-        });
+    if (path) {
+      const splitPath = path.split('.');
+      const parentPath = splitPath.slice(0, splitPath.length - 2).join('.');
+      const oldInfo = lodashGet(entities, `${parentPath}`);
+      if (!oldInfo || parentPath === '') {
+        getRootEntity();
       } else {
-        getEntityChildren({
-          childrenEntities: parentInfoFromApi.children,
-          childrenVenues: parentInfoFromApi.venues,
-          uuid: oldInfo.uuid,
-          path: parentPath,
-          isVenue: oldInfo.isVenue,
-        });
+        const parentInfoFromApi = await getEntity(oldInfo.uuid, oldInfo.isVenue);
+        selectEntity(oldInfo.uuid, oldInfo.name, parentPath, oldInfo.isVenue);
+
+        if (
+          parentInfoFromApi.children.length === 0 &&
+          (parentInfoFromApi.venues === undefined || parentInfoFromApi.venues?.length === 0)
+        ) {
+          setEntities(
+            lodashSet(entities, `${parentPath}`, { ...oldInfo, _tag: 'SidebarChildless' }),
+          );
+        } else if (oldInfo.isVenue) {
+          getEntityChildren({
+            childrenEntities: [],
+            childrenVenues: parentInfoFromApi.children,
+            uuid: oldInfo.uuid,
+            path: parentPath,
+            isVenue: oldInfo.isVenue,
+          });
+        } else {
+          getEntityChildren({
+            childrenEntities: parentInfoFromApi.children,
+            childrenVenues: parentInfoFromApi.venues,
+            uuid: oldInfo.uuid,
+            path: parentPath,
+            isVenue: oldInfo.isVenue,
+          });
+        }
       }
+    } else {
+      getRootEntity();
     }
   };
 
@@ -426,6 +434,7 @@ export const EntityProvider = ({ axiosInstance, selectedEntity, children }) => {
         refreshEntityChildren,
         deleteEntity,
         deviceTypes,
+        resetEntity,
       }}
     >
       {children}

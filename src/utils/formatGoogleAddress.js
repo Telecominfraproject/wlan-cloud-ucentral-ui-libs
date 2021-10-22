@@ -1,5 +1,5 @@
 export default (google) => {
-  if(!google) return null;
+  if (!google) return null;
 
   const obj = {
     street_number: {},
@@ -12,21 +12,20 @@ export default (google) => {
     country: {},
   };
 
-   for(const [key] of Object.entries(obj)) {
-    loop1:
-      for(const val of google.value.address_components){
-          for(const type of val.types) {
-            if(type === key) {
-              obj[key] = { long_name: val.long_name, short_name: val.short_name };
-              break loop1;
-            }
-          }
+  for (const [key] of Object.entries(obj)) {
+    loop1: for (const val of google.value.address_components) {
+      for (const type of val.types) {
+        if (type === key) {
+          obj[key] = { long_name: val.long_name, short_name: val.short_name };
+          break loop1;
+        }
       }
-   }
+    }
+  }
 
-   return {
-     label: google.label,
-     geoCode: google.value.geometry.location,
-     ...obj
-   };
-}
+  return {
+    label: google.label,
+    geoCode: google.value.geometry.location,
+    ...obj,
+  };
+};

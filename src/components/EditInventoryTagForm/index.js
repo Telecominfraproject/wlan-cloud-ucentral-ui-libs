@@ -53,7 +53,6 @@ const EditInventoryTagForm = ({
           required
           value={fields.description.value}
           onChange={updateField}
-          invalid={fields.description.error}
           disabled={disable}
           maxLength="50"
         />

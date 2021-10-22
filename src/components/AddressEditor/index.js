@@ -19,8 +19,8 @@ const AddressEditor = ({ t, currentToken, endpoint, setAddress, show }) => {
 
   const changeAddress = (val) => {
     const parsedAddress = formatGoogleAddress(val);
-    if(parsedAddress) setAddress(parsedAddress);
-  }
+    if (parsedAddress) setAddress(parsedAddress);
+  };
 
   const onChange = useCallback(
     (v) => {
@@ -50,9 +50,7 @@ const AddressEditor = ({ t, currentToken, endpoint, setAddress, show }) => {
     if (socket?.readyState === WebSocket.OPEN) {
       if (value.length > 3) {
         setWaitingSearch('');
-        socket.send(
-          JSON.stringify({ command: 'address_completion', address: value }),
-        );
+        socket.send(JSON.stringify({ command: 'address_completion', address: value }));
       } else {
         setResults([]);
       }
@@ -96,12 +94,12 @@ const AddressEditor = ({ t, currentToken, endpoint, setAddress, show }) => {
   }, []);
 
   useEffect(() => {
-    if(waitingSearch.length >= 3) {
+    if (waitingSearch.length >= 3) {
       search(waitingSearch);
     }
   }, [socket, waitingSearch]);
 
-  if(!show) {
+  if (!show) {
     return null;
   }
 
@@ -111,19 +109,20 @@ const AddressEditor = ({ t, currentToken, endpoint, setAddress, show }) => {
       options={results.map((v) => ({ label: v.formatted_address, value: v }))}
       filterOption={() => true}
       inputValue={tempValue}
+      value={tempValue}
       placeholder={t('location.search')}
       onInputChange={handleTyping}
       onChange={(property) => changeAddress(property)}
     />
   );
-}
+};
 
 AddressEditor.propTypes = {
   t: PropTypes.func.isRequired,
   currentToken: PropTypes.string.isRequired,
   endpoint: PropTypes.string.isRequired,
   setAddress: PropTypes.func.isRequired,
-  show: PropTypes.bool.isRequired
+  show: PropTypes.bool.isRequired,
 };
 
 export default AddressEditor;

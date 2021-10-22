@@ -40,7 +40,7 @@ const AddContactForm = ({ t, disable, fields, updateField, updateFieldWithKey, e
   ];
 
   const selectEntity = ({ id, name }) => {
-    updateFieldWithKey('entity', { value: id });
+    updateFieldWithKey('entity', { value: id, error: false });
     setSelectedEntity(name);
   };
 
@@ -59,7 +59,7 @@ const AddContactForm = ({ t, disable, fields, updateField, updateFieldWithKey, e
                   ? { value: fields.type.value, label: fields.type.value }
                   : null
               }
-              onChange={(v) => updateFieldWithKey('type', { value: v.value })}
+              onChange={(v) => updateFieldWithKey('type', { value: v.value, error: false })}
               options={[
                 { label: 'SUBSCRIBER', value: 'SUBSCRIBER' },
                 { label: 'USER', value: 'USER' },
@@ -89,7 +89,7 @@ const AddContactForm = ({ t, disable, fields, updateField, updateFieldWithKey, e
             disabled={disable}
             maxLength="50"
           />
-          <CInvalidFeedback>{t('common.required')}</CInvalidFeedback>
+          <CFormText color={fields.name.error ? 'danger' : ''}>{t('common.required')}</CFormText>
         </CCol>
         <CLabel className="mb-5" sm="2" col htmlFor="title">
           {t('contact.user_title')}
@@ -101,7 +101,6 @@ const AddContactForm = ({ t, disable, fields, updateField, updateFieldWithKey, e
             required
             value={fields.title.value}
             onChange={updateField}
-            invalid={fields.title.error}
             disabled={disable}
             maxLength="50"
           />
@@ -302,14 +301,16 @@ const AddContactForm = ({ t, disable, fields, updateField, updateFieldWithKey, e
           />
         </CCol>
       </CRow>
-      {entities ?
+      {entities ? (
         <div>
           <CFormGroup row className="pt-2 pb-1">
             <CLabel sm="2" col htmlFor="title">
               {t('entity.selected_entity')}
             </CLabel>
             <CCol sm="4" className="pt-2">
-              <h6>{fields.entity.value === '' ? t('entity.need_select_entity') : selectedEntity}</h6>
+              <h6 className={fields.entity.error ? 'text-danger' : ''}>
+                {fields.entity.value === '' ? t('entity.need_select_entity') : selectedEntity}
+              </h6>
             </CCol>
           </CFormGroup>
           <div className="overflow-auto border mb-1" style={{ height: '200px' }}>
@@ -356,9 +357,7 @@ const AddContactForm = ({ t, disable, fields, updateField, updateFieldWithKey, e
             />
           </div>
         </div>
-      :
-        null
-      }
+      ) : null}
     </CForm>
   );
 };
@@ -373,7 +372,7 @@ AddContactForm.propTypes = {
 };
 
 AddContactForm.defaultProps = {
-  entities: null
+  entities: null,
 };
 
 export default AddContactForm;
