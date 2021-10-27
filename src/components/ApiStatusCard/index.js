@@ -34,7 +34,11 @@ const ApiStatusCard = ({ t, info, reload }) => {
 
   return (
     <CCard>
-      <CCardHeader>{info.title}</CCardHeader>
+      <CCardHeader className="my-0 p-1 text-light" style={{ backgroundColor: '#2f3d54' }}>
+        <div style={{ fontWeight: '600' }} className=" text-value-lg float-left">
+          {info.title}
+        </div>
+      </CCardHeader>
       <CCardBody>
         <CRow>
           <CCol sm="4">
@@ -74,7 +78,7 @@ const ApiStatusCard = ({ t, info, reload }) => {
           </CCol>
           <CCol>
             <div block="true">
-              <FormattedDate date={info.start} />
+              {info.start ? <FormattedDate date={info.start} /> : t('common.unknown')}
             </div>
           </CCol>
         </CRow>

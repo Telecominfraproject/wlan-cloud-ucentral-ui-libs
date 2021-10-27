@@ -3,6 +3,8 @@ import { CForm, CInput, CLabel, CCol, CFormGroup, CFormText, CRow } from '@coreu
 import Select from 'react-select';
 import PropTypes from 'prop-types';
 import NotesTable from '../NotesTable';
+import RequiredAsterisk from '../RequiredAsterisk';
+import selectStyles from '../../utils/selectStyles';
 
 const EditInventoryTagForm = ({
   t,
@@ -14,19 +16,16 @@ const EditInventoryTagForm = ({
   deviceTypes,
 }) => (
   <CForm>
-    <CFormGroup row className="pt-3">
+    <CFormGroup row className="mb-1">
       <CCol>
         <CLabel htmlFor="serialNumber">{t('common.serial_number')}</CLabel>
       </CCol>
-      <CCol sm="8">
-        <p id="serialNumber" className="form-control-static">
-          {fields.serialNumber.value}
-        </p>
-      </CCol>
+      <CCol sm="8">{fields.serialNumber.value}</CCol>
     </CFormGroup>
-    <CFormGroup row className="pb-3">
+    <CFormGroup row className="mb-1">
       <CLabel col htmlFor="name">
         {t('user.name')}
+        <RequiredAsterisk />
       </CLabel>
       <CCol sm="8">
         <CInput
@@ -39,10 +38,12 @@ const EditInventoryTagForm = ({
           disabled={disable}
           maxLength="50"
         />
-        <CFormText color={fields.name.error ? 'danger' : ''}>{t('common.required')}</CFormText>
+        <CFormText hidden={!fields.name.error} color={fields.name.error ? 'danger' : ''}>
+          {t('common.required')}
+        </CFormText>
       </CCol>
     </CFormGroup>
-    <CFormGroup row className="pb-3">
+    <CFormGroup row className="mb-1">
       <CLabel col htmlFor="description">
         {t('user.description')}
       </CLabel>
@@ -58,13 +59,15 @@ const EditInventoryTagForm = ({
         />
       </CCol>
     </CFormGroup>
-    <CFormGroup row className="pb-3">
+    <CFormGroup row className="mb-1">
       <CLabel col htmlFor="deviceType">
         {t('firmware.device_type')}
+        <RequiredAsterisk />
       </CLabel>
       <CCol sm="8">
         <div style={{ width: '250px' }}>
           <Select
+            styles={selectStyles}
             id="deviceType"
             value={{ value: fields.deviceType.value, label: fields.deviceType.value }}
             onChange={(v) => updateFieldDirectly('deviceType', { value: v.value })}
@@ -72,19 +75,24 @@ const EditInventoryTagForm = ({
             isDisabled={disable}
           />
         </div>
-        <CFormText color={fields.deviceType.error ? 'danger' : ''}>
+        <CFormText
+          hidden={!fields.deviceType.error}
+          color={fields.deviceType.error ? 'danger' : ''}
+        >
           {t('common.required')}
         </CFormText>
       </CCol>
     </CFormGroup>
-    <CRow className="pb-3">
+    <CRow className="mb-1">
       <CLabel sm="4" col htmlFor="rrm">
-        <div>RRM:</div>
+        RRM
+        <RequiredAsterisk />
       </CLabel>
       <CCol sm="8">
         <div style={{ width: '120px' }}>
           <Select
             id="rrm"
+            styles={selectStyles}
             value={{ value: fields.rrm.value, label: fields.rrm.value }}
             onChange={(v) => updateFieldDirectly('rrm', { value: v.value, error: false })}
             options={[
@@ -95,7 +103,9 @@ const EditInventoryTagForm = ({
             isDisabled={disable}
           />
         </div>
-        <CFormText color={fields.rrm.error ? 'danger' : ''}>{t('common.required')}</CFormText>
+        <CFormText hidden={!fields.rrm.error} color={fields.rrm.error ? 'danger' : ''}>
+          {t('common.required')}
+        </CFormText>
       </CCol>
     </CRow>
     <CRow>

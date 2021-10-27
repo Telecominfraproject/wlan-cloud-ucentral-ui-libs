@@ -9,8 +9,9 @@ import {
   CDataTable,
   CPopover,
   CSelect,
+  CButtonToolbar,
 } from '@coreui/react';
-import { cilBan, cilCheckCircle, cilPencil, cilPlus, cilSync, cilTrash } from '@coreui/icons';
+import { cilBan, cilCheckCircle, cilPlus, cilSearch, cilSync, cilTrash } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import { capitalizeFirstLetter } from '../../utils/formatting';
 import DeleteModal from '../DeleteModal';
@@ -58,16 +59,9 @@ const UserListTable = ({
     { key: 'validated', label: t('user.validated'), _style: { width: '5%' } },
     { key: 'description', label: t('user.description') },
     {
-      key: 'user_details',
+      key: 'actions',
       label: '',
-      _style: { width: '3%' },
-      sorter: false,
-      filter: false,
-    },
-    {
-      key: 'user_delete',
-      label: '',
-      _style: { width: '3%' },
+      _style: { width: '1%' },
       sorter: false,
       filter: false,
     },
@@ -75,19 +69,22 @@ const UserListTable = ({
 
   return (
     <div>
-      <CCard>
-        <CCardHeader>
+      <CCard className="my-0 py-0">
+        <CCardHeader className="my-0 p-1 text-light" style={{ backgroundColor: '#2f3d54' }}>
+          <div style={{ fontWeight: '600' }} className=" text-value-lg float-left">
+            {t('user.users')}
+          </div>
           <div className="d-flex flex-row-reverse">
             <div className="pl-2">
               <CPopover content={t('common.refresh')}>
-                <CButton onClick={refreshUsers} color="primary" variant="outline">
+                <CButton onClick={refreshUsers} color="info">
                   <CIcon name="cil-sync" content={cilSync} />
                 </CButton>
               </CPopover>
             </div>
             <div className="pl-2">
               <CPopover content={t('user.create')}>
-                <CButton color="primary" variant="outline" onClick={toggleCreate} block>
+                <CButton color="info" onClick={toggleCreate} block>
                   <CIcon name="cil-plus" content={cilPlus} />
                 </CButton>
               </CPopover>
@@ -146,33 +143,37 @@ const UserListTable = ({
                   </CPopover>
                 </td>
               ),
-              user_details: (item) => (
+              actions: (item) => (
                 <td className="text-center align-middle">
-                  <CPopover content={t('common.edit')}>
-                    <CButton
-                      color="primary"
-                      variant="outline"
-                      shape="square"
-                      size="sm"
-                      onClick={() => toggleEdit(item.Id)}
-                    >
-                      <CIcon name="cil-pencil" content={cilPencil} size="sm" />
-                    </CButton>
-                  </CPopover>
-                </td>
-              ),
-              user_delete: (item) => (
-                <td className="text-center align-middle">
-                  <CPopover content={t('common.delete')}>
-                    <CButton
-                      onClick={() => handleDeleteClick(item.Id)}
-                      color="primary"
-                      variant="outline"
-                      size="sm"
-                    >
-                      <CIcon content={cilTrash} size="sm" />
-                    </CButton>
-                  </CPopover>
+                  <CButtonToolbar
+                    role="group"
+                    className="justify-content-center"
+                    style={{ width: '100px' }}
+                  >
+                    <CPopover content={t('common.details')}>
+                      <CButton
+                        className="mx-1"
+                        color="primary"
+                        variant="outline"
+                        shape="square"
+                        size="sm"
+                        onClick={() => toggleEdit(item.Id)}
+                      >
+                        <CIcon name="cil-search" content={cilSearch} size="sm" />
+                      </CButton>
+                    </CPopover>
+                    <CPopover content={t('common.delete')}>
+                      <CButton
+                        className="mx-1"
+                        onClick={() => handleDeleteClick(item.Id)}
+                        color="primary"
+                        variant="outline"
+                        size="sm"
+                      >
+                        <CIcon content={cilTrash} size="sm" />
+                      </CButton>
+                    </CPopover>
+                  </CButtonToolbar>
                 </td>
               ),
             }}

@@ -2,6 +2,7 @@ import React from 'react';
 import { CForm, CInput, CLabel, CCol, CFormGroup, CFormText, CRow } from '@coreui/react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
+import selectStyles from 'utils/selectStyles';
 
 const AddEntityForm = ({ t, disable, fields, updateField, updateFieldDirectly }) => (
   <CForm>
@@ -47,6 +48,7 @@ const AddEntityForm = ({ t, disable, fields, updateField, updateFieldDirectly })
         <div style={{ width: '120px' }}>
           <Select
             id="rrm"
+            styles={selectStyles}
             value={{ value: fields.rrm.value, label: fields.rrm.value }}
             onChange={(v) => updateFieldDirectly('rrm', { value: v.value })}
             options={[

@@ -15,10 +15,10 @@ import {
   CPopover,
   CButton,
 } from '@coreui/react';
-import CIcon from '@coreui/icons-react';
-import { cilPlus } from '@coreui/icons';
 import countryList from 'utils/countryList';
 import FormattedDate from '../FormattedDate';
+import RequiredAsterisk from '../RequiredAsterisk';
+import selectStyles from '../../utils/selectStyles';
 
 const AddLocationForm = ({
   t,
@@ -55,8 +55,9 @@ const AddLocationForm = ({
   return (
     <CForm>
       <CRow>
-        <CLabel className="mb-5" sm="2" col htmlFor="name">
+        <CLabel className="mb-2" sm="2" col htmlFor="name">
           {t('contact.identifier')}
+          <RequiredAsterisk />
         </CLabel>
         <CCol sm="4">
           <CInput
@@ -69,7 +70,9 @@ const AddLocationForm = ({
             disabled={disable}
             maxLength="50"
           />
-          <CFormText color={fields.name.error ? 'danger' : ''}>{t('common.required')}</CFormText>
+          <CFormText hidden={!fields.name.error} color={fields.name.error ? 'danger' : ''}>
+            {t('common.required')}
+          </CFormText>
         </CCol>
         <CLabel sm="2" col htmlFor="description">
           {t('user.description')}
@@ -99,13 +102,14 @@ const AddLocationForm = ({
             maxLength="50"
           />
         </CCol>
-        <CLabel className="mb-5" sm="2" col htmlFor="type">
+        <CLabel className="mb-2" sm="2" col htmlFor="type">
           {t('contact.type')}
         </CLabel>
         <CCol sm="4">
           <div style={{ width: '200px' }}>
             <Select
               id="type"
+              styles={selectStyles}
               value={
                 fields.type.value !== ''
                   ? { value: fields.type.value, label: fields.type.value }
@@ -125,7 +129,7 @@ const AddLocationForm = ({
             />
           </div>
         </CCol>
-        <CLabel className="mb-5" sm="2" col htmlFor="phones">
+        <CLabel className="mb-2" sm="2" col htmlFor="phones">
           Landlines
         </CLabel>
         <CCol sm="4">
@@ -140,7 +144,7 @@ const AddLocationForm = ({
             placeholder={t('common.type_for_options')}
           />
         </CCol>
-        <CLabel className="mb-5" sm="2" col htmlFor="phones">
+        <CLabel className="mb-2" sm="2" col htmlFor="phones">
           Mobiles
         </CLabel>
         <CCol sm="4">
@@ -160,8 +164,9 @@ const AddLocationForm = ({
             <CCol sm="6">{locationSearch}</CCol>
           </CRow>
         </CCol>
-        <CLabel className="mb-5" sm="2" col htmlFor="addressLines">
+        <CLabel className="mb-2" sm="2" col htmlFor="addressLines">
           {t('location.street_address')}
+          <RequiredAsterisk />
         </CLabel>
         <CCol sm="4">
           <CInput
@@ -176,17 +181,22 @@ const AddLocationForm = ({
             invalid={fields.addressLines.error}
             maxLength="50"
           />
-          <CFormText color={fields.addressLines.error ? 'danger' : ''}>
+          <CFormText
+            hidden={!fields.addressLines.error}
+            color={fields.addressLines.error ? 'danger' : ''}
+          >
             {t('common.required')}
           </CFormText>
         </CCol>
-        <CLabel className="mb-5" sm="2" col htmlFor="country">
+        <CLabel className="mb-2" sm="2" col htmlFor="country">
           {t('location.country')}
+          <RequiredAsterisk />
         </CLabel>
         <CCol sm="4">
           <div>
             <Select
               id="country"
+              styles={selectStyles}
               value={{
                 value: fields.country.value,
                 label:
@@ -199,10 +209,13 @@ const AddLocationForm = ({
               isDisabled={disable}
             />
           </div>
-          <CFormText color={fields.country.error ? 'danger' : ''}>{t('common.required')}</CFormText>
+          <CFormText hidden={!fields.country.error} color={fields.country.error ? 'danger' : ''}>
+            {t('common.required')}
+          </CFormText>
         </CCol>
-        <CLabel className="mb-5" sm="2" col htmlFor="city">
+        <CLabel className="mb-2" sm="2" col htmlFor="city">
           {t('location.city')}
+          <RequiredAsterisk />
         </CLabel>
         <CCol sm="4">
           <CInput
@@ -215,10 +228,13 @@ const AddLocationForm = ({
             disabled={disable}
             maxLength="50"
           />
-          <CFormText color={fields.city.error ? 'danger' : ''}>{t('common.required')}</CFormText>
+          <CFormText hidden={!fields.city.error} color={fields.city.error ? 'danger' : ''}>
+            {t('common.required')}
+          </CFormText>
         </CCol>
-        <CLabel className="mb-5" sm="2" col htmlFor="state">
+        <CLabel className="mb-2" sm="2" col htmlFor="state">
           {t('location.state')}
+          <RequiredAsterisk />
         </CLabel>
         <CCol sm="4">
           <CInput
@@ -231,10 +247,13 @@ const AddLocationForm = ({
             disabled={disable}
             maxLength="50"
           />
-          <CFormText color={fields.state.error ? 'danger' : ''}>{t('common.required')}</CFormText>
+          <CFormText hidden={!fields.state.error} color={fields.state.error ? 'danger' : ''}>
+            {t('common.required')}
+          </CFormText>
         </CCol>
-        <CLabel className="mb-5" sm="2" col htmlFor="postal">
+        <CLabel className="mb-2" sm="2" col htmlFor="postal">
           {t('location.postal')}
+          <RequiredAsterisk />
         </CLabel>
         <CCol sm="4">
           <CInput
@@ -246,6 +265,9 @@ const AddLocationForm = ({
             disabled={disable}
             maxLength="50"
           />
+          <CFormText hidden={!fields.postal.error} color={fields.postal.error ? 'danger' : ''}>
+            {t('common.required')}
+          </CFormText>
         </CCol>
         <CLabel sm="2" col htmlFor="geoCode">
           {t('location.geocode')}
@@ -290,26 +312,31 @@ const AddLocationForm = ({
               border
               scopedSlots={{
                 name: (item) => (
-                  <td>
+                  <td className="align-middle p-1">
                     <CLink
                       className="c-subheader-nav-link"
                       aria-current="page"
-                      to={() => `/configuration/${item.id}`}
+                      to={() => `/entity/${item.id}`}
                     >
                       {item.name}
                     </CLink>
                   </td>
                 ),
                 created: (item) => (
-                  <td>
+                  <td className="align-middle p-1">
                     <FormattedDate date={item.created} />
                   </td>
                 ),
                 actions: (item) => (
-                  <td>
+                  <td className="align-middle p-1">
                     <CPopover content={t('entity.select_entity')}>
-                      <CButton color="primary" variant="outline" onClick={() => selectEntity(item)}>
-                        <CIcon content={cilPlus} />
+                      <CButton
+                        size="sm"
+                        color="primary"
+                        variant="outline"
+                        onClick={() => selectEntity(item)}
+                      >
+                        {t('common.select')}
                       </CButton>
                     </CPopover>
                   </td>

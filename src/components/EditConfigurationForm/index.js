@@ -15,6 +15,7 @@ import PropTypes from 'prop-types';
 import Select from 'react-select';
 import NotesTable from '../NotesTable';
 import FormattedDate from '../FormattedDate';
+import selectStyles from '../../utils/selectStyles';
 
 const EditConfigurationForm = ({
   t,
@@ -141,6 +142,7 @@ const EditConfigurationForm = ({
             <CCol lg="7" xl="9">
               <Select
                 isMulti
+                styles={selectStyles}
                 closeMenuOnSelect={false}
                 name="Device Types"
                 options={typeOptions}
@@ -163,6 +165,7 @@ const EditConfigurationForm = ({
               <div style={{ width: '120px' }}>
                 <Select
                   id="rrm"
+                  styles={selectStyles}
                   value={{ value: fields.rrm.value, label: fields.rrm.value }}
                   onChange={(v) => updateFieldWithKey('rrm', { value: v.value })}
                   options={[
@@ -186,6 +189,7 @@ const EditConfigurationForm = ({
               <div style={{ width: '120px' }}>
                 <Select
                   id="rrm"
+                  styles={selectStyles}
                   value={{
                     value: fields.firmwareUpgrade.value,
                     label: fields.firmwareUpgrade.value,

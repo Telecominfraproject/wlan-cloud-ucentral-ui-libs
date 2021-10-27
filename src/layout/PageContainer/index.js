@@ -12,8 +12,8 @@ const loading = (
 );
 
 const PageContainer = ({ t, routes, redirectTo }) => (
-  <main className="c-main">
-    <CContainer fluid>
+  <main className="c-main py-2">
+    <CContainer className="px-2" fluid>
       <Suspense fallback={loading}>
         <Switch>
           {routes.map(

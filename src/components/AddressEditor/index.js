@@ -4,6 +4,7 @@ import Select, { components } from 'react-select';
 import { checkIfJson } from 'utils/formatting';
 import _ from 'lodash';
 import formatGoogleAddress from 'utils/formatGoogleAddress';
+import selectStyles from 'utils/selectStyles';
 
 const AddressEditor = ({ t, currentToken, endpoint, setAddress, show }) => {
   const [tempValue, setTempValue] = useState('');
@@ -105,6 +106,7 @@ const AddressEditor = ({ t, currentToken, endpoint, setAddress, show }) => {
 
   return (
     <Select
+      styles={selectStyles}
       components={{ NoOptionsMessage }}
       options={results.map((v) => ({ label: v.formatted_address, value: v }))}
       filterOption={() => true}

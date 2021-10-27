@@ -2,6 +2,8 @@ import React from 'react';
 import { CForm, CInput, CLabel, CCol, CRow, CFormGroup, CFormText } from '@coreui/react';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
+import RequiredAsterisk from '../RequiredAsterisk';
+import selectStyles from '../../utils/selectStyles';
 
 const AddInventoryTagForm = ({
   t,
@@ -11,10 +13,11 @@ const AddInventoryTagForm = ({
   updateFieldDirectly,
   deviceTypes,
 }) => (
-  <CForm className="px-5 pt-5">
-    <CFormGroup row className="pb-3">
+  <CForm>
+    <CFormGroup row className="mb-1">
       <CLabel col htmlFor="name">
         {t('common.serial_number')}
+        <RequiredAsterisk />
       </CLabel>
       <CCol sm="8">
         <CInput
@@ -28,13 +31,14 @@ const AddInventoryTagForm = ({
           maxLength="50"
         />
         <CFormText color={fields.serialNumber.error ? 'danger' : ''}>
-          {t('common.required')}, {t('entity.valid_serial')}
+          {t('entity.valid_serial')}
         </CFormText>
       </CCol>
     </CFormGroup>
-    <CFormGroup row className="pb-3">
+    <CFormGroup row className="mb-1">
       <CLabel col htmlFor="name">
         {t('user.name')}
+        <RequiredAsterisk />
       </CLabel>
       <CCol sm="8">
         <CInput
@@ -47,12 +51,15 @@ const AddInventoryTagForm = ({
           disabled={disable}
           maxLength="50"
         />
-        <CFormText color={fields.name.error ? 'danger' : ''}>{t('common.required')}</CFormText>
+        <CFormText hidden={!fields.name.error} color={fields.name.error ? 'danger' : ''}>
+          {t('common.required')}
+        </CFormText>
       </CCol>
     </CFormGroup>
-    <CFormGroup row className="pb-3">
+    <CFormGroup row className="mb-1">
       <CLabel col htmlFor="deviceType">
         {t('firmware.device_type')}
+        <RequiredAsterisk />
       </CLabel>
       <CCol sm="8">
         <div style={{ width: '250px' }}>
@@ -64,19 +71,24 @@ const AddInventoryTagForm = ({
             isDisabled={disable}
           />
         </div>
-        <CFormText color={fields.deviceType.error ? 'danger' : ''}>
+        <CFormText
+          hidden={!fields.deviceType.error}
+          color={fields.deviceType.error ? 'danger' : ''}
+        >
           {t('common.required')}
         </CFormText>
       </CCol>
     </CFormGroup>
-    <CRow className="pb-3">
+    <CRow className="mb-1">
       <CLabel sm="4" col htmlFor="name">
-        <div>RRM:</div>
+        RRM
+        <RequiredAsterisk />
       </CLabel>
       <CCol sm="8">
         <div style={{ width: '120px' }}>
           <Select
             id="rrm"
+            styles={selectStyles}
             value={{ value: fields.rrm.value, label: fields.rrm.value }}
             onChange={(v) => updateFieldDirectly('rrm', { value: v.value, error: false })}
             options={[
@@ -87,10 +99,12 @@ const AddInventoryTagForm = ({
             isDisabled={disable}
           />
         </div>
-        <CFormText color={fields.rrm.error ? 'danger' : ''}>{t('common.required')}</CFormText>
+        <CFormText hidden={!fields.rrm.error} color={fields.rrm.error ? 'danger' : ''}>
+          {t('common.required')}
+        </CFormText>
       </CCol>
     </CRow>
-    <CFormGroup row className="pb-3">
+    <CFormGroup row className="mb-1">
       <CLabel col htmlFor="description">
         {t('user.description')}
       </CLabel>
@@ -107,7 +121,7 @@ const AddInventoryTagForm = ({
         />
       </CCol>
     </CFormGroup>
-    <CFormGroup row className="pb-3">
+    <CFormGroup row className="mb-1">
       <CLabel col htmlFor="note">
         {t('user.note')}
       </CLabel>

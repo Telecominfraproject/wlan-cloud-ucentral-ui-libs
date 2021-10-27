@@ -32,6 +32,7 @@ export { default as ContactTable } from './components/ContactTable';
 export { default as CopyToClipboardButton } from './components/CopyToClipboardButton';
 export { default as CreateUserForm } from './components/CreateUserForm';
 export { default as ConfigurationTable } from './components/ConfigurationTable';
+export { default as DeviceDetails } from './components/DeviceDetails';
 export { default as DeviceFirmwareModal } from './components/DeviceFirmwareModal';
 export { default as DeviceListTable } from './components/DeviceListTable';
 export { default as DeviceStatusCard } from './components/DeviceStatusCard';

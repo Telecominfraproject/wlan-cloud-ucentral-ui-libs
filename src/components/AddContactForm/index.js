@@ -16,9 +16,8 @@ import {
   CPopover,
   CButton,
 } from '@coreui/react';
-import CIcon from '@coreui/icons-react';
-import { cilPlus } from '@coreui/icons';
 import FormattedDate from '../FormattedDate';
+import RequiredAsterisk from '../RequiredAsterisk';
 
 const AddContactForm = ({ t, disable, fields, updateField, updateFieldWithKey, entities }) => {
   const [filter, setFilter] = useState('');
@@ -47,8 +46,9 @@ const AddContactForm = ({ t, disable, fields, updateField, updateFieldWithKey, e
   return (
     <CForm>
       <CRow>
-        <CLabel className="mb-5" sm="2" col htmlFor="type">
+        <CLabel className="mb-2" sm="2" col htmlFor="type">
           {t('contact.type')}
+          <RequiredAsterisk />
         </CLabel>
         <CCol sm="4">
           <div style={{ width: '200px' }}>
@@ -73,10 +73,13 @@ const AddContactForm = ({ t, disable, fields, updateField, updateFieldWithKey, e
               isDisabled={disable}
             />
           </div>
-          <CFormText color={fields.type.error ? 'danger' : ''}>{t('common.required')}</CFormText>
+          <CFormText hidden={!fields.type.error} color={fields.type.error ? 'danger' : ''}>
+            {t('common.required')}
+          </CFormText>
         </CCol>
-        <CLabel className="mb-5" sm="2" col htmlFor="name">
+        <CLabel className="mb-2" sm="2" col htmlFor="name">
           {t('contact.identifier')}
+          <RequiredAsterisk />
         </CLabel>
         <CCol sm="4">
           <CInput
@@ -89,9 +92,11 @@ const AddContactForm = ({ t, disable, fields, updateField, updateFieldWithKey, e
             disabled={disable}
             maxLength="50"
           />
-          <CFormText color={fields.name.error ? 'danger' : ''}>{t('common.required')}</CFormText>
+          <CFormText hidden={!fields.name.error} color={fields.name.error ? 'danger' : ''}>
+            {t('common.required')}
+          </CFormText>
         </CCol>
-        <CLabel className="mb-5" sm="2" col htmlFor="title">
+        <CLabel className="mb-2" sm="2" col htmlFor="title">
           {t('contact.user_title')}
         </CLabel>
         <CCol sm="4">
@@ -105,7 +110,7 @@ const AddContactForm = ({ t, disable, fields, updateField, updateFieldWithKey, e
             maxLength="50"
           />
         </CCol>
-        <CLabel className="mb-5" sm="2" col htmlFor="salutation">
+        <CLabel className="mb-2" sm="2" col htmlFor="salutation">
           {t('contact.salutation')}
         </CLabel>
         <CCol sm="4">
@@ -128,8 +133,9 @@ const AddContactForm = ({ t, disable, fields, updateField, updateFieldWithKey, e
             />
           </div>
         </CCol>
-        <CLabel className="mb-5" sm="2" col htmlFor="firstname">
+        <CLabel className="mb-2" sm="2" col htmlFor="firstname">
           {t('contact.first_name')}
+          <RequiredAsterisk />
         </CLabel>
         <CCol sm="4">
           <CInput
@@ -142,11 +148,14 @@ const AddContactForm = ({ t, disable, fields, updateField, updateFieldWithKey, e
             disabled={disable}
             maxLength="50"
           />
-          <CFormText color={fields.firstname.error ? 'danger' : ''}>
+          <CFormText
+            hidden={!fields.firstname.error}
+            color={fields.firstname.error ? 'danger' : ''}
+          >
             {t('common.required')}
           </CFormText>
         </CCol>
-        <CLabel className="mb-5" sm="2" col htmlFor="lastname">
+        <CLabel className="mb-2" sm="2" col htmlFor="lastname">
           {t('contact.last_name')}
         </CLabel>
         <CCol sm="4">
@@ -160,11 +169,11 @@ const AddContactForm = ({ t, disable, fields, updateField, updateFieldWithKey, e
             disabled={disable}
             maxLength="50"
           />
-          <CFormText color={fields.lastname.error ? 'danger' : ''}>
+          <CFormText hidden={!fields.lastname.error} color={fields.lastname.error ? 'danger' : ''}>
             {t('common.required')}
           </CFormText>
         </CCol>
-        <CLabel className="mb-5" sm="2" col htmlFor="initials">
+        <CLabel className="mb-2" sm="2" col htmlFor="initials">
           {t('contact.initials')}
         </CLabel>
         <CCol sm="4">
@@ -192,8 +201,9 @@ const AddContactForm = ({ t, disable, fields, updateField, updateFieldWithKey, e
             maxLength="50"
           />
         </CCol>
-        <CLabel className="mb-5" sm="2" col htmlFor="primaryEmail">
+        <CLabel className="mb-2" sm="2" col htmlFor="primaryEmail">
           {t('contact.primary_email')}
+          <RequiredAsterisk />
         </CLabel>
         <CCol sm="4">
           <CInput
@@ -206,11 +216,14 @@ const AddContactForm = ({ t, disable, fields, updateField, updateFieldWithKey, e
             disabled={disable}
             maxLength="50"
           />
-          <CFormText color={fields.primaryEmail.error ? 'danger' : ''}>
+          <CFormText
+            hidden={!fields.primaryEmail.error}
+            color={fields.primaryEmail.error ? 'danger' : ''}
+          >
             {t('common.required')}
           </CFormText>
         </CCol>
-        <CLabel className="mb-5" sm="2" col htmlFor="secondaryEmail">
+        <CLabel className="mb-2" sm="2" col htmlFor="secondaryEmail">
           {t('contact.secondary_email')}
         </CLabel>
         <CCol sm="4">
@@ -226,7 +239,7 @@ const AddContactForm = ({ t, disable, fields, updateField, updateFieldWithKey, e
           />
           <CInvalidFeedback>{t('common.required')}</CInvalidFeedback>
         </CCol>
-        <CLabel className="mb-5" sm="2" col htmlFor="accessPIN">
+        <CLabel className="mb-2" sm="2" col htmlFor="accessPIN">
           {t('contact.access_pin')}
         </CLabel>
         <CCol sm="4">
@@ -242,7 +255,7 @@ const AddContactForm = ({ t, disable, fields, updateField, updateFieldWithKey, e
           />
           <CInvalidFeedback>{t('common.required')}</CInvalidFeedback>
         </CCol>
-        <CLabel className="mb-5" sm="2" col htmlFor="phones">
+        <CLabel className="mb-2" sm="2" col htmlFor="phones">
           Landlines
         </CLabel>
         <CCol sm="4">
@@ -257,7 +270,7 @@ const AddContactForm = ({ t, disable, fields, updateField, updateFieldWithKey, e
             placeholder={t('common.type_for_options')}
           />
         </CCol>
-        <CLabel className="mb-5" sm="2" col htmlFor="phones">
+        <CLabel className="mb-2" sm="2" col htmlFor="phones">
           Mobiles
         </CLabel>
         <CCol sm="4">
@@ -329,26 +342,31 @@ const AddContactForm = ({ t, disable, fields, updateField, updateFieldWithKey, e
               border
               scopedSlots={{
                 name: (item) => (
-                  <td>
+                  <td className="align-middle p-1">
                     <CLink
                       className="c-subheader-nav-link"
                       aria-current="page"
-                      to={() => `/configuration/${item.id}`}
+                      to={() => `/entity/${item.id}`}
                     >
                       {item.name}
                     </CLink>
                   </td>
                 ),
                 created: (item) => (
-                  <td>
+                  <td className="align-middle p-1">
                     <FormattedDate date={item.created} />
                   </td>
                 ),
                 actions: (item) => (
-                  <td>
+                  <td className="align-middle p-1">
                     <CPopover content={t('entity.select_entity')}>
-                      <CButton color="primary" variant="outline" onClick={() => selectEntity(item)}>
-                        <CIcon content={cilPlus} />
+                      <CButton
+                        size="sm"
+                        color="primary"
+                        variant="outline"
+                        onClick={() => selectEntity(item)}
+                      >
+                        {t('common.select')}
                       </CButton>
                     </CPopover>
                   </td>

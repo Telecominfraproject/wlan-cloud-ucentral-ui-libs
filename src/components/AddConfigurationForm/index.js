@@ -11,6 +11,7 @@ import {
   CFormText,
   CRow,
 } from '@coreui/react';
+import selectStyles from '../../utils/selectStyles';
 
 const AddConfigurationForm = ({
   t,
@@ -133,6 +134,7 @@ const AddConfigurationForm = ({
           <div style={{ width: '120px' }}>
             <Select
               id="rrm"
+              styles={selectStyles}
               value={{ value: fields.rrm.value, label: fields.rrm.value }}
               onChange={(v) => updateFieldWithKey('rrm', { value: v.value })}
               options={[

@@ -17,12 +17,11 @@ import {
 } from '@coreui/react';
 import {
   cilSync,
-  cilNotes,
   cilArrowCircleTop,
   cilCheckCircle,
-  cilWifiSignal2,
   cilTerminal,
   cilTrash,
+  cilSearch,
 } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import ReactTooltip from 'react-tooltip';
@@ -336,26 +335,8 @@ const DeviceListTable = ({
                   <CButtonToolbar
                     role="group"
                     className="justify-content-center"
-                    style={{ width: '230px' }}
+                    style={{ width: '170px' }}
                   >
-                    <CPopover content={t('wifi_analysis.title')}>
-                      <CLink
-                        className="c-subheader-nav-link"
-                        aria-current="page"
-                        to={() => `/devices/${item.serialNumber}/wifianalysis`}
-                      >
-                        <CButton
-                          color="primary"
-                          variant="outline"
-                          shape="square"
-                          size="sm"
-                          className="mx-1"
-                          style={{ width: '33px', height: '30px' }}
-                        >
-                          <CIcon name="cil-wifi-signal-2" content={cilWifiSignal2} size="sm" />
-                        </CButton>
-                      </CLink>
-                    </CPopover>
                     <CPopover content={t('actions.connect')}>
                       <CButton
                         className="mx-1"
@@ -384,7 +365,7 @@ const DeviceListTable = ({
                           className="mx-1"
                           style={{ width: '33px', height: '30px' }}
                         >
-                          <CIcon name="cil-notes" content={cilNotes} size="sm" />
+                          <CIcon name="cil-search" content={cilSearch} size="sm" />
                         </CButton>
                       </CLink>
                     </CPopover>

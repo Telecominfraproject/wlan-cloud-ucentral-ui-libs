@@ -14,6 +14,7 @@ import PropTypes from 'prop-types';
 import Select from 'react-select';
 import NotesTable from '../NotesTable';
 import FormattedDate from '../FormattedDate';
+import selectStyles from '../../utils/selectStyles';
 
 const EditEntityForm = ({
   t,
@@ -85,6 +86,7 @@ const EditEntityForm = ({
             <div style={{ width: '120px' }}>
               <Select
                 id="rrm"
+                styles={selectStyles}
                 value={{ value: fields.rrm.value, label: fields.rrm.value }}
                 onChange={(v) => updateFieldDirectly('rrm', { value: v.value })}
                 options={[
@@ -104,22 +106,19 @@ const EditEntityForm = ({
           <CCol lg="7" xxl="9">
             {editing ? (
               <CButton className="pl-0 text-left" color="link" onClick={toggleAssociate}>
-                {fields.deviceConfiguration.value === ''
+                {fields.deviceConfiguration.value.length === 0
                   ? t('configuration.add_configuration')
-                  : fields.deviceConfiguration.value}
+                  : fields.deviceConfiguration.value.map((c) => c.name).join(', ')}
               </CButton>
             ) : (
               <div className="mt-2 mb-0">
-                {fields.deviceConfiguration.uuid === '' ? (
+                {fields.deviceConfiguration.value.length === 0 ? (
                   <p className="mb-0">{t('configuration.no_associated_config')}</p>
                 ) : (
-                  <CLink
-                    className="c-subheader-nav-link"
-                    aria-current="page"
-                    to={() => `/configuration/${fields.deviceConfiguration.uuid}`}
-                  >
-                    {fields.deviceConfiguration.value}
-                  </CLink>
+                  <p className="mb-0">
+                    {' '}
+                    {fields.deviceConfiguration.value.map((c) => c.name).join(', ')}
+                  </p>
                 )}
               </div>
             )}

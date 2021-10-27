@@ -39,6 +39,7 @@ const EditMyProfile = ({
   fileInputKey,
   sendPhoneNumberTest,
   testVerificationCode,
+  editing,
 }) => {
   const [showPhoneModal, togglePhoneModal] = useToggle(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -74,73 +75,35 @@ const EditMyProfile = ({
           {t('user.name')}
         </CLabel>
         <CCol lg="4" xxl="5">
-          <CInput id="name" value={user.name.value} onChange={updateUserWithId} maxLength="20" />
+          {editing ? (
+            <CInput id="name" value={user.name.value} onChange={updateUserWithId} maxLength="20" />
+          ) : (
+            <p className="mt-2 mb-0">{user.name.value}</p>
+          )}
         </CCol>
         <CLabel lg="2" xxl="1" col htmlFor="description">
           {t('user.description')}
         </CLabel>
         <CCol lg="4" xxl="5">
-          <CInput
-            id="description"
-            value={user.description.value}
-            onChange={updateUserWithId}
-            maxLength="50"
-          />
-        </CCol>
-      </CFormGroup>
-      <CFormGroup row>
-        <CLabel lg="2" xxl="1" col htmlFor="userRole">
-          {t('user.user_role')}
-        </CLabel>
-        <CCol lg="4" xxl="5">
-          <CSelect
-            custom
-            id="userRole"
-            onChange={updateUserWithId}
-            value={user.userRole.value}
-            style={{ width: '100px' }}
-          >
-            <option value="admin">Admin</option>
-            <option value="csr">CSR</option>
-            <option value="root">Root</option>
-            <option value="special">Special</option>
-            <option value="sub">Sub</option>
-            <option value="system">System</option>
-          </CSelect>
-        </CCol>
-        <CLabel lg="2" xxl="1" col htmlFor="currentPassword">
-          {t('login.new_password')}
-        </CLabel>
-        <CCol lg="4" xxl="5">
-          <CInputGroup>
+          {editing ? (
             <CInput
-              type={showPassword ? 'text' : 'password'}
-              id="currentPassword"
-              value={user.currentPassword.value}
+              id="description"
+              value={user.description.value}
               onChange={updateUserWithId}
-              invalid={user.currentPassword.error}
               maxLength="50"
             />
-            <CInputGroupAppend>
-              <CPopover content={t('user.show_hide_password')}>
-                <CButton type="button" onClick={toggleShowPassword} color="secondary">
-                  <CIcon
-                    name={showPassword ? 'cil-envelope-open' : 'cil-envelope-closed'}
-                    size="sm"
-                  />
-                </CButton>
-              </CPopover>
-            </CInputGroupAppend>
-            <CInvalidFeedback>{t('user.provide_password')}</CInvalidFeedback>
-          </CInputGroup>
+          ) : (
+            <p className="mt-2 mb-0">{user.description.value}</p>
+          )}
         </CCol>
       </CFormGroup>
       <CFormGroup row>
-        <CLabel lg="2" xxl="1" col htmlFor="userRole">
-          {t('user.user_role')}
+        <CLabel lg="2" xxl="1" col htmlFor="mfaMethod">
+          MFA
         </CLabel>
         <CCol lg="4" xxl="5">
           <CSelect
+            disabled={!editing}
             custom
             id="mfaMethod"
             onChange={updateUserWithId}
@@ -156,9 +119,71 @@ const EditMyProfile = ({
           {t('user.phone_number')}
         </CLabel>
         <CCol lg="4" xxl="5">
-          <CButton color="link" onClick={togglePhoneModal} className="pl-0">
-            {parseNumber()}
-          </CButton>
+          {editing ? (
+            <CButton color="link" onClick={togglePhoneModal} className="pl-0">
+              {parseNumber()}
+            </CButton>
+          ) : (
+            <p className="mt-2 mb-0">{parseNumber()}</p>
+          )}
+        </CCol>
+      </CFormGroup>
+      <CFormGroup row>
+        <CLabel lg="2" xxl="1" col htmlFor="newPassword">
+          {t('login.new_password')}
+        </CLabel>
+        <CCol lg="4" xxl="5">
+          {editing ? (
+            <CInputGroup>
+              <CInput
+                type={showPassword ? 'text' : 'password'}
+                id="newPassword"
+                value={user.newPassword.value}
+                onChange={updateUserWithId}
+                invalid={user.newPassword.error}
+                maxLength="50"
+              />
+              <CInputGroupAppend>
+                <CPopover content={t('user.show_hide_password')}>
+                  <CButton type="button" onClick={toggleShowPassword} color="secondary">
+                    <CIcon
+                      name={showPassword ? 'cil-envelope-open' : 'cil-envelope-closed'}
+                      size="sm"
+                    />
+                  </CButton>
+                </CPopover>
+              </CInputGroupAppend>
+              <CInvalidFeedback>{t('user.make_sure_same_password')}</CInvalidFeedback>
+            </CInputGroup>
+          ) : null}
+        </CCol>
+        <CLabel lg="2" xxl="1" col htmlFor="confirmNewPassword">
+          {t('user.confirm_new_password')}
+        </CLabel>
+        <CCol lg="4" xxl="5">
+          {editing ? (
+            <CInputGroup>
+              <CInput
+                type={showPassword ? 'text' : 'password'}
+                id="confirmNewPassword"
+                value={user.confirmNewPassword.value}
+                onChange={updateUserWithId}
+                invalid={user.newPassword.error}
+                maxLength="50"
+              />
+              <CInputGroupAppend>
+                <CPopover content={t('user.show_hide_password')}>
+                  <CButton type="button" onClick={toggleShowPassword} color="secondary">
+                    <CIcon
+                      name={showPassword ? 'cil-envelope-open' : 'cil-envelope-closed'}
+                      size="sm"
+                    />
+                  </CButton>
+                </CPopover>
+              </CInputGroupAppend>
+              <CInvalidFeedback>{t('user.make_sure_same_password')}</CInvalidFeedback>
+            </CInputGroup>
+          ) : null}
         </CCol>
       </CFormGroup>
       <CFormGroup row>
@@ -185,11 +210,14 @@ const EditMyProfile = ({
                   isLoading={loading}
                   action={deleteAvatar}
                   block={false}
-                  disabled={loading || !avatar || avatar === '' || avatar === 'data:;base64,'}
+                  disabled={
+                    !editing || loading || !avatar || avatar === '' || avatar === 'data:;base64,'
+                  }
                 />
               </div>
               <div className="pt-1">
                 <CInputFile
+                  disabled={!editing}
                   id="file-input"
                   name="file-input"
                   accept="image/*"
@@ -207,6 +235,7 @@ const EditMyProfile = ({
             addNote={addNote}
             loading={loading}
             size="lg"
+            editable={editing}
           />
         </CCol>
       </CFormGroup>
@@ -251,6 +280,7 @@ EditMyProfile.propTypes = {
   sendPhoneNumberTest: PropTypes.func.isRequired,
   testVerificationCode: PropTypes.func.isRequired,
   updateWithKey: PropTypes.func.isRequired,
+  editing: PropTypes.bool.isRequired,
 };
 
 EditMyProfile.defaultProps = {

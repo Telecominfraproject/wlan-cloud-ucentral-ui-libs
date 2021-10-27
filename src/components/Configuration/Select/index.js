@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { CFormGroup, CCol, CLabel } from '@coreui/react';
 import Select from 'react-select';
+import selectStyles from 'utils/selectStyles';
 
 const ConfigurationSelectField = ({
   id,
@@ -91,6 +92,7 @@ const ConfigurationSelectField = ({
       <CCol sm={secondCol}>
         <div style={{ maxWidth: width ?? '' }}>
           <Select
+            styles={selectStyles}
             name="Subsystems"
             options={parseOptions()}
             onChange={onChange}
