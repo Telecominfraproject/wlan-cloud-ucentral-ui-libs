@@ -17,9 +17,8 @@ import {
 } from '@coreui/react';
 import PropTypes from 'prop-types';
 import CIcon from '@coreui/icons-react';
-import NotesTable from '../NotesTable';
 
-const EditUserForm = ({ t, user, updateUserWithId, loading, policies, addNote }) => {
+const EditUserForm = ({ t, user, updateUserWithId, policies, editing }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const toggleShowPassword = () => {
@@ -33,18 +32,26 @@ const EditUserForm = ({ t, user, updateUserWithId, loading, policies, addNote })
           {t('user.name')}
         </CLabel>
         <CCol sm="4">
-          <CInput id="name" value={user.name.value} onChange={updateUserWithId} maxLength="20" />
+          {editing ? (
+            <CInput id="name" value={user.name.value} onChange={updateUserWithId} maxLength="20" />
+          ) : (
+            <p className="mt-2 mb-0">{user.name.value}</p>
+          )}
         </CCol>
         <CLabel sm="2" col htmlFor="description">
           {t('user.description')}
         </CLabel>
         <CCol sm="4">
-          <CInput
-            id="description"
-            value={user.description.value}
-            onChange={updateUserWithId}
-            maxLength="50"
-          />
+          {editing ? (
+            <CInput
+              id="description"
+              value={user.description.value}
+              onChange={updateUserWithId}
+              maxLength="50"
+            />
+          ) : (
+            <p className="mt-2 mb-0">{user.description.value}</p>
+          )}
         </CCol>
       </CFormGroup>
       <CFormGroup row>
@@ -52,7 +59,13 @@ const EditUserForm = ({ t, user, updateUserWithId, loading, policies, addNote })
           {t('user.user_role')}
         </CLabel>
         <CCol sm="4">
-          <CSelect custom id="userRole" onChange={updateUserWithId} value={user.userRole.value}>
+          <CSelect
+            custom
+            id="userRole"
+            onChange={updateUserWithId}
+            value={user.userRole.value}
+            disabled={!editing}
+          >
             <option value="accounting">Accounting</option>
             <option value="admin">Admin</option>
             <option value="csr">CSR</option>
@@ -68,27 +81,31 @@ const EditUserForm = ({ t, user, updateUserWithId, loading, policies, addNote })
           {t('login.new_password')}
         </CLabel>
         <CCol sm="4">
-          <CInputGroup>
-            <CInput
-              type={showPassword ? 'text' : 'password'}
-              id="currentPassword"
-              value={user.currentPassword.value}
-              onChange={updateUserWithId}
-              invalid={user.currentPassword.error}
-              maxLength="50"
-            />
-            <CInputGroupAppend>
-              <CPopover content={t('user.show_hide_password')}>
-                <CButton type="button" onClick={toggleShowPassword} color="secondary">
-                  <CIcon
-                    name={showPassword ? 'cil-envelope-open' : 'cil-envelope-closed'}
-                    size="sm"
-                  />
-                </CButton>
-              </CPopover>
-            </CInputGroupAppend>
-            <CInvalidFeedback>{t('user.provide_password')}</CInvalidFeedback>
-          </CInputGroup>
+          {editing ? (
+            <CInputGroup>
+              <CInput
+                type={showPassword ? 'text' : 'password'}
+                id="currentPassword"
+                value={user.currentPassword.value}
+                onChange={updateUserWithId}
+                invalid={user.currentPassword.error}
+                maxLength="50"
+              />
+              <CInputGroupAppend>
+                <CPopover content={t('user.show_hide_password')}>
+                  <CButton type="button" onClick={toggleShowPassword} color="secondary">
+                    <CIcon
+                      name={showPassword ? 'cil-envelope-open' : 'cil-envelope-closed'}
+                      size="sm"
+                    />
+                  </CButton>
+                </CPopover>
+              </CInputGroupAppend>
+              <CInvalidFeedback>{t('user.provide_password')}</CInvalidFeedback>
+            </CInputGroup>
+          ) : (
+            <p className="mt-2 mb-0" />
+          )}
         </CCol>
       </CFormGroup>
       <CFormGroup row>
@@ -98,6 +115,7 @@ const EditUserForm = ({ t, user, updateUserWithId, loading, policies, addNote })
         <CCol sm="1">
           <CInputGroup>
             <CSwitch
+              disabled={!editing}
               id="changePassword"
               color="success"
               defaultChecked={user.changePassword.value}
@@ -105,9 +123,6 @@ const EditUserForm = ({ t, user, updateUserWithId, loading, policies, addNote })
               size="lg"
             />
           </CInputGroup>
-        </CCol>
-        <CCol sm="8">
-          <NotesTable t={t} notes={user.notes.value} addNote={addNote} loading={loading} />
         </CCol>
       </CFormGroup>
       <CRow>
@@ -132,9 +147,8 @@ EditUserForm.propTypes = {
   t: PropTypes.func.isRequired,
   user: PropTypes.instanceOf(Object).isRequired,
   updateUserWithId: PropTypes.func.isRequired,
-  loading: PropTypes.bool.isRequired,
   policies: PropTypes.instanceOf(Object).isRequired,
-  addNote: PropTypes.func.isRequired,
+  editing: PropTypes.bool.isRequired,
 };
 
 export default React.memo(EditUserForm);

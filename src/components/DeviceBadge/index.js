@@ -45,7 +45,10 @@ const DeviceBadge = ({ t, device, deviceIcons }) => {
 
   return (
     <CPopover content={device.verifiedCertificate} placement="top">
-      <div className={`c-avatar c-avatar-lg ${getCertColor()}`}>
+      <div
+        style={{ height: '35px', width: '35px' }}
+        className={`c-avatar c-avatar-lg ${getCertColor()}`}
+      >
         <img src={src} className={styles.icon} alt={device.deviceType} />
         <CPopover content={device.connected ? t('common.connected') : t('common.not_connected')}>
           <span

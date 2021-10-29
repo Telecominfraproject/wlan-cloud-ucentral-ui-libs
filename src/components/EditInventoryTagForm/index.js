@@ -2,7 +2,6 @@ import React from 'react';
 import { CForm, CInput, CLabel, CCol, CFormGroup, CFormText, CRow } from '@coreui/react';
 import Select from 'react-select';
 import PropTypes from 'prop-types';
-import NotesTable from '../NotesTable';
 import RequiredAsterisk from '../RequiredAsterisk';
 import selectStyles from '../../utils/selectStyles';
 
@@ -12,8 +11,8 @@ const EditInventoryTagForm = ({
   fields,
   updateField,
   updateFieldDirectly,
-  addNote,
   deviceTypes,
+  editing,
 }) => (
   <CForm>
     <CFormGroup row className="mb-1">
@@ -28,19 +27,25 @@ const EditInventoryTagForm = ({
         <RequiredAsterisk />
       </CLabel>
       <CCol sm="8">
-        <CInput
-          id="name"
-          type="text"
-          required
-          value={fields.name.value}
-          onChange={updateField}
-          invalid={fields.name.error}
-          disabled={disable}
-          maxLength="50"
-        />
-        <CFormText hidden={!fields.name.error} color={fields.name.error ? 'danger' : ''}>
-          {t('common.required')}
-        </CFormText>
+        {editing ? (
+          <div>
+            <CInput
+              id="name"
+              type="text"
+              required
+              value={fields.name.value}
+              onChange={updateField}
+              invalid={fields.name.error}
+              disabled={disable}
+              maxLength="50"
+            />
+            <CFormText hidden={!fields.name.error} color={fields.name.error ? 'danger' : ''}>
+              {t('common.required')}
+            </CFormText>
+          </div>
+        ) : (
+          <p className="mt-2 mb-0">{fields.name.value}</p>
+        )}
       </CCol>
     </CFormGroup>
     <CFormGroup row className="mb-1">
@@ -48,15 +53,21 @@ const EditInventoryTagForm = ({
         {t('user.description')}
       </CLabel>
       <CCol sm="8">
-        <CInput
-          id="description"
-          type="text"
-          required
-          value={fields.description.value}
-          onChange={updateField}
-          disabled={disable}
-          maxLength="50"
-        />
+        {editing ? (
+          <div>
+            <CInput
+              id="description"
+              type="text"
+              required
+              value={fields.description.value}
+              onChange={updateField}
+              disabled={disable}
+              maxLength="50"
+            />
+          </div>
+        ) : (
+          <p className="mt-2 mb-0">{fields.description.value}</p>
+        )}
       </CCol>
     </CFormGroup>
     <CFormGroup row className="mb-1">
@@ -72,7 +83,7 @@ const EditInventoryTagForm = ({
             value={{ value: fields.deviceType.value, label: fields.deviceType.value }}
             onChange={(v) => updateFieldDirectly('deviceType', { value: v.value })}
             options={deviceTypes.map((v) => ({ value: v, label: v }))}
-            isDisabled={disable}
+            isDisabled={disable || !editing}
           />
         </div>
         <CFormText
@@ -100,17 +111,12 @@ const EditInventoryTagForm = ({
               { label: 'off', value: 'off' },
               { label: 'inherit', value: 'inherit' },
             ]}
-            isDisabled={disable}
+            isDisabled={disable || !editing}
           />
         </div>
         <CFormText hidden={!fields.rrm.error} color={fields.rrm.error ? 'danger' : ''}>
           {t('common.required')}
         </CFormText>
-      </CCol>
-    </CRow>
-    <CRow>
-      <CCol>
-        <NotesTable t={t} notes={fields.notes.value} addNote={addNote} loading={disable} />
       </CCol>
     </CRow>
   </CForm>
@@ -123,7 +129,7 @@ EditInventoryTagForm.propTypes = {
   updateField: PropTypes.func.isRequired,
   updateFieldDirectly: PropTypes.func.isRequired,
   deviceTypes: PropTypes.instanceOf(Array).isRequired,
-  addNote: PropTypes.func.isRequired,
+  editing: PropTypes.bool.isRequired,
 };
 
 export default EditInventoryTagForm;

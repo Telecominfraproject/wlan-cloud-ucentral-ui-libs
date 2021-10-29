@@ -70,7 +70,7 @@ const UserListTable = ({
   return (
     <div>
       <CCard className="my-0 py-0">
-        <CCardHeader className="my-0 p-1 text-light" style={{ backgroundColor: '#2f3d54' }}>
+        <CCardHeader className="dark-header">
           <div style={{ fontWeight: '600' }} className=" text-value-lg float-left">
             {t('user.users')}
           </div>
@@ -93,6 +93,7 @@ const UserListTable = ({
         </CCardHeader>
         <CCardBody className="p-0">
           <CDataTable
+            addTableClasses="table-sm"
             items={users}
             fields={fields}
             loading={loading}

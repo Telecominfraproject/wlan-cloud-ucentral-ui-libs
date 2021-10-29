@@ -29,7 +29,7 @@ const FirmwareDashboard = ({ t, data }) => {
 
   return (
     <div>
-      <CRow>
+      <CRow className="mt-3">
         <CCol>
           <CWidgetIcon
             text={t('common.last_dashboard_refresh')}
@@ -79,7 +79,7 @@ const FirmwareDashboard = ({ t, data }) => {
       <CRow>
         <CCol>
           <CCard>
-            <CCardHeader>{t('common.firmware_installed')}</CCardHeader>
+            <CCardHeader className="dark-header">{t('common.firmware_installed')}</CCardHeader>
             <CCardBody>
               <CChartPie
                 datasets={data.firmwareDistribution.datasets}
@@ -96,7 +96,7 @@ const FirmwareDashboard = ({ t, data }) => {
         </CCol>
         <CCol>
           <CCard>
-            <CCardHeader>{t('common.devices_using_latest')}</CCardHeader>
+            <CCardHeader className="dark-header">{t('common.devices_using_latest')}</CCardHeader>
             <CCardBody>
               <CChartBar
                 datasets={data.latest.datasets}
@@ -121,7 +121,7 @@ const FirmwareDashboard = ({ t, data }) => {
         </CCol>
         <CCol>
           <CCard>
-            <CCardHeader>Unknown Firmware</CCardHeader>
+            <CCardHeader className="dark-header">Unknown Firmware</CCardHeader>
             <CCardBody>
               <CChartBar
                 datasets={data.unknownFirmwares.datasets}
@@ -148,7 +148,7 @@ const FirmwareDashboard = ({ t, data }) => {
       <CRow>
         <CCol>
           <CCard>
-            <CCardHeader>{t('common.device_status')}</CCardHeader>
+            <CCardHeader className="dark-header">{t('common.device_status')}</CCardHeader>
             <CCardBody>
               <CChartPie
                 datasets={data.status.datasets}
@@ -171,7 +171,7 @@ const FirmwareDashboard = ({ t, data }) => {
         </CCol>
         <CCol>
           <CCard>
-            <CCardHeader>{t('firmware.device_types')}</CCardHeader>
+            <CCardHeader className="dark-header">{t('firmware.device_types')}</CCardHeader>
             <CCardBody>
               <CChartPie
                 datasets={data.deviceType.datasets}
@@ -195,7 +195,7 @@ const FirmwareDashboard = ({ t, data }) => {
         </CCol>
         <CCol>
           <CCard>
-            <CCardHeader>OUIs</CCardHeader>
+            <CCardHeader className="dark-header">OUIs</CCardHeader>
             <CCardBody>
               <CChartBar
                 datasets={data.ouis.datasets}
@@ -222,9 +222,15 @@ const FirmwareDashboard = ({ t, data }) => {
       <CRow>
         <CCol>
           <CCard>
-            <CCardHeader>{t('common.endpoints')}</CCardHeader>
+            <CCardHeader className="dark-header">{t('common.endpoints')}</CCardHeader>
             <CCardBody>
-              <CDataTable items={data.endpoints ?? []} fields={columns} hover border />
+              <CDataTable
+                addTableClasses="table-sm"
+                items={data.endpoints ?? []}
+                fields={columns}
+                hover
+                border
+              />
             </CCardBody>
           </CCard>
         </CCol>

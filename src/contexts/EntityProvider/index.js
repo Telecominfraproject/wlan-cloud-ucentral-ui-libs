@@ -47,12 +47,50 @@ export const EntityProvider = ({ axiosInstance, selectedEntity, children }) => {
 
   const resetEntity = () => setEntity(null);
 
+  const setEntityId = async (entityId, isVenue) => {
+    const newEntity = await getEntity(entityId, isVenue);
+    if (newEntity && !_.isEqual(newEntity, entity)) {
+      const newObj = {
+        ...newEntity,
+        uuid: newEntity.id,
+        name: newEntity.name,
+        path: null,
+        isVenue,
+        childrenIds: newEntity.children,
+        childrenVenues: newEntity.venues,
+        extraData: newEntity,
+        refreshId: createUuid(),
+      };
+
+      setEntity({ ...newObj });
+    }
+  };
+
+  const setProviderEntity = async (entityToLoad) => {
+    const newEntity = await getEntity(entityToLoad.uuid, entityToLoad.isVenue);
+    if (newEntity) {
+      const newObj = {
+        ...newEntity,
+        uuid: newEntity.id,
+        name: newEntity.name,
+        path: null,
+        isVenue: entityToLoad.isVenue,
+        childrenIds: newEntity.children,
+        childrenVenues: newEntity.venues,
+        extraData: newEntity,
+        refreshId: createUuid(),
+      };
+
+      setEntity({ ...newObj });
+    }
+  };
+
   const selectEntity = (uuid, name, path, isVenue, childrenEntities, childrenVenues, extraData) => {
     // If we have not yet gotten the information of this entity's children, we get them now
     if (childrenEntities || childrenVenues) {
       setEntityToRetrieve({ childrenEntities, childrenVenues, path, uuid, isVenue });
     }
-    setEntity({
+    setProviderEntity({
       uuid,
       name,
       isVenue,
@@ -102,25 +140,6 @@ export const EntityProvider = ({ axiosInstance, selectedEntity, children }) => {
       .catch(() => {
         throw new Error('Error while fetching entities');
       });
-  };
-
-  const setProviderEntity = async (id, isVenue) => {
-    const newEntity = await getEntity(id, isVenue);
-    if (newEntity && !_.isEqual(newEntity, entity)) {
-      const newObj = {
-        ...newEntity,
-        uuid: newEntity.id,
-        name: newEntity.name,
-        path: null,
-        isVenue,
-        childrenIds: newEntity.children,
-        childrenVenues: newEntity.venues,
-        extraData: newEntity,
-        refreshId: createUuid(),
-      };
-
-      setEntity({ ...newObj });
-    }
   };
 
   const getEntityChildren = async (parent) => {
@@ -435,6 +454,7 @@ export const EntityProvider = ({ axiosInstance, selectedEntity, children }) => {
         deleteEntity,
         deviceTypes,
         resetEntity,
+        setEntityId,
       }}
     >
       {children}

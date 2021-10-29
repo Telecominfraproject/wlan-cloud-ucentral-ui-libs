@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import ReactPaginate from 'react-paginate';
 import { CButton, CDataTable, CLink, CPopover, CButtonToolbar, CSelect } from '@coreui/react';
-import { cilPencil, cilPlus, cilRouter, cilSpreadsheet } from '@coreui/icons';
+import { cilMagnifyingGlass, cilPlus, cilRouter, cilSpreadsheet, cilZoomIn } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import ReactTooltip from 'react-tooltip';
 import DeleteButton from './DeleteButton';
@@ -31,6 +31,7 @@ const InventoryTable = ({
   pushConfig,
 }) => {
   const [gwUi] = useState(localStorage.getItem('owgw-ui'));
+
   const columns =
     onlyEntity || onlyUnassigned
       ? [
@@ -70,7 +71,7 @@ const InventoryTable = ({
   return (
     <>
       <CDataTable
-        addTableClasses="ignore-overflow"
+        addTableClasses="ignore-overflow table-sm"
         items={tags ?? []}
         fields={columns}
         hover
@@ -79,15 +80,9 @@ const InventoryTable = ({
         scopedSlots={{
           serialNumber: (item) => (
             <td className="align-middle">
-              <CLink
-                className="c-subheader-nav-link align-self-center"
-                aria-current="page"
-                href={`${gwUi}/#/devices/${item.serialNumber}`}
-                target="_blank"
-                disabled={!gwUi || gwUi === ''}
-              >
+              <CButton color="link" onClick={() => toggleEditModal(item.serialNumber)}>
                 {item.serialNumber}
-              </CLink>
+              </CButton>
             </td>
           ),
           name: (item) => <td className="align-middle">{item.name}</td>,
@@ -107,7 +102,7 @@ const InventoryTable = ({
                   toggleAssociate({
                     serialNumber: item.serialNumber,
                     uuid: item.deviceConfiguration,
-                    value: item.deviceConfigurationName,
+                    value: item.extendedInfo?.deviceConfiguration?.name ?? '',
                   })
                 }
               >
@@ -152,7 +147,7 @@ const InventoryTable = ({
               <CButtonToolbar
                 role="group"
                 className="justify-content-flex-end"
-                style={{ width: '300px' }}
+                style={{ width: '290px' }}
               >
                 <CPopover content={t('inventory.assign_ent_ven')}>
                   <div>
@@ -162,7 +157,7 @@ const InventoryTable = ({
                       variant="outline"
                       shape="square"
                       size="sm"
-                      className="mx-2"
+                      className="mx-1"
                       onClick={() =>
                         entity !== null
                           ? assignToEntity(item.serialNumber)
@@ -187,7 +182,7 @@ const InventoryTable = ({
                     variant="outline"
                     shape="square"
                     size="sm"
-                    className="mx-2"
+                    className="mx-1 d"
                     onClick={() => pushConfig(item.serialNumber)}
                     style={{ width: '33px', height: '30px' }}
                     disabled={item.deviceConfigurationName === ''}
@@ -201,24 +196,38 @@ const InventoryTable = ({
                     variant="outline"
                     shape="square"
                     size="sm"
-                    className="mx-2"
+                    className="mx-1"
                     onClick={() => toggleComputed(item.serialNumber)}
                     style={{ width: '33px', height: '30px' }}
                   >
                     <CIcon name="cil-spreadsheet" content={cilSpreadsheet} size="sm" />
                   </CButton>
                 </CPopover>
-                <CPopover content="Edit Tag">
+                <CPopover content="View Tag">
                   <CButton
                     color="primary"
                     variant="outline"
                     shape="square"
                     size="sm"
-                    className="mx-2"
+                    className="mx-1"
                     onClick={() => toggleEditModal(item.serialNumber)}
                     style={{ width: '33px', height: '30px' }}
                   >
-                    <CIcon name="cil-pencil" content={cilPencil} size="sm" />
+                    <CIcon name="cil-magnifying-glass" content={cilMagnifyingGlass} size="sm" />
+                  </CButton>
+                </CPopover>
+                <CPopover content={t('inventory.view_in_gateway')}>
+                  <CButton
+                    color="primary"
+                    variant="outline"
+                    shape="square"
+                    size="sm"
+                    className="mx-1"
+                    onClick={() => window.open(`${gwUi}/#/devices/${item.serialNumber}`, '_blank')}
+                    disabled={!gwUi || gwUi === ''}
+                    style={{ width: '33px', height: '30px' }}
+                  >
+                    <CIcon content={cilZoomIn} />
                   </CButton>
                 </CPopover>
               </CButtonToolbar>

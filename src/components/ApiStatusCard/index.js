@@ -34,7 +34,7 @@ const ApiStatusCard = ({ t, info, reload }) => {
 
   return (
     <CCard>
-      <CCardHeader className="my-0 p-1 text-light" style={{ backgroundColor: '#2f3d54' }}>
+      <CCardHeader className="dark-header">
         <div style={{ fontWeight: '600' }} className=" text-value-lg float-left">
           {info.title}
         </div>
@@ -167,6 +167,7 @@ const ApiStatusCard = ({ t, info, reload }) => {
         </CModalHeader>
         <CModalBody>
           <CDataTable
+            addTableClasses="table-sm"
             border
             items={info?.certificates.map((cert) => ({
               ...cert,

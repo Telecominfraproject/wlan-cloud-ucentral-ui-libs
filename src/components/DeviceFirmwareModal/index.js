@@ -76,6 +76,7 @@ const DeviceFirmwareModal = ({
               <CCol>
                 <div className="overflow-auto" style={{ height: '600px' }}>
                   <CDataTable
+                    addTableClasses="table-sm"
                     items={firmwareVersions}
                     fields={fields}
                     loading={loading}

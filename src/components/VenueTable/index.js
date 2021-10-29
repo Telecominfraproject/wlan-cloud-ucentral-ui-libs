@@ -85,7 +85,7 @@ const VenueTable = ({
       </CCardHeader>
       <CCardBody className="p-0">
         <CDataTable
-          addTableClasses="ignore-overflow"
+          addTableClasses="ignore-overflow table-sm"
           items={venues ?? []}
           fields={columns}
           hover
@@ -120,7 +120,7 @@ const VenueTable = ({
                 <CButtonToolbar
                   role="group"
                   className="justify-content-flex-end pl-2"
-                  style={{ width: '100px' }}
+                  style={{ width: '90px' }}
                 >
                   <CPopover content="Edit Tag">
                     <CButton
@@ -128,7 +128,7 @@ const VenueTable = ({
                       variant="outline"
                       shape="square"
                       size="sm"
-                      className="mx-1"
+                      className="mr-1"
                       onClick={() => history.push(`/venue/${item.id}`)}
                       style={{ width: '33px', height: '30px' }}
                     >

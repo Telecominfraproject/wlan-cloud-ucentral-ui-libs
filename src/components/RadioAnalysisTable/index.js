@@ -20,6 +20,7 @@ const RadioAnalysisTable = ({ data, loading }) => {
 
   return (
     <CDataTable
+      addTableClasses="table-sm"
       fields={columns}
       items={data}
       hover

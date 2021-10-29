@@ -21,7 +21,7 @@ const DeleteButton = ({ t, tag, deleteTag, hideTooltips }) => {
           variant="outline"
           shape="square"
           size="sm"
-          className="mx-2"
+          className="mx-1"
           data-tip
           data-for={tooltipId}
           data-event="click"

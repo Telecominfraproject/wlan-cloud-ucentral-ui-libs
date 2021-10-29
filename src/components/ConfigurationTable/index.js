@@ -1,13 +1,21 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { CButtonToolbar, CDataTable, CPopover, CButton } from '@coreui/react';
-import { cilPencil, cilMagnifyingGlass } from '@coreui/icons';
+import { cilFilterSquare, cilMagnifyingGlass, cilSpreadsheet } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import ReactTooltip from 'react-tooltip';
 import DeleteButton from './DeleteButton';
 import FormattedDate from '../FormattedDate';
 
-const ConfigurationTable = ({ t, history, loading, configs, toggleInUse, deleteConfig }) => {
+const ConfigurationTable = ({
+  t,
+  history,
+  loading,
+  configs,
+  toggleInUse,
+  deleteConfig,
+  toggleEffects,
+}) => {
   const columns = [
     { key: 'name', label: t('user.name'), _style: { width: '20%' } },
     { key: 'description', label: t('user.description'), _style: { width: '20%' } },
@@ -35,7 +43,7 @@ const ConfigurationTable = ({ t, history, loading, configs, toggleInUse, deleteC
 
   return (
     <CDataTable
-      addTableClasses="ignore-overflow"
+      addTableClasses="ignore-overflow table-sm"
       items={configs ?? []}
       fields={columns}
       hover
@@ -60,7 +68,7 @@ const ConfigurationTable = ({ t, history, loading, configs, toggleInUse, deleteC
             <CButtonToolbar
               role="group"
               className="justify-content-flex-end"
-              style={{ width: '150px' }}
+              style={{ width: '200px' }}
             >
               <CPopover content={t('configuration.view_in_use')}>
                 <CButton
@@ -73,7 +81,21 @@ const ConfigurationTable = ({ t, history, loading, configs, toggleInUse, deleteC
                   onClick={() => toggleInUse(item)}
                   style={{ width: '33px', height: '30px' }}
                 >
-                  <CIcon name="cil-magnifying-glass" content={cilMagnifyingGlass} size="sm" />
+                  <CIcon name="cil-spreadsheet" content={cilSpreadsheet} size="sm" />
+                </CButton>
+              </CPopover>
+              <CPopover content={t('configuration.view_affected_devices')}>
+                <CButton
+                  disabled={item.inUse.length === 0}
+                  color="primary"
+                  variant="outline"
+                  shape="square"
+                  size="sm"
+                  className="mx-2"
+                  onClick={() => toggleEffects(item)}
+                  style={{ width: '33px', height: '30px' }}
+                >
+                  <CIcon name="cil-filter-square" content={cilFilterSquare} size="sm" />
                 </CButton>
               </CPopover>
               <DeleteButton
@@ -82,7 +104,7 @@ const ConfigurationTable = ({ t, history, loading, configs, toggleInUse, deleteC
                 deleteConfig={deleteConfig}
                 hideTooltips={hideTooltips}
               />
-              <CPopover content={t('configuration.edit_configuration')}>
+              <CPopover content={t('configuration.view_config')}>
                 <CButton
                   color="primary"
                   variant="outline"
@@ -92,7 +114,7 @@ const ConfigurationTable = ({ t, history, loading, configs, toggleInUse, deleteC
                   onClick={() => history.push(`/configuration/${item.id}`)}
                   style={{ width: '33px', height: '30px' }}
                 >
-                  <CIcon name="cil-pencil" content={cilPencil} size="sm" />
+                  <CIcon name="cil-magnifying-glass" content={cilMagnifyingGlass} size="sm" />
                 </CButton>
               </CPopover>
             </CButtonToolbar>
@@ -110,6 +132,7 @@ ConfigurationTable.propTypes = {
   configs: PropTypes.instanceOf(Array).isRequired,
   toggleInUse: PropTypes.func.isRequired,
   deleteConfig: PropTypes.func.isRequired,
+  toggleEffects: PropTypes.func.isRequired,
 };
 
 export default ConfigurationTable;

@@ -16,7 +16,6 @@ import {
   CButton,
 } from '@coreui/react';
 import FormattedDate from '../FormattedDate';
-import NotesTable from '../NotesTable';
 import RequiredAsterisk from '../RequiredAsterisk';
 import selectStyles from '../../utils/selectStyles';
 
@@ -27,9 +26,9 @@ const EditContactForm = ({
   updateField,
   updateFieldWithKey,
   entities,
-  addNote,
   batchSetField,
   hideEntities,
+  editing,
 }) => {
   const [filter, setFilter] = useState('');
 
@@ -83,7 +82,7 @@ const EditContactForm = ({
                 { label: 'TECHNICIAN', value: 'TECHNICIAN' },
                 { label: 'CORPORATE', value: 'CORPORATE' },
               ]}
-              isDisabled={disable}
+              isDisabled={disable || !editing}
             />
           </div>
           <CFormText hidden={!fields.type.error} color={fields.type.error ? 'danger' : ''}>
@@ -95,34 +94,46 @@ const EditContactForm = ({
           <RequiredAsterisk />
         </CLabel>
         <CCol sm="4">
-          <CInput
-            id="name"
-            type="text"
-            required
-            value={fields.name.value}
-            onChange={updateField}
-            invalid={fields.name.error}
-            disabled={disable}
-            maxLength="50"
-          />
-          <CFormText hidden={!fields.name.error} color={fields.name.error ? 'danger' : ''}>
-            {t('common.required')}
-          </CFormText>
+          {editing ? (
+            <div>
+              <CInput
+                id="name"
+                type="text"
+                required
+                value={fields.name.value}
+                onChange={updateField}
+                invalid={fields.name.error}
+                disabled={disable}
+                maxLength="50"
+              />
+              <CFormText hidden={!fields.name.error} color={fields.name.error ? 'danger' : ''}>
+                {t('common.required')}
+              </CFormText>
+            </div>
+          ) : (
+            <p className="mt-2 mb-0">{fields.name.value}</p>
+          )}
         </CCol>
         <CLabel className="mb-2" sm="2" col htmlFor="title">
           {t('contact.user_title')}
         </CLabel>
         <CCol sm="4">
-          <CInput
-            id="title"
-            type="text"
-            required
-            value={fields.title.value}
-            onChange={updateField}
-            invalid={fields.title.error}
-            disabled={disable}
-            maxLength="50"
-          />
+          {editing ? (
+            <div>
+              <CInput
+                id="title"
+                type="text"
+                required
+                value={fields.title.value}
+                onChange={updateField}
+                invalid={fields.title.error}
+                disabled={disable}
+                maxLength="50"
+              />
+            </div>
+          ) : (
+            <p className="mt-2 mb-0">{fields.title.value}</p>
+          )}
         </CCol>
         <CLabel className="mb-2" sm="2" col htmlFor="salutation">
           {t('contact.salutation')}
@@ -144,7 +155,7 @@ const EditContactForm = ({
                 { label: 'Mx.', value: 'Mx.' },
                 { label: 'Dr.', value: 'Dr.' },
               ]}
-              isDisabled={disable}
+              isDisabled={disable || !editing}
             />
           </div>
         </CCol>
@@ -153,119 +164,184 @@ const EditContactForm = ({
           <RequiredAsterisk />
         </CLabel>
         <CCol sm="4">
-          <CInput
-            id="firstname"
-            type="text"
-            required
-            value={fields.firstname.value}
-            onChange={updateField}
-            invalid={fields.firstname.error}
-            disabled={disable}
-            maxLength="50"
-          />
-          <CFormText
-            hidden={!fields.firstname.error}
-            color={fields.firstname.error ? 'danger' : ''}
-          >
-            {t('common.required')}
-          </CFormText>
+          {editing ? (
+            <div>
+              <CInput
+                id="firstname"
+                type="text"
+                required
+                value={fields.firstname.value}
+                onChange={updateField}
+                invalid={fields.firstname.error}
+                disabled={disable}
+                maxLength="50"
+              />
+              <CFormText
+                hidden={!fields.firstname.error}
+                color={fields.firstname.error ? 'danger' : ''}
+              >
+                {t('common.required')}
+              </CFormText>
+            </div>
+          ) : (
+            <p className="mt-2 mb-0">{fields.firstname.value}</p>
+          )}
         </CCol>
         <CLabel className="mb-2" sm="2" col htmlFor="lastname">
           {t('contact.last_name')}
           <RequiredAsterisk />
         </CLabel>
         <CCol sm="4">
-          <CInput
-            id="lastname"
-            type="text"
-            required
-            value={fields.lastname.value}
-            onChange={updateField}
-            invalid={fields.lastname.error}
-            disabled={disable}
-            maxLength="50"
-          />
-          <CFormText hidden={!fields.lastname.error} color={fields.lastname.error ? 'danger' : ''}>
-            {t('common.required')}
-          </CFormText>
+          {editing ? (
+            <div>
+              <CInput
+                id="lastname"
+                type="text"
+                required
+                value={fields.lastname.value}
+                onChange={updateField}
+                invalid={fields.lastname.error}
+                disabled={disable}
+                maxLength="50"
+              />
+              <CFormText
+                hidden={!fields.lastname.error}
+                color={fields.lastname.error ? 'danger' : ''}
+              >
+                {t('common.required')}
+              </CFormText>
+            </div>
+          ) : (
+            <p className="mt-2 mb-0">{fields.lastname.value}</p>
+          )}
         </CCol>
         <CLabel className="mb-2" sm="2" col htmlFor="initials">
           {t('contact.initials')}
         </CLabel>
         <CCol sm="4">
-          <CInput
-            id="initials"
-            type="text"
-            required
-            value={fields.initials.value}
-            onChange={updateField}
-            disabled={disable}
-            maxLength="50"
-          />
+          {editing ? (
+            <div>
+              <CInput
+                id="initials"
+                type="text"
+                required
+                value={fields.initials.value}
+                onChange={updateField}
+                disabled={disable}
+                maxLength="50"
+              />
+            </div>
+          ) : (
+            <p className="mt-2 mb-0">{fields.initials.value}</p>
+          )}
         </CCol>
         <CLabel sm="2" col htmlFor="visual">
           {t('contact.visual')}
         </CLabel>
         <CCol sm="4">
-          <CInput
-            id="visual"
-            type="text"
-            required
-            value={fields.visual.value}
-            onChange={updateField}
-            disabled={disable}
-            maxLength="50"
-          />
+          {editing ? (
+            <div>
+              <CInput
+                id="visual"
+                type="text"
+                required
+                value={fields.visual.value}
+                onChange={updateField}
+                disabled={disable}
+                maxLength="50"
+              />
+            </div>
+          ) : (
+            <p className="mt-2 mb-0">{fields.visual.value}</p>
+          )}
         </CCol>
         <CLabel className="mb-2" sm="2" col htmlFor="primaryEmail">
           {t('contact.primary_email')}
           <RequiredAsterisk />
         </CLabel>
         <CCol sm="4">
-          <CInput
-            id="primaryEmail"
-            type="text"
-            required
-            value={fields.primaryEmail.value}
-            onChange={updateField}
-            invalid={fields.primaryEmail.error}
-            disabled={disable}
-            maxLength="50"
-          />
-          <CFormText
-            hidden={!fields.primaryEmail.error}
-            color={fields.primaryEmail.error ? 'danger' : ''}
-          >
-            {t('common.required')}
-          </CFormText>
+          {editing ? (
+            <div>
+              <CInput
+                id="primaryEmail"
+                type="text"
+                required
+                value={fields.primaryEmail.value}
+                onChange={updateField}
+                invalid={fields.primaryEmail.error}
+                disabled={disable}
+                maxLength="50"
+              />
+              <CFormText
+                hidden={!fields.primaryEmail.error}
+                color={fields.primaryEmail.error ? 'danger' : ''}
+              >
+                {t('common.required')}
+              </CFormText>
+            </div>
+          ) : (
+            <p className="mt-2 mb-0">{fields.primaryEmail.value}</p>
+          )}
         </CCol>
         <CLabel className="mb-2" sm="2" col htmlFor="secondaryEmail">
           {t('contact.secondary_email')}
         </CLabel>
         <CCol sm="4">
-          <CInput
-            id="secondaryEmail"
-            type="text"
-            required
-            value={fields.secondaryEmail.value}
-            onChange={updateField}
-            disabled={disable}
-            maxLength="50"
-          />
+          {editing ? (
+            <div>
+              <CInput
+                id="secondaryEmail"
+                type="text"
+                required
+                value={fields.secondaryEmail.value}
+                onChange={updateField}
+                disabled={disable}
+                maxLength="50"
+              />
+            </div>
+          ) : (
+            <p className="mt-2 mb-0">{fields.secondaryEmail.value}</p>
+          )}
         </CCol>
         <CLabel className="mb-2" sm="2" col htmlFor="accessPIN">
           {t('contact.access_pin')}
         </CLabel>
         <CCol sm="4">
-          <CInput
-            id="accessPIN"
-            type="text"
-            required
-            value={fields.accessPIN.value}
-            onChange={updateField}
-            disabled={disable}
-            maxLength="50"
-          />
+          {editing ? (
+            <div>
+              <CInput
+                id="accessPIN"
+                type="text"
+                required
+                value={fields.accessPIN.value}
+                onChange={updateField}
+                disabled={disable}
+                maxLength="50"
+              />
+            </div>
+          ) : (
+            <p className="mt-2 mb-0">{fields.accessPIN.value}</p>
+          )}
+        </CCol>
+        <CLabel sm="2" col htmlFor="description">
+          {t('user.description')}
+        </CLabel>
+        <CCol sm="4">
+          {editing ? (
+            <div>
+              <CInput
+                id="description"
+                type="text"
+                required
+                value={fields.description.value}
+                onChange={updateField}
+                disabled={disable}
+                maxLength="50"
+              />
+            </div>
+          ) : (
+            <p className="mt-2 mb-0">{fields.description.value}</p>
+          )}
         </CCol>
         <CLabel className="mb-2" sm="2" col htmlFor="phones">
           Landlines
@@ -274,7 +350,7 @@ const EditContactForm = ({
           <CreatableSelect
             isMulti
             id="phones"
-            isDisabled={disable}
+            isDisabled={disable || !editing}
             onChange={onPhonesChange}
             components={{ NoOptionsMessage }}
             options={[]}
@@ -289,26 +365,12 @@ const EditContactForm = ({
           <CreatableSelect
             id="mobiles"
             isMulti
-            isDisabled={disable}
+            isDisabled={disable || !editing}
             onChange={onMobilesChange}
             components={{ NoOptionsMessage }}
             options={[]}
             value={fields.mobiles.value.map((opt) => ({ value: opt, label: opt }))}
             placeholder={t('common.type_for_options')}
-          />
-        </CCol>
-        <CLabel sm="2" col htmlFor="description">
-          {t('user.description')}
-        </CLabel>
-        <CCol sm="4">
-          <CInput
-            id="description"
-            type="text"
-            required
-            value={fields.description.value}
-            onChange={updateField}
-            disabled={disable}
-            maxLength="50"
           />
         </CCol>
       </CRow>
@@ -362,6 +424,7 @@ const EditContactForm = ({
                       color="primary"
                       variant="outline"
                       onClick={() => selectEntity(item)}
+                      disabled={!editing}
                     >
                       {t('common.select')}
                     </CButton>
@@ -372,7 +435,6 @@ const EditContactForm = ({
           />
         </div>
       )}
-      <NotesTable t={t} notes={fields.notes.value} addNote={addNote} loading={disable} editable />
     </CForm>
   );
 };
@@ -384,9 +446,9 @@ EditContactForm.propTypes = {
   updateField: PropTypes.func.isRequired,
   updateFieldWithKey: PropTypes.func.isRequired,
   entities: PropTypes.instanceOf(Array).isRequired,
-  addNote: PropTypes.func.isRequired,
   batchSetField: PropTypes.func.isRequired,
   hideEntities: PropTypes.bool,
+  editing: PropTypes.bool.isRequired,
 };
 
 EditContactForm.defaultProps = {

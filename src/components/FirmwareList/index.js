@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import ReactPaginate from 'react-paginate';
 import { v4 as createUuid } from 'uuid';
@@ -12,8 +12,9 @@ import {
   CSelect,
   CSwitch,
 } from '@coreui/react';
+import CIcon from '@coreui/icons-react';
+import { cilSearch } from '@coreui/icons';
 import { prettyDate, cleanBytesString } from '../../utils/formatting';
-import FirmwareDetails from '../FirmwareDetails';
 import CopyToClipboardButton from '../CopyToClipboardButton';
 
 const FirmwareList = ({
@@ -23,19 +24,15 @@ const FirmwareList = ({
   pageCount,
   setPage,
   data,
+  toggleEditModal,
   firmwarePerPage,
   setFirmwarePerPage,
   selectedDeviceType,
   deviceTypes,
   setSelectedDeviceType,
-  addNote,
-  addNoteLoading,
-  updateDescription,
-  updateDescriptionLoading,
   displayDev,
   toggleDevDisplay,
 }) => {
-  const [detailsShown, setDetailsShown] = useState([]);
   const fields = [
     { key: 'imageDate', label: t('firmware.image_date'), _style: { width: '1%' } },
     { key: 'size', label: t('firmware.size'), _style: { width: '1%' } },
@@ -43,18 +40,6 @@ const FirmwareList = ({
     { key: 'uri', label: 'URI' },
     { key: 'show_details', label: '', _style: { width: '5%' } },
   ];
-
-  const toggleDetails = (index) => {
-    const position = detailsShown.indexOf(index);
-    let newDetails = detailsShown.slice();
-
-    if (position !== -1) {
-      newDetails.splice(position, 1);
-    } else {
-      newDetails = [...newDetails, index];
-    }
-    setDetailsShown(newDetails);
-  };
 
   const getShortRevision = (revision) => {
     if (revision.includes(' / ')) {
@@ -64,17 +49,12 @@ const FirmwareList = ({
   };
 
   const changePage = (newValue) => {
-    setDetailsShown([]);
     setPage(newValue);
   };
 
-  useEffect(() => {
-    setDetailsShown([]);
-  }, [selectedDeviceType]);
-
   return (
-    <CCard>
-      <CCardHeader className="py-2 px-3">
+    <CCard className="m-0">
+      <CCardHeader className="dark-header">
         <div className="d-flex flex-row-reverse">
           <div className="px-3">
             <CSwitch
@@ -105,6 +85,7 @@ const FirmwareList = ({
       </CCardHeader>
       <CCardBody className="p-0">
         <CDataTable
+          addTableClasses="table-sm"
           items={data}
           fields={fields}
           loading={loading}
@@ -134,7 +115,7 @@ const FirmwareList = ({
               <td className="align-middle">
                 <div style={{ width: 'calc(45vw)' }}>
                   <div className="text-truncate align-middle">
-                    <CopyToClipboardButton key={item.uri} t={t} size="md" content={item.uri} />
+                    <CopyToClipboardButton key={item.uri} t={t} size="sm" content={item.uri} />
                     <CPopover content={item.uri}>
                       <span>{item.uri}</span>
                     </CPopover>
@@ -142,27 +123,17 @@ const FirmwareList = ({
                 </div>
               </td>
             ),
-            show_details: (item, index) => (
+            show_details: (item) => (
               <td className="text-center align-middle">
                 <CButton
+                  size="sm"
                   color="primary"
-                  variant={detailsShown.includes(index) ? '' : 'outline'}
-                  onClick={() => toggleDetails(index)}
+                  variant="outline"
+                  onClick={() => toggleEditModal(item.id)}
                 >
-                  {detailsShown.includes(index) ? t('common.hide') : t('common.details')}
+                  <CIcon content={cilSearch} />
                 </CButton>
               </td>
-            ),
-            details: (item, index) => (
-              <FirmwareDetails
-                t={t}
-                show={detailsShown.includes(index)}
-                item={item}
-                addNote={addNote}
-                addNoteLoading={addNoteLoading}
-                updateDescription={updateDescription}
-                updateDescriptionLoading={updateDescriptionLoading}
-              />
             ),
           }}
         />
@@ -217,12 +188,9 @@ FirmwareList.propTypes = {
   selectedDeviceType: PropTypes.string.isRequired,
   deviceTypes: PropTypes.instanceOf(Array).isRequired,
   setSelectedDeviceType: PropTypes.func.isRequired,
-  addNote: PropTypes.func.isRequired,
-  addNoteLoading: PropTypes.bool.isRequired,
-  updateDescription: PropTypes.func.isRequired,
-  updateDescriptionLoading: PropTypes.bool.isRequired,
   displayDev: PropTypes.bool.isRequired,
   toggleDevDisplay: PropTypes.func.isRequired,
+  toggleEditModal: PropTypes.func.isRequired,
 };
 
 export default React.memo(FirmwareList);

@@ -7,13 +7,11 @@ import {
   CFormGroup,
   CInvalidFeedback,
   CFormText,
-  CRow,
   CButton,
   CSwitch,
 } from '@coreui/react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
-import NotesTable from '../NotesTable';
 import FormattedDate from '../FormattedDate';
 import selectStyles from '../../utils/selectStyles';
 
@@ -23,7 +21,6 @@ const EditConfigurationForm = ({
   fields,
   updateField,
   updateFieldWithKey,
-  addNote,
   editing,
   toggleInUseModal,
   deviceTypes,
@@ -84,188 +81,159 @@ const EditConfigurationForm = ({
   return (
     <CForm>
       <CFormGroup row>
-        <CCol>
-          <CRow className="pb-0">
-            <CLabel lg="5" xl="3" col htmlFor="name">
-              <div>{t('user.name')}:</div>
-            </CLabel>
-            <CCol lg="7" xl="9">
-              {editing ? (
-                <div>
-                  <CInput
-                    id="name"
-                    type="text"
-                    required
-                    value={fields.name.value}
-                    onChange={updateField}
-                    invalid={fields.name.error}
-                    disabled={disable}
-                    maxLength="50"
-                  />
-                  <CFormText hidden={!fields.name.error} color={fields.name.error ? 'danger' : ''}>
-                    {t('common.required')}
-                  </CFormText>
-                </div>
-              ) : (
-                <p className="mt-2 mb-0">{fields.name.value}</p>
-              )}
-            </CCol>
-          </CRow>
-          <CRow className="pb-0">
-            <CLabel lg="5" xl="3" col htmlFor="name">
-              <div>{t('user.description')}:</div>
-            </CLabel>
-            <CCol lg="7" xl="9">
-              {editing ? (
-                <div>
-                  <CInput
-                    id="description"
-                    type="text"
-                    required
-                    value={fields.description.value}
-                    onChange={updateField}
-                    invalid={fields.description.error}
-                    disabled={disable}
-                    maxLength="50"
-                  />
-                  <CInvalidFeedback>{t('common.required')}</CInvalidFeedback>
-                </div>
-              ) : (
-                <p className="mt-2 mb-0">{fields.description.value}</p>
-              )}
-            </CCol>
-          </CRow>
-          <CRow className="pt-1">
-            <CLabel lg="5" xl="3" col htmlFor="name">
-              <div>{t('configuration.device_types')}:</div>
-            </CLabel>
-            <CCol lg="7" xl="9">
-              <Select
-                isMulti
-                styles={selectStyles}
-                closeMenuOnSelect={false}
-                name="Device Types"
-                options={typeOptions}
-                onChange={typeOnChange}
-                value={chosenTypes}
-                className={`basic-multi-select ${fields.deviceTypes.error ? 'border-danger' : ''}`}
-                classNamePrefix="select"
-                isDisabled={!editing}
+        <CLabel className="mb-2" md="5" lg="2" xl="2" xxl="1" col htmlFor="name">
+          <div>{t('user.name')}:</div>
+        </CLabel>
+        <CCol md="7" lg="4" xl="4" xxl="5">
+          {editing ? (
+            <div>
+              <CInput
+                id="name"
+                type="text"
+                required
+                value={fields.name.value}
+                onChange={updateField}
+                invalid={fields.name.error}
+                disabled={disable}
+                maxLength="50"
               />
-              <CFormText hidden={!fields.deviceTypes.error} color="danger">
-                {t('configuration.need_device_type')}
-              </CFormText>
-            </CCol>
-          </CRow>
-          <CRow className="pt-1 pb-0">
-            <CLabel lg="5" xl="3" col htmlFor="name">
-              <div>RRM:</div>
-            </CLabel>
-            <CCol lg="7" xl="9">
-              <div style={{ width: '120px' }}>
-                <Select
-                  id="rrm"
-                  styles={selectStyles}
-                  value={{ value: fields.rrm.value, label: fields.rrm.value }}
-                  onChange={(v) => updateFieldWithKey('rrm', { value: v.value })}
-                  options={[
-                    { label: 'on', value: 'on' },
-                    { label: 'off', value: 'off' },
-                    { label: 'inherit', value: 'inherit' },
-                  ]}
-                  isDisabled={!editing}
-                />
-              </div>
-              <CFormText color="danger" hidden={!fields.rrm.error}>
+              <CFormText hidden={!fields.name.error} color={fields.name.error ? 'danger' : ''}>
                 {t('common.required')}
               </CFormText>
-            </CCol>
-          </CRow>
-          <CRow className="py-1">
-            <CLabel col lg="5" xl="3" htmlFor="firmwareUpgrade">
-              Firmware Upgrade
-            </CLabel>
-            <CCol lg="7" xl="9">
-              <div style={{ width: '120px' }}>
-                <Select
-                  id="rrm"
-                  styles={selectStyles}
-                  value={{
-                    value: fields.firmwareUpgrade.value,
-                    label: fields.firmwareUpgrade.value,
-                  }}
-                  onChange={(v) => updateFieldWithKey('firmwareUpgrade', { value: v.value })}
-                  options={[
-                    { label: 'yes', value: 'yes' },
-                    { label: 'no', value: 'no' },
-                    { label: 'inherit', value: 'inherit' },
-                  ]}
-                  isDisabled={!editing}
-                />
-              </div>
-            </CCol>
-          </CRow>
-          <CRow className="py-1">
-            <CLabel col lg="5" xl="3" htmlFor="firmwareRCOnly">
-              Only Release Candidates
-            </CLabel>
-            <CCol lg="7" xl="9">
-              <CSwitch
-                id="firmwareRCOnly"
-                color="primary"
-                defaultChecked={fields.firmwareRCOnly.value}
-                onClick={() =>
-                  updateFieldWithKey('firmwareRCOnly', { value: !fields.firmwareRCOnly.value })
-                }
-                size="lg"
-                disabled={!editing || fields.firmwareUpgrade.value === 'no'}
-              />
-            </CCol>
-          </CRow>
-          <CRow className="pb-0">
-            <CLabel lg="5" xl="3" col htmlFor="name">
-              <div>{t('configuration.used_by')}:</div>
-            </CLabel>
-            <CCol lg="7" xl="9">
-              <CButton
-                disabled={fields.inUse.value.length === 0}
-                className="ml-0 pl-0"
-                color="link"
-                onClick={toggleInUseModal}
-              >
-                {config?.parsedInUse}
-              </CButton>
-            </CCol>
-          </CRow>
+            </div>
+          ) : (
+            <p className="mt-2 mb-0">{fields.name.value}</p>
+          )}
         </CCol>
-        <CCol className="mt-2">
-          <CRow className="pb-0">
-            <CLabel lg="5" xl="3" col htmlFor="name">
-              <div>{t('common.created')}:</div>
-            </CLabel>
-            <CCol lg="7" xl="9">
-              <p className="mt-2 mb-0">
-                <FormattedDate date={fields.created.value} />
-              </p>
-            </CCol>
-          </CRow>
-          <CRow className="pb-0">
-            <CLabel lg="5" xl="3" col htmlFor="name">
-              <div>{t('common.modified')}:</div>
-            </CLabel>
-            <CCol lg="7" xl="9">
-              <p className="mt-2 mb-0">
-                <FormattedDate date={fields.modified.value} />
-              </p>
-            </CCol>
-          </CRow>
-          <NotesTable
-            t={t}
-            notes={fields.notes.value}
-            addNote={addNote}
-            loading={disable}
-            editable={editing}
+        <CLabel className="mb-2" md="5" lg="2" xl="2" xxl="1" col htmlFor="name">
+          <div>{t('user.description')}:</div>
+        </CLabel>
+        <CCol md="7" lg="4" xl="4" xxl="5">
+          {editing ? (
+            <div>
+              <CInput
+                id="description"
+                type="text"
+                required
+                value={fields.description.value}
+                onChange={updateField}
+                invalid={fields.description.error}
+                disabled={disable}
+                maxLength="50"
+              />
+              <CInvalidFeedback>{t('common.required')}</CInvalidFeedback>
+            </div>
+          ) : (
+            <p className="mt-2 mb-0">{fields.description.value}</p>
+          )}
+        </CCol>
+        <CLabel className="mb-2" md="5" lg="2" xl="2" xxl="1" col htmlFor="name">
+          <div>{t('configuration.device_types')}:</div>
+        </CLabel>
+        <CCol md="7" lg="4" xl="4" xxl="5">
+          <Select
+            isMulti
+            styles={selectStyles}
+            closeMenuOnSelect={false}
+            name="Device Types"
+            options={typeOptions}
+            onChange={typeOnChange}
+            value={chosenTypes}
+            className={`basic-multi-select ${fields.deviceTypes.error ? 'border-danger' : ''}`}
+            classNamePrefix="select"
+            isDisabled={!editing}
           />
+          <CFormText hidden={!fields.deviceTypes.error} color="danger">
+            {t('configuration.need_device_type')}
+          </CFormText>
+        </CCol>
+        <CLabel className="mb-2" md="5" lg="2" xl="2" xxl="1" col htmlFor="name">
+          <div>RRM:</div>
+        </CLabel>
+        <CCol md="7" lg="4" xl="4" xxl="5">
+          <div style={{ width: '120px' }}>
+            <Select
+              id="rrm"
+              styles={selectStyles}
+              value={{ value: fields.rrm.value, label: fields.rrm.value }}
+              onChange={(v) => updateFieldWithKey('rrm', { value: v.value })}
+              options={[
+                { label: 'on', value: 'on' },
+                { label: 'off', value: 'off' },
+                { label: 'inherit', value: 'inherit' },
+              ]}
+              isDisabled={!editing}
+            />
+          </div>
+          <CFormText color="danger" hidden={!fields.rrm.error}>
+            {t('common.required')}
+          </CFormText>
+        </CCol>
+        <CLabel col className="mb-2" md="5" lg="2" xl="2" xxl="1" htmlFor="firmwareUpgrade">
+          Firmware Upgrade
+        </CLabel>
+        <CCol md="7" lg="4" xl="4" xxl="5">
+          <div style={{ width: '120px' }}>
+            <Select
+              id="rrm"
+              styles={selectStyles}
+              value={{
+                value: fields.firmwareUpgrade.value,
+                label: fields.firmwareUpgrade.value,
+              }}
+              onChange={(v) => updateFieldWithKey('firmwareUpgrade', { value: v.value })}
+              options={[
+                { label: 'yes', value: 'yes' },
+                { label: 'no', value: 'no' },
+                { label: 'inherit', value: 'inherit' },
+              ]}
+              isDisabled={!editing}
+            />
+          </div>
+        </CCol>
+        <CLabel col className="mb-2" md="5" lg="2" xl="2" xxl="1" htmlFor="firmwareRCOnly">
+          Only Release Candidates
+        </CLabel>
+        <CCol md="7" lg="4" xl="4" xxl="5">
+          <CSwitch
+            id="firmwareRCOnly"
+            color="primary"
+            defaultChecked={fields.firmwareRCOnly.value}
+            onClick={() =>
+              updateFieldWithKey('firmwareRCOnly', { value: !fields.firmwareRCOnly.value })
+            }
+            size="lg"
+            disabled={!editing || fields.firmwareUpgrade.value === 'no'}
+          />
+        </CCol>
+        <CLabel className="mb-2" md="5" lg="2" xl="2" xxl="1" col htmlFor="name">
+          <div>{t('common.created')}:</div>
+        </CLabel>
+        <CCol md="7" lg="4" xl="4" xxl="5">
+          <p className="mt-2 mb-0">
+            <FormattedDate date={fields.created.value} />
+          </p>
+        </CCol>
+        <CLabel className="mb-2" md="5" lg="2" xl="2" xxl="1" col htmlFor="name">
+          <div>{t('common.modified')}:</div>
+        </CLabel>
+        <CCol md="7" lg="4" xl="4" xxl="5">
+          <p className="mt-2 mb-0">
+            <FormattedDate date={fields.modified.value} />
+          </p>
+        </CCol>
+        <CLabel className="mb-2" md="5" lg="2" xl="2" xxl="1" col htmlFor="inUse">
+          <div>{t('configuration.used_by')}:</div>
+        </CLabel>
+        <CCol md="7" lg="4" xl="4" xxl="5">
+          <CButton
+            disabled={fields.inUse.value.length === 0}
+            className="ml-0 pl-0"
+            color="link"
+            onClick={toggleInUseModal}
+          >
+            {config?.parsedInUse}
+          </CButton>
         </CCol>
       </CFormGroup>
     </CForm>
@@ -278,7 +246,6 @@ EditConfigurationForm.propTypes = {
   fields: PropTypes.instanceOf(Object).isRequired,
   updateField: PropTypes.func.isRequired,
   updateFieldWithKey: PropTypes.func.isRequired,
-  addNote: PropTypes.func.isRequired,
   editing: PropTypes.bool.isRequired,
   toggleInUseModal: PropTypes.func.isRequired,
   deviceTypes: PropTypes.instanceOf(Array).isRequired,

@@ -61,7 +61,7 @@ const WifiAnalysisTable = ({ t, data, loading }) => {
   return (
     <div>
       <CDataTable
-        addTableClasses="ignore-overflow mb-5"
+        addTableClasses="ignore-overflow mb-5 table-sm"
         fields={columns}
         items={data}
         hover

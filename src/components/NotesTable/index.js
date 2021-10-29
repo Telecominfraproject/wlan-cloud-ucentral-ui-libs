@@ -56,9 +56,9 @@ const NotesTable = ({
           <CCol>
             <div className="overflow-auto" style={{ height: '200px' }}>
               <CDataTable
-                striped
                 responsive
                 border
+                addTableClasses="table-sm"
                 loading={loading}
                 fields={columns}
                 items={notes || []}
@@ -106,15 +106,14 @@ const NotesTable = ({
             />
           </CCol>
         </CRow>
-        <CRow className="pt-3">
+        <CRow className="pt-1">
           <CCol sm="2" />
           <CCol>
             <div className="overflow-auto border" style={{ height: '200px' }}>
               <CDataTable
-                striped
                 responsive
                 border
-                addTableClasses="m-0 p-0"
+                addTableClasses="m-0 p-0 table-sm"
                 loading={loading}
                 fields={columns}
                 items={notes || []}
@@ -146,10 +145,9 @@ const NotesTable = ({
         <CCol>
           <div className="overflow-auto border" style={{ height: '200px' }}>
             <CDataTable
-              striped
               responsive
               border
-              addTableClasses="m-0 p-0"
+              addTableClasses="m-0 p-0 table-sm"
               loading={loading}
               fields={columns}
               items={notes || []}

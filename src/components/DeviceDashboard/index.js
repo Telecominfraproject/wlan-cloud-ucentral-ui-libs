@@ -22,7 +22,7 @@ const getIcon = (health) => {
 
 const DeviceDashboard = ({ t, data }) => (
   <div>
-    <CRow>
+    <CRow className="mt-3">
       <CCol>
         <CWidgetIcon
           text={t('common.last_dashboard_refresh')}
@@ -57,7 +57,7 @@ const DeviceDashboard = ({ t, data }) => (
     <CRow>
       <CCol>
         <CCard>
-          <CCardHeader>{t('common.device_status')}</CCardHeader>
+          <CCardHeader className="dark-header">{t('common.device_status')}</CCardHeader>
           <CCardBody>
             <CChartPie
               datasets={data.status.datasets}
@@ -80,7 +80,7 @@ const DeviceDashboard = ({ t, data }) => (
       </CCol>
       <CCol>
         <CCard>
-          <CCardHeader>{t('common.device_health')}</CCardHeader>
+          <CCardHeader className="dark-header">{t('common.device_health')}</CCardHeader>
           <CCardBody>
             <CChartPie
               datasets={data.healths.datasets}
@@ -104,7 +104,7 @@ const DeviceDashboard = ({ t, data }) => (
       </CCol>
       <CCol>
         <CCard>
-          <CCardHeader>
+          <CCardHeader className="dark-header">
             {data.totalAssociations}{' '}
             {data.totalAssociations === 1
               ? t('wifi_analysis.association')
@@ -137,7 +137,7 @@ const DeviceDashboard = ({ t, data }) => (
     <CRow>
       <CCol>
         <CCard>
-          <CCardHeader>{t('common.vendors')}</CCardHeader>
+          <CCardHeader className="dark-header">{t('common.vendors')}</CCardHeader>
           <CCardBody>
             <CChartBar
               datasets={data.vendors.datasets}
@@ -162,7 +162,7 @@ const DeviceDashboard = ({ t, data }) => (
       </CCol>
       <CCol>
         <CCard>
-          <CCardHeader>{t('firmware.device_types')}</CCardHeader>
+          <CCardHeader className="dark-header">{t('firmware.device_types')}</CCardHeader>
           <CCardBody>
             <CChartPie
               datasets={data.deviceType.datasets}
@@ -186,7 +186,7 @@ const DeviceDashboard = ({ t, data }) => (
       </CCol>
       <CCol>
         <CCard>
-          <CCardHeader>{t('common.uptimes')}</CCardHeader>
+          <CCardHeader className="dark-header">{t('common.uptimes')}</CCardHeader>
           <CCardBody>
             <CChartBar
               datasets={data.upTimes.datasets}
@@ -213,7 +213,7 @@ const DeviceDashboard = ({ t, data }) => (
     <CRow>
       <CCol>
         <CCard>
-          <CCardHeader>{t('common.certificates')}</CCardHeader>
+          <CCardHeader className="dark-header">{t('common.certificates')}</CCardHeader>
           <CCardBody>
             <CChartPie
               datasets={data.certificates.datasets}
@@ -236,7 +236,7 @@ const DeviceDashboard = ({ t, data }) => (
       </CCol>
       <CCol>
         <CCard>
-          <CCardHeader>{t('common.commands')}</CCardHeader>
+          <CCardHeader className="dark-header">{t('common.commands')}</CCardHeader>
           <CCardBody>
             <CChartBar
               datasets={data.commands.datasets}
@@ -261,7 +261,7 @@ const DeviceDashboard = ({ t, data }) => (
       </CCol>
       <CCol>
         <CCard>
-          <CCardHeader>{t('common.memory_used')}</CCardHeader>
+          <CCardHeader className="dark-header">{t('common.memory_used')}</CCardHeader>
           <CCardBody>
             <CChartBar
               datasets={data.memoryUsed.datasets}

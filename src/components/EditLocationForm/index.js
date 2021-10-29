@@ -17,7 +17,6 @@ import {
 } from '@coreui/react';
 import countryList from 'utils/countryList';
 import FormattedDate from '../FormattedDate';
-import NotesTable from '../NotesTable';
 import RequiredAsterisk from '../RequiredAsterisk';
 
 const EditLocationForm = ({
@@ -27,9 +26,9 @@ const EditLocationForm = ({
   updateField,
   updateFieldWithKey,
   entities,
-  addNote,
   locationSearch,
   batchSetField,
+  editing,
 }) => {
   const [filter, setFilter] = useState('');
 
@@ -63,33 +62,45 @@ const EditLocationForm = ({
           <RequiredAsterisk />
         </CLabel>
         <CCol sm="4">
-          <CInput
-            id="name"
-            type="text"
-            required
-            value={fields.name.value}
-            onChange={updateField}
-            invalid={fields.name.error}
-            disabled={disable}
-            maxLength="50"
-          />
-          <CFormText hidden={!fields.name.error} color={fields.name.error ? 'danger' : ''}>
-            {t('common.required')}
-          </CFormText>
+          {editing ? (
+            <div>
+              <CInput
+                id="name"
+                type="text"
+                required
+                value={fields.name.value}
+                onChange={updateField}
+                invalid={fields.name.error}
+                disabled={disable}
+                maxLength="50"
+              />
+              <CFormText hidden={!fields.name.error} color={fields.name.error ? 'danger' : ''}>
+                {t('common.required')}
+              </CFormText>
+            </div>
+          ) : (
+            <p className="mt-2 mb-0">{fields.name.value}</p>
+          )}
         </CCol>
         <CLabel sm="2" col htmlFor="description">
           {t('user.description')}
         </CLabel>
         <CCol sm="4">
-          <CInput
-            id="description"
-            type="text"
-            required
-            value={fields.description.value}
-            onChange={updateField}
-            disabled={disable}
-            maxLength="50"
-          />
+          {editing ? (
+            <div>
+              <CInput
+                id="description"
+                type="text"
+                required
+                value={fields.description.value}
+                onChange={updateField}
+                disabled={disable}
+                maxLength="50"
+              />
+            </div>
+          ) : (
+            <p className="mt-2 mb-0">{fields.description.value}</p>
+          )}
         </CCol>
         <CLabel className="mb-2" sm="2" col htmlFor="type">
           {t('contact.type')}
@@ -114,7 +125,7 @@ const EditLocationForm = ({
                 { label: 'UNKNOWN', value: 'UNKNOWN' },
                 { label: 'CORPORATE', value: 'CORPORATE' },
               ]}
-              isDisabled={disable}
+              isDisabled={disable || !editing}
             />
           </div>
           <CFormText hidden={!fields.type.error} color={fields.type.error ? 'danger' : ''}>
@@ -125,15 +136,21 @@ const EditLocationForm = ({
           {t('location.building_name')}
         </CLabel>
         <CCol sm="4">
-          <CInput
-            id="buildingName"
-            type="text"
-            required
-            value={fields.buildingName.value}
-            onChange={updateField}
-            disabled={disable}
-            maxLength="50"
-          />
+          {editing ? (
+            <div>
+              <CInput
+                id="buildingName"
+                type="text"
+                required
+                value={fields.buildingName.value}
+                onChange={updateField}
+                disabled={disable}
+                maxLength="50"
+              />
+            </div>
+          ) : (
+            <p className="mt-2 mb-0">{fields.buildingName.value}</p>
+          )}
         </CCol>
         <CLabel className="mb-3" sm="2" col htmlFor="phones">
           Landlines
@@ -142,7 +159,7 @@ const EditLocationForm = ({
           <CreatableSelect
             isMulti
             id="phones"
-            isDisabled={disable}
+            isDisabled={disable || !editing}
             onChange={onPhonesChange}
             components={{ NoOptionsMessage }}
             options={[]}
@@ -157,7 +174,7 @@ const EditLocationForm = ({
           <CreatableSelect
             id="mobiles"
             isMulti
-            isDisabled={disable}
+            isDisabled={disable || !editing}
             onChange={onMobilesChange}
             components={{ NoOptionsMessage }}
             options={[]}
@@ -175,24 +192,30 @@ const EditLocationForm = ({
           <RequiredAsterisk />
         </CLabel>
         <CCol sm="4">
-          <CInput
-            id="addressLines"
-            type="text"
-            required
-            value={fields.addressLines.value[0]}
-            onChange={(e) =>
-              updateFieldWithKey('addressLines', { value: [e.target.value], error: false })
-            }
-            disabled={disable}
-            invalid={fields.addressLines.error}
-            maxLength="50"
-          />
-          <CFormText
-            hidden={!fields.addressLines.error}
-            color={fields.addressLines.error ? 'danger' : ''}
-          >
-            {t('common.required')}
-          </CFormText>
+          {editing ? (
+            <div>
+              <CInput
+                id="addressLines"
+                type="text"
+                required
+                value={fields.addressLines.value[0]}
+                onChange={(e) =>
+                  updateFieldWithKey('addressLines', { value: [e.target.value], error: false })
+                }
+                disabled={disable}
+                invalid={fields.addressLines.error}
+                maxLength="50"
+              />
+              <CFormText
+                hidden={!fields.addressLines.error}
+                color={fields.addressLines.error ? 'danger' : ''}
+              >
+                {t('common.required')}
+              </CFormText>
+            </div>
+          ) : (
+            <p className="mt-2 mb-0">{fields.addressLines.value[0]}</p>
+          )}
         </CCol>
         <CLabel className="mb-2" sm="2" col htmlFor="country">
           {t('location.country')}
@@ -211,7 +234,7 @@ const EditLocationForm = ({
               }}
               onChange={(v) => updateFieldWithKey('country', { value: v.value })}
               options={countryList}
-              isDisabled={disable}
+              isDisabled={disable || !editing}
             />
             <CFormText hidden={!fields.country.error} color={fields.country.error ? 'danger' : ''}>
               {t('common.required')}
@@ -223,71 +246,95 @@ const EditLocationForm = ({
           <RequiredAsterisk />
         </CLabel>
         <CCol sm="4">
-          <CInput
-            id="city"
-            type="text"
-            required
-            value={fields.city.value}
-            onChange={updateField}
-            invalid={fields.city.error}
-            disabled={disable}
-            maxLength="50"
-          />
-          <CFormText hidden={!fields.city.error} color={fields.city.error ? 'danger' : ''}>
-            {t('common.required')}
-          </CFormText>
+          {editing ? (
+            <div>
+              <CInput
+                id="city"
+                type="text"
+                required
+                value={fields.city.value}
+                onChange={updateField}
+                invalid={fields.city.error}
+                disabled={disable}
+                maxLength="50"
+              />
+              <CFormText hidden={!fields.city.error} color={fields.city.error ? 'danger' : ''}>
+                {t('common.required')}
+              </CFormText>
+            </div>
+          ) : (
+            <p className="mt-2 mb-0">{fields.city.value}</p>
+          )}
         </CCol>
         <CLabel className="mb-2" sm="2" col htmlFor="state">
           {t('location.state')}
           <RequiredAsterisk />
         </CLabel>
         <CCol sm="4">
-          <CInput
-            id="state"
-            type="text"
-            required
-            value={fields.state.value}
-            onChange={updateField}
-            invalid={fields.state.error}
-            disabled={disable}
-            maxLength="50"
-          />
-          <CFormText hidden={!fields.state.error} color={fields.state.error ? 'danger' : ''}>
-            {t('common.required')}
-          </CFormText>
+          {editing ? (
+            <div>
+              <CInput
+                id="state"
+                type="text"
+                required
+                value={fields.state.value}
+                onChange={updateField}
+                invalid={fields.state.error}
+                disabled={disable}
+                maxLength="50"
+              />
+              <CFormText hidden={!fields.state.error} color={fields.state.error ? 'danger' : ''}>
+                {t('common.required')}
+              </CFormText>
+            </div>
+          ) : (
+            <p className="mt-2 mb-0">{fields.state.value}</p>
+          )}
         </CCol>
         <CLabel className="mb-2" sm="2" col htmlFor="postal">
           {t('location.postal')}
           <RequiredAsterisk />
         </CLabel>
         <CCol sm="4">
-          <CInput
-            id="postal"
-            type="text"
-            required
-            value={fields.postal.value}
-            onChange={updateField}
-            invalid={fields.postal.error}
-            disabled={disable}
-            maxLength="50"
-          />
-          <CFormText hidden={!fields.postal.error} color={fields.postal.error ? 'danger' : ''}>
-            {t('common.required')}
-          </CFormText>
+          {editing ? (
+            <div>
+              <CInput
+                id="postal"
+                type="text"
+                required
+                value={fields.postal.value}
+                onChange={updateField}
+                invalid={fields.postal.error}
+                disabled={disable}
+                maxLength="50"
+              />
+              <CFormText hidden={!fields.postal.error} color={fields.postal.error ? 'danger' : ''}>
+                {t('common.required')}
+              </CFormText>
+            </div>
+          ) : (
+            <p className="mt-2 mb-0">{fields.postal.value}</p>
+          )}
         </CCol>
         <CLabel sm="2" col htmlFor="geoCode">
           {t('location.geocode')}
         </CLabel>
         <CCol sm="4">
-          <CInput
-            id="geoCode"
-            type="text"
-            required
-            value={fields.geoCode.value}
-            onChange={updateField}
-            disabled={disable}
-            maxLength="50"
-          />
+          {editing ? (
+            <div>
+              <CInput
+                id="geoCode"
+                type="text"
+                required
+                value={fields.geoCode.value}
+                onChange={updateField}
+                disabled={disable}
+                maxLength="50"
+              />
+            </div>
+          ) : (
+            <p className="mt-2 mb-0">{fields.geoCode.value}</p>
+          )}
         </CCol>
       </CRow>
       <CFormGroup row className="pt-2 pb-1">
@@ -335,6 +382,7 @@ const EditLocationForm = ({
               <td className="align-middle p-1">
                 <CPopover content={t('entity.select_entity')}>
                   <CButton
+                    disabled={!editing}
                     size="sm"
                     color="primary"
                     variant="outline"
@@ -348,7 +396,6 @@ const EditLocationForm = ({
           }}
         />
       </div>
-      <NotesTable t={t} notes={fields.notes.value} addNote={addNote} loading={disable} editable />
     </CForm>
   );
 };
@@ -360,9 +407,9 @@ EditLocationForm.propTypes = {
   updateField: PropTypes.func.isRequired,
   updateFieldWithKey: PropTypes.func.isRequired,
   entities: PropTypes.instanceOf(Array).isRequired,
-  addNote: PropTypes.func.isRequired,
   locationSearch: PropTypes.node.isRequired,
   batchSetField: PropTypes.func.isRequired,
+  editing: PropTypes.bool.isRequired,
 };
 
 export default EditLocationForm;

@@ -92,14 +92,14 @@ const DeviceListTable = ({
     const tooltipId = createUuid();
     let text = t('firmware.unknown_firmware_status');
     let upgradeText = t('firmware.upgrade_to_latest');
-    let icon = <CIcon size="lg" name="cil-arrow-circle-top" content={cilArrowCircleTop} />;
+    let icon = <CIcon size="md" name="cil-arrow-circle-top" content={cilArrowCircleTop} />;
     let color = 'secondary';
     if (latest !== undefined) {
       text = t('firmware.newer_firmware_available');
       color = 'warning';
 
       if (latest) {
-        icon = <CIcon size="lg" name="cil-check-circle" content={cilCheckCircle} />;
+        icon = <CIcon size="md" name="cil-check-circle" content={cilCheckCircle} />;
         text = t('firmware.latest_version_installed');
         upgradeText = t('firmware.reinstall_latest');
         color = 'success';
@@ -107,7 +107,7 @@ const DeviceListTable = ({
     }
     return (
       <div>
-        <CButton color={color} data-tip data-for={tooltipId} data-event="click">
+        <CButton size="sm" color={color} data-tip data-for={tooltipId} data-event="click">
           {icon}
         </CButton>
         <ReactTooltip
@@ -252,15 +252,15 @@ const DeviceListTable = ({
 
   return (
     <>
-      <CCard>
-        <CCardHeader>
+      <CCard className="m-0 p-0">
+        <CCardHeader className="dark-header">
           <div className="float-left" style={{ width: '400px' }}>
             {searchBar}
           </div>
         </CCardHeader>
         <CCardBody className="p-0">
           <CDataTable
-            addTableClasses="ignore-overflow"
+            addTableClasses="ignore-overflow table-sm"
             items={devices ?? []}
             fields={columns}
             hover
@@ -268,7 +268,7 @@ const DeviceListTable = ({
             loading={loading}
             scopedSlots={{
               deviceType: (item) => (
-                <td className="pt-3 text-center">
+                <td className="align-middle text-center">
                   <DeviceBadge t={t} device={item} deviceIcons={deviceIcons} />
                 </td>
               ),

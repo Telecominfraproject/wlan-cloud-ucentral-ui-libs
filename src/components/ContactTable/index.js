@@ -55,7 +55,7 @@ const ContactTable = ({
   return (
     <>
       <CDataTable
-        addTableClasses="ignore-overflow"
+        addTableClasses="ignore-overflow table-sm"
         items={contacts}
         fields={columns}
         hover
@@ -94,7 +94,7 @@ const ContactTable = ({
               <CButtonToolbar
                 role="group"
                 className="justify-content-flex-end"
-                style={{ width: '140px' }}
+                style={{ width: '125px' }}
               >
                 <CPopover content={t('inventory.assign_ent_ven')}>
                   <div>
@@ -104,7 +104,7 @@ const ContactTable = ({
                       variant="outline"
                       shape="square"
                       size="sm"
-                      className="mx-2"
+                      className="mx-1"
                       onClick={() => assignToEntity(item.id)}
                       style={{ width: '33px', height: '30px' }}
                     >
@@ -124,7 +124,7 @@ const ContactTable = ({
                     variant="outline"
                     shape="square"
                     size="sm"
-                    className="ml-2"
+                    className="mx-1"
                     onClick={() => toggleEditModal(item.id)}
                     style={{ width: '33px', height: '30px' }}
                   >

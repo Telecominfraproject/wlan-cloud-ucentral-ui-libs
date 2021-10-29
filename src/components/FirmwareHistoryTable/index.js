@@ -12,7 +12,7 @@ const FirmwareHistoryModal = ({ t, loading, data }) => {
 
   return (
     <CDataTable
-      addTableClasses="ignore-overflow"
+      addTableClasses="ignore-overflow table-sm"
       fields={columns}
       items={data}
       hover
