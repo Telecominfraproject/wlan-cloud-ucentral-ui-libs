@@ -203,7 +203,7 @@ const InventoryTable = ({
                     <CIcon name="cil-spreadsheet" content={cilSpreadsheet} size="sm" />
                   </CButton>
                 </CPopover>
-                <CPopover content="View Tag">
+                <CPopover content={t('common.details')}>
                   <CButton
                     color="primary"
                     variant="outline"

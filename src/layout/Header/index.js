@@ -30,6 +30,8 @@ const Header = ({
   user,
   avatar,
   hideBreadcrumb,
+  extraButton,
+  hideSidebarButton,
 }) => {
   const [translatedRoutes, setTranslatedRoutes] = useState(routes);
 
@@ -49,13 +51,24 @@ const Header = ({
 
   return (
     <CHeader withSubheader>
-      <CToggler inHeader className="ml-md-3 d-lg-none" onClick={toggleSidebarMobile} />
-      <CToggler inHeader className="ml-3 d-md-down-none" onClick={toggleSidebar} />
+      {hideSidebarButton ? null : (
+        <>
+          <CToggler inHeader className="ml-md-3 d-lg-none" onClick={toggleSidebarMobile} />
+          <CToggler inHeader className="ml-3 d-md-down-none" onClick={toggleSidebar} />
+        </>
+      )}
       <CHeaderBrand className="mx-auto d-lg-none" to="/">
-        <img src={logo} alt="OpenWifi" />
+        <img
+          src={logo}
+          alt="OpenWifi"
+          className="c-sidebar-brand-full"
+          style={{ height: '75px', width: '175px' }}
+        />
       </CHeaderBrand>
 
       <CHeaderNav className="d-md-down-none mr-auto" />
+
+      <CHeaderNav>{extraButton}</CHeaderNav>
 
       <CHeaderNav className="px-3">
         <LanguageSwitcher i18n={i18n} />
@@ -78,12 +91,14 @@ const Header = ({
         </CDropdown>
       </CHeaderNav>
 
-      <CSubheader hidden={hideBreadcrumb} className="px-3 justify-content-between">
-        <CBreadcrumbRouter
-          className="border-0 c-subheader-nav m-0 px-0 px-md-3"
-          routes={translatedRoutes}
-        />
-      </CSubheader>
+      {hideBreadcrumb ? null : (
+        <CSubheader hidden={hideBreadcrumb} className="px-3 justify-content-between">
+          <CBreadcrumbRouter
+            className="border-0 c-subheader-nav m-0 px-0 px-md-3"
+            routes={translatedRoutes}
+          />
+        </CSubheader>
+      )}
     </CHeader>
   );
 };
@@ -101,10 +116,14 @@ Header.propTypes = {
   user: PropTypes.instanceOf(Object).isRequired,
   avatar: PropTypes.string.isRequired,
   hideBreadcrumb: PropTypes.bool,
+  extraButton: PropTypes.node,
+  hideSidebarButton: PropTypes.bool,
 };
 
 Header.defaultProps = {
+  extraButton: null,
   hideBreadcrumb: false,
+  hideSidebarButton: false,
 };
 
 export default React.memo(Header);

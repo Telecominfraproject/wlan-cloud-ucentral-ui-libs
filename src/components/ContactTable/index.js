@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { CButton, CDataTable, CLink, CPopover, CButtonToolbar } from '@coreui/react';
-import { cilPencil, cilPlus } from '@coreui/icons';
+import { cilMagnifyingGlass, cilPlus } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import ReactTooltip from 'react-tooltip';
 import DeleteButton from './DeleteButton';
@@ -118,7 +118,7 @@ const ContactTable = ({
                   deleteContact={deleteContact}
                   hideTooltips={hideTooltips}
                 />
-                <CPopover content={t('common.edit')}>
+                <CPopover content={t('common.details')}>
                   <CButton
                     color="primary"
                     variant="outline"
@@ -128,7 +128,7 @@ const ContactTable = ({
                     onClick={() => toggleEditModal(item.id)}
                     style={{ width: '33px', height: '30px' }}
                   >
-                    <CIcon name="cil-pencil" content={cilPencil} size="sm" />
+                    <CIcon name="cil-magnifying-glass" content={cilMagnifyingGlass} size="sm" />
                   </CButton>
                 </CPopover>
               </CButtonToolbar>

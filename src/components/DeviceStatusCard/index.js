@@ -119,11 +119,18 @@ const DeviceStatusCard = ({
                 errorField(t)
               ) : (
                 <div>
-                  {lastStats?.unit?.load[0] ? (lastStats?.unit?.load[0] * 100).toFixed(2) : '-'}%
-                  {' / '}
-                  {lastStats?.unit?.load[1] ? (lastStats?.unit?.load[1] * 100).toFixed(2) : '-'}%
-                  {' / '}
-                  {lastStats?.unit?.load[2] ? (lastStats?.unit?.load[2] * 100).toFixed(2) : '-'}%
+                  {lastStats?.unit?.load[0] !== undefined
+                    ? (lastStats?.unit?.load[0] * 100).toFixed(2)
+                    : '-'}
+                  %{' / '}
+                  {lastStats?.unit?.load[1] !== undefined
+                    ? (lastStats?.unit?.load[1] * 100).toFixed(2)
+                    : '-'}
+                  %{' / '}
+                  {lastStats?.unit?.load[2] !== undefined
+                    ? (lastStats?.unit?.load[2] * 100).toFixed(2)
+                    : '-'}
+                  %
                 </div>
               )}
             </CCol>

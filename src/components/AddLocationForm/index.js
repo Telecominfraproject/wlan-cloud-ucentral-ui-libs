@@ -130,7 +130,7 @@ const AddLocationForm = ({
           </div>
         </CCol>
         <CLabel className="mb-2" sm="2" col htmlFor="phones">
-          Landlines
+          {t('location.phones')}
         </CLabel>
         <CCol sm="4">
           <CreatableSelect
@@ -141,11 +141,11 @@ const AddLocationForm = ({
             components={{ NoOptionsMessage }}
             options={[]}
             value={fields.phones.value.map((opt) => ({ value: opt, label: opt }))}
-            placeholder={t('common.type_for_options')}
+            placeholder="+1(202)555-0103"
           />
         </CCol>
         <CLabel className="mb-2" sm="2" col htmlFor="phones">
-          Mobiles
+          {t('location.mobiles')}
         </CLabel>
         <CCol sm="4">
           <CreatableSelect
@@ -156,7 +156,7 @@ const AddLocationForm = ({
             components={{ NoOptionsMessage }}
             options={[]}
             value={fields.mobiles.value.map((opt) => ({ value: opt, label: opt }))}
-            placeholder={t('common.type_for_options')}
+            placeholder="+1(202)555-0103"
           />
         </CCol>
         <CCol className="mb-3" sm="12">

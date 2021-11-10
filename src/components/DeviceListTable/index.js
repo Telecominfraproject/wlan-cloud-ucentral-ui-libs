@@ -52,10 +52,10 @@ const DeviceListTable = ({
   deleteStatus,
 }) => {
   const columns = [
-    { key: 'deviceType', label: '', filter: false, sorter: false, _style: { width: '3%' } },
+    { key: 'deviceType', label: '', filter: false, sorter: false, _style: { width: '1%' } },
     { key: 'serialNumber', label: t('common.serial_number'), _style: { width: '6%' } },
     { key: 'firmware', label: t('firmware.revision') },
-    { key: 'firmware_button', label: '', filter: false, _style: { width: '5%' } },
+    { key: 'firmware_button', label: '', filter: false, _style: { width: '1%' } },
     { key: 'compatible', label: t('common.type'), filter: false, _style: { width: '13%' } },
     { key: 'txBytes', label: 'Tx', filter: false, _style: { width: '14%' } },
     { key: 'rxBytes', label: 'Rx', filter: false, _style: { width: '14%' } },
@@ -92,14 +92,14 @@ const DeviceListTable = ({
     const tooltipId = createUuid();
     let text = t('firmware.unknown_firmware_status');
     let upgradeText = t('firmware.upgrade_to_latest');
-    let icon = <CIcon size="md" name="cil-arrow-circle-top" content={cilArrowCircleTop} />;
+    let icon = <CIcon name="cil-arrow-circle-top" content={cilArrowCircleTop} />;
     let color = 'secondary';
     if (latest !== undefined) {
       text = t('firmware.newer_firmware_available');
       color = 'warning';
 
       if (latest) {
-        icon = <CIcon size="md" name="cil-check-circle" content={cilCheckCircle} />;
+        icon = <CIcon name="cil-check-circle" content={cilCheckCircle} />;
         text = t('firmware.latest_version_installed');
         upgradeText = t('firmware.reinstall_latest');
         color = 'success';
@@ -147,7 +147,9 @@ const DeviceListTable = ({
                   isLoading={upgradeStatus.loading}
                   action={() => upgradeToLatest(device)}
                   block
-                  disabled={upgradeStatus.loading}
+                  disabled={
+                    upgradeStatus.loading && upgradeStatus.serialNumber === device.serialNumber
+                  }
                 />
               </CCol>
               <CCol>
@@ -185,75 +187,82 @@ const DeviceListTable = ({
     const tooltipId = createUuid();
 
     return (
-      <CPopover content={t('common.delete_device')}>
-        <div>
-          <CButton
-            color="primary"
-            variant="outline"
-            shape="square"
-            size="sm"
-            className="mx-1"
-            data-tip
-            data-for={tooltipId}
-            data-event="click"
-            style={{ width: '33px', height: '30px' }}
-          >
-            <CIcon name="cil-trash" content={cilTrash} size="sm" />
-          </CButton>
-          <ReactTooltip
-            id={tooltipId}
-            place="top"
-            effect="solid"
-            globalEventOff="click"
-            clickable
-            className={[styles.deleteTooltip, 'tooltipRight'].join(' ')}
-            border
-            borderColor="#321fdb"
-            arrowColor="white"
-            overridePosition={({ left, top }) => {
-              const element = document.getElementById(tooltipId);
-              const tooltipWidth = element ? element.offsetWidth : 0;
-              const newLeft = left - tooltipWidth * 0.25;
-              return { top, left: newLeft };
-            }}
-          >
-            <CCardHeader color="primary" className={styles.tooltipHeader}>
-              {t('common.device_delete', { serialNumber })}
-              <CButtonClose
-                style={{ color: 'white' }}
-                onClick={(e) => {
-                  e.target.parentNode.parentNode.classList.remove('show');
-                  hideTooltips();
-                }}
-              />
-            </CCardHeader>
-            <CCardBody>
-              <CRow>
-                <CCol>
-                  <LoadingButton
-                    data-toggle="dropdown"
-                    variant="outline"
-                    color="danger"
-                    label={t('common.confirm')}
-                    isLoadingLabel={t('user.deleting')}
-                    isLoading={deleteStatus.loading}
-                    action={() => deleteDevice(serialNumber)}
-                    block
-                    disabled={deleteStatus.loading}
-                  />
-                </CCol>
-              </CRow>
-            </CCardBody>
-          </ReactTooltip>
-        </div>
-      </CPopover>
+      <div>
+        <CPopover content={t('common.delete_device')}>
+          <div>
+            <CButton
+              color="primary"
+              variant="outline"
+              shape="square"
+              size="sm"
+              className="mx-1"
+              data-tip
+              data-for={tooltipId}
+              data-event="click"
+              style={{ width: '33px', height: '30px' }}
+            >
+              <CIcon name="cil-trash" content={cilTrash} size="sm" />
+            </CButton>
+          </div>
+        </CPopover>
+        <ReactTooltip
+          id={tooltipId}
+          place="top"
+          effect="solid"
+          globalEventOff="click"
+          clickable
+          className={[styles.deleteTooltip, 'tooltipRight'].join(' ')}
+          border
+          borderColor="#321fdb"
+          arrowColor="white"
+          overridePosition={({ left, top }) => {
+            const element = document.getElementById(tooltipId);
+            const tooltipWidth = element ? element.offsetWidth : 0;
+            const newLeft = left - tooltipWidth * 0.25;
+            return { top, left: newLeft };
+          }}
+        >
+          <CCardHeader color="primary" className={styles.tooltipHeader}>
+            {t('common.device_delete', { serialNumber })}
+            <CButtonClose
+              className="p-0 mb-1"
+              style={{ color: 'white' }}
+              onClick={(e) => {
+                e.target.parentNode.parentNode.classList.remove('show');
+                hideTooltips();
+              }}
+            />
+          </CCardHeader>
+          <CCardBody>
+            <CRow>
+              <CCol>
+                <LoadingButton
+                  data-toggle="dropdown"
+                  variant="outline"
+                  color="danger"
+                  label={t('common.confirm')}
+                  isLoadingLabel={t('user.deleting')}
+                  isLoading={deleteStatus.loading}
+                  action={(e) => {
+                    e.target.parentNode.parentNode.parentNode.parentNode.classList.remove('show');
+                    hideTooltips();
+                    deleteDevice(serialNumber);
+                  }}
+                  block
+                  disabled={deleteStatus.loading}
+                />
+              </CCol>
+            </CRow>
+          </CCardBody>
+        </ReactTooltip>
+      </div>
     );
   };
 
   return (
     <>
       <CCard className="m-0 p-0">
-        <CCardHeader className="dark-header">
+        <CCardHeader className="p-0">
           <div className="float-left" style={{ width: '400px' }}>
             {searchBar}
           </div>
@@ -335,7 +344,7 @@ const DeviceListTable = ({
                   <CButtonToolbar
                     role="group"
                     className="justify-content-center"
-                    style={{ width: '170px' }}
+                    style={{ width: '180px' }}
                   >
                     <CPopover content={t('actions.connect')}>
                       <CButton

@@ -6,7 +6,7 @@ import _ from 'lodash';
 import formatGoogleAddress from 'utils/formatGoogleAddress';
 import selectStyles from 'utils/selectStyles';
 
-const AddressEditor = ({ t, currentToken, endpoint, setAddress, show }) => {
+const AddressEditor = ({ t, currentToken, endpoint, setAddress, show, disabled }) => {
   const [tempValue, setTempValue] = useState('');
   const [socket, setSocket] = useState(null);
   const [results, setResults] = useState([]);
@@ -25,7 +25,7 @@ const AddressEditor = ({ t, currentToken, endpoint, setAddress, show }) => {
 
   const onChange = useCallback(
     (v) => {
-      setWaitingSearch(v);
+      if (v.length >= 4) setWaitingSearch(v);
     },
     [setWaitingSearch],
   );
@@ -115,6 +115,7 @@ const AddressEditor = ({ t, currentToken, endpoint, setAddress, show }) => {
       placeholder={t('location.search')}
       onInputChange={handleTyping}
       onChange={(property) => changeAddress(property)}
+      isDisabled={disabled}
     />
   );
 };
@@ -125,6 +126,11 @@ AddressEditor.propTypes = {
   endpoint: PropTypes.string.isRequired,
   setAddress: PropTypes.func.isRequired,
   show: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool,
+};
+
+AddressEditor.defaultProps = {
+  disabled: false,
 };
 
 export default AddressEditor;

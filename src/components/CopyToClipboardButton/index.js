@@ -14,7 +14,7 @@ const CopyToClipboardButton = ({ t, content, size }) => {
 
   return (
     <CPopover content={t('common.copy_to_clipboard')}>
-      <CButton onClick={copyToClipboard} size={size}>
+      <CButton onClick={copyToClipboard} size={size} className="py-0">
         <CIcon content={cilClone} />
         {'   '}
         {result || ''}

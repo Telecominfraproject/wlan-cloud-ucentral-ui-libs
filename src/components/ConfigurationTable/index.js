@@ -104,7 +104,7 @@ const ConfigurationTable = ({
                 deleteConfig={deleteConfig}
                 hideTooltips={hideTooltips}
               />
-              <CPopover content={t('configuration.view_config')}>
+              <CPopover content={t('common.details')}>
                 <CButton
                   color="primary"
                   variant="outline"

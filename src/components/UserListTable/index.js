@@ -169,6 +169,7 @@ const UserListTable = ({
                         onClick={() => handleDeleteClick(item.Id)}
                         color="primary"
                         variant="outline"
+                        shape="square"
                         size="sm"
                       >
                         <CIcon content={cilTrash} size="sm" />

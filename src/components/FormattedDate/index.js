@@ -4,7 +4,7 @@ import { CPopover } from '@coreui/react';
 import { formatDaysAgo, prettyDate } from 'utils/formatting';
 
 const FormattedDate = ({ date }) => (
-  <CPopover content={prettyDate(date)}>
+  <CPopover content={prettyDate(date)} advancedOptions={{ animation: false }}>
     <span className="d-inline-block">{date === 0 ? '-' : formatDaysAgo(date)}</span>
   </CPopover>
 );

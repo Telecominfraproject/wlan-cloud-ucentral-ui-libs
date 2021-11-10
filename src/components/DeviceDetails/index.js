@@ -77,10 +77,11 @@ const DeviceDetails = ({ t, loading, getData, status, deviceConfig, lastStats })
             </div>
             <CRow>
               <CCol lg="2" xl="1" xxl="1">
-                <CLabel>{t('common.serial_number')}: </CLabel>
+                <CLabel>{t('common.serial_num')}: </CLabel>
               </CCol>
               <CCol className="border-right" lg="2" xl="3" xxl="3">
                 {deviceConfig?.serialNumber}
+                {'      '}
                 <CopyToClipboardButton t={t} size="sm" content={deviceConfig?.serialNumber} />
               </CCol>
               <CCol lg="2" xl="1" xxl="1">
@@ -88,6 +89,7 @@ const DeviceDetails = ({ t, loading, getData, status, deviceConfig, lastStats })
               </CCol>
               <CCol lg="2" xl="3" xxl="3">
                 {getPassword()}
+                {'      '}
                 <HideTextButton t={t} toggle={toggleShowPassword} show={showPassword} />
                 <CopyToClipboardButton
                   t={t}

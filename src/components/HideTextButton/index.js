@@ -5,7 +5,7 @@ import { CButton, CPopover } from '@coreui/react';
 
 const HideTextButton = ({ t, toggle, show, size }) => (
   <CPopover content={t('user.show_hide_password')}>
-    <CButton onClick={toggle} size={size} className="pt-0">
+    <CButton onClick={toggle} size={size} className="py-0">
       <CIcon name={show ? 'cil-envelope-open' : 'cil-envelope-closed'} />
     </CButton>
   </CPopover>

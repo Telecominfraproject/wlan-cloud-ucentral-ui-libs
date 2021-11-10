@@ -80,6 +80,14 @@ const EditEntityForm = ({
           />
         </div>
       </CCol>
+      <CLabel className="mb-2" md="5" lg="2" xl="2" xxl="1" col htmlFor="name">
+        <div>{t('common.created')}:</div>
+      </CLabel>
+      <CCol md="7" lg="4" xl="4" xxl="5">
+        <div className="mt-2 mb-0">
+          <FormattedDate date={fields.created.value} />
+        </div>
+      </CCol>
       <CLabel className="mb-2" md="5" lg="2" xl="2" xxl="1" col htmlFor="sourceIp">
         <div>{t('entity.ip_detection')}:</div>
       </CLabel>
@@ -99,14 +107,6 @@ const EditEntityForm = ({
             </p>
           </div>
         )}
-      </CCol>
-      <CLabel className="mb-2" md="5" lg="2" xl="2" xxl="1" col htmlFor="name">
-        <div>{t('common.created')}:</div>
-      </CLabel>
-      <CCol md="7" lg="4" xl="4" xxl="5">
-        <div className="mt-2 mb-0">
-          <FormattedDate date={fields.created.value} />
-        </div>
       </CCol>
       <CLabel className="mb-2" md="5" lg="2" xl="2" xxl="1" col htmlFor="name">
         <div>{t('common.modified')}:</div>

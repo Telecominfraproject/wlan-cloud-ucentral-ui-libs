@@ -38,7 +38,7 @@ const FirmwareList = ({
     { key: 'size', label: t('firmware.size'), _style: { width: '1%' } },
     { key: 'revision', label: t('firmware.revision'), _style: { width: '1%' } },
     { key: 'uri', label: 'URI' },
-    { key: 'show_details', label: '', _style: { width: '5%' } },
+    { key: 'show_details', label: '', _style: { width: '1%' } },
   ];
 
   const getShortRevision = (revision) => {
@@ -54,7 +54,7 @@ const FirmwareList = ({
 
   return (
     <CCard className="m-0">
-      <CCardHeader className="dark-header">
+      <CCardHeader className="p-1">
         <div className="d-flex flex-row-reverse">
           <div className="px-3">
             <CSwitch
@@ -113,7 +113,7 @@ const FirmwareList = ({
             ),
             uri: (item) => (
               <td className="align-middle">
-                <div style={{ width: 'calc(45vw)' }}>
+                <div style={{ width: 'calc(50vw)' }}>
                   <div className="text-truncate align-middle">
                     <CopyToClipboardButton key={item.uri} t={t} size="sm" content={item.uri} />
                     <CPopover content={item.uri}>
@@ -125,14 +125,16 @@ const FirmwareList = ({
             ),
             show_details: (item) => (
               <td className="text-center align-middle">
-                <CButton
-                  size="sm"
-                  color="primary"
-                  variant="outline"
-                  onClick={() => toggleEditModal(item.id)}
-                >
-                  <CIcon content={cilSearch} />
-                </CButton>
+                <CPopover content={t('common.details')}>
+                  <CButton
+                    size="sm"
+                    color="primary"
+                    variant="outline"
+                    onClick={() => toggleEditModal(item.id)}
+                  >
+                    <CIcon content={cilSearch} />
+                  </CButton>
+                </CPopover>
               </td>
             ),
           }}

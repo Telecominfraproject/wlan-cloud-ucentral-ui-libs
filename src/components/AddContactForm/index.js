@@ -256,7 +256,7 @@ const AddContactForm = ({ t, disable, fields, updateField, updateFieldWithKey, e
           <CInvalidFeedback>{t('common.required')}</CInvalidFeedback>
         </CCol>
         <CLabel className="mb-2" sm="2" col htmlFor="phones">
-          Landlines
+          {t('location.phones')}
         </CLabel>
         <CCol sm="4">
           <CreatableSelect
@@ -267,11 +267,11 @@ const AddContactForm = ({ t, disable, fields, updateField, updateFieldWithKey, e
             components={{ NoOptionsMessage }}
             options={[]}
             value={fields.phones.value.map((opt) => ({ value: opt, label: opt }))}
-            placeholder={t('common.type_for_options')}
+            placeholder="+1(202)555-0103"
           />
         </CCol>
         <CLabel className="mb-2" sm="2" col htmlFor="phones">
-          Mobiles
+          {t('location.mobiles')}
         </CLabel>
         <CCol sm="4">
           <CreatableSelect
@@ -282,7 +282,7 @@ const AddContactForm = ({ t, disable, fields, updateField, updateFieldWithKey, e
             components={{ NoOptionsMessage }}
             options={[]}
             value={fields.mobiles.value.map((opt) => ({ value: opt, label: opt }))}
-            placeholder={t('common.type_for_options')}
+            placeholder="+1(202)555-0103"
           />
         </CCol>
         <CLabel sm="2" col htmlFor="description">

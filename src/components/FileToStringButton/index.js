@@ -18,7 +18,15 @@ const validatePem = (value) =>
   (value.includes('---BEGIN CERTIFICATE---') && value.includes('---END CERTIFICATE---')) ||
   (value.includes('---BEGIN PRIVATE KEY---') && value.includes('---END PRIVATE KEY---'));
 
-const FileToStringButton = ({ t, save, title, explanations, acceptedFileTypes, size }) => {
+const FileToStringButton = ({
+  t,
+  save,
+  title,
+  explanations,
+  acceptedFileTypes,
+  size,
+  disabled,
+}) => {
   const [show, toggle] = useToggle(false);
   const [value, setValue] = useState('');
   const [fileName, setFileName] = useState('');
@@ -74,6 +82,7 @@ const FileToStringButton = ({ t, save, title, explanations, acceptedFileTypes, s
           variant="outline"
           style={{ height: '35px', width: '35px' }}
           size={size}
+          disabled={disabled}
         >
           <CIcon content={cilCloudUpload} />
         </CButton>
@@ -125,6 +134,7 @@ FileToStringButton.propTypes = {
   explanations: PropTypes.string.isRequired,
   acceptedFileTypes: PropTypes.string.isRequired,
   size: PropTypes.string,
+  disabled: PropTypes.bool.isRequired,
 };
 
 FileToStringButton.defaultProps = {

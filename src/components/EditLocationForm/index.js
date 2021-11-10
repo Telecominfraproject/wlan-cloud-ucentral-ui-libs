@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
@@ -14,10 +14,12 @@ import {
   CLink,
   CPopover,
   CButton,
+  CCollapse,
 } from '@coreui/react';
 import countryList from 'utils/countryList';
 import FormattedDate from '../FormattedDate';
 import RequiredAsterisk from '../RequiredAsterisk';
+import useToggle from '../../hooks/useToggle';
 
 const EditLocationForm = ({
   t,
@@ -30,6 +32,7 @@ const EditLocationForm = ({
   batchSetField,
   editing,
 }) => {
+  const [showDropdown, toggleDropdown, setShowDropdown] = useToggle(false);
   const [filter, setFilter] = useState('');
 
   const onPhonesChange = (v) => updateFieldWithKey('phones', { value: v.map((obj) => obj.value) });
@@ -52,7 +55,12 @@ const EditLocationForm = ({
       { id: 'entity', value: id },
       { id: 'entityName', value: name },
     ]);
+    toggleDropdown();
   };
+
+  useEffect(() => {
+    if (!editing) setShowDropdown(false);
+  }, [editing]);
 
   return (
     <CForm>
@@ -153,7 +161,7 @@ const EditLocationForm = ({
           )}
         </CCol>
         <CLabel className="mb-3" sm="2" col htmlFor="phones">
-          Landlines
+          {t('location.phones')}
         </CLabel>
         <CCol sm="4">
           <CreatableSelect
@@ -164,11 +172,11 @@ const EditLocationForm = ({
             components={{ NoOptionsMessage }}
             options={[]}
             value={fields.phones.value.map((opt) => ({ value: opt, label: opt }))}
-            placeholder={t('common.type_for_options')}
+            placeholder="+1(202)555-0103"
           />
         </CCol>
-        <CLabel className="mb-3" sm="2" col htmlFor="phones">
-          Mobiles
+        <CLabel className="mb-3" sm="2" col htmlFor="mobiles">
+          {t('location.mobiles')}
         </CLabel>
         <CCol sm="4">
           <CreatableSelect
@@ -179,7 +187,7 @@ const EditLocationForm = ({
             components={{ NoOptionsMessage }}
             options={[]}
             value={fields.mobiles.value.map((opt) => ({ value: opt, label: opt }))}
-            placeholder={t('common.type_for_options')}
+            placeholder="+1(202)555-0103"
           />
         </CCol>
         <CCol className="mb-3" sm="12">
@@ -339,63 +347,65 @@ const EditLocationForm = ({
       </CRow>
       <CFormGroup row className="pt-2 pb-1">
         <CLabel sm="2" col htmlFor="title">
-          {t('entity.selected_entity')}
+          {t('entity.entity')}
         </CLabel>
-        <CCol sm="4" className="pt-2">
-          <h6>
+        <CCol sm="4">
+          <CButton className="pl-0" color="link" onClick={toggleDropdown} disabled={!editing}>
             {fields.entity.value === '' ? t('entity.need_select_entity') : fields.entityName.value}
-          </h6>
+          </CButton>
         </CCol>
       </CFormGroup>
-      <div className="overflow-auto border mb-1" style={{ height: '200px' }}>
-        <CInput
-          className="w-50 mb-2"
-          type="text"
-          placeholder="Search"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        />
-        <CDataTable
-          items={entities}
-          fields={columns}
-          hover
-          tableFilterValue={filter}
-          border
-          scopedSlots={{
-            name: (item) => (
-              <td className="align-middle p-1">
-                <CLink
-                  className="c-subheader-nav-link"
-                  aria-current="page"
-                  to={() => `/configuration/${item.id}`}
-                >
-                  {item.name}
-                </CLink>
-              </td>
-            ),
-            created: (item) => (
-              <td className="align-middle p-1">
-                <FormattedDate date={item.created} />
-              </td>
-            ),
-            actions: (item) => (
-              <td className="align-middle p-1">
-                <CPopover content={t('entity.select_entity')}>
-                  <CButton
-                    disabled={!editing}
-                    size="sm"
-                    color="primary"
-                    variant="outline"
-                    onClick={() => selectEntity(item)}
+      <CCollapse show={showDropdown}>
+        <div className="overflow-auto border mb-1" style={{ height: '200px' }}>
+          <CInput
+            className="w-50 mb-2"
+            type="text"
+            placeholder="Search"
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+          />
+          <CDataTable
+            items={entities}
+            fields={columns}
+            hover
+            tableFilterValue={filter}
+            border
+            scopedSlots={{
+              name: (item) => (
+                <td className="align-middle p-1">
+                  <CLink
+                    className="c-subheader-nav-link"
+                    aria-current="page"
+                    to={() => `/configuration/${item.id}`}
                   >
-                    {t('common.select')}
-                  </CButton>
-                </CPopover>
-              </td>
-            ),
-          }}
-        />
-      </div>
+                    {item.name}
+                  </CLink>
+                </td>
+              ),
+              created: (item) => (
+                <td className="align-middle p-1">
+                  <FormattedDate date={item.created} />
+                </td>
+              ),
+              actions: (item) => (
+                <td className="align-middle p-1">
+                  <CPopover content={t('entity.select_entity')}>
+                    <CButton
+                      disabled={!editing}
+                      size="sm"
+                      color="primary"
+                      variant="outline"
+                      onClick={() => selectEntity(item)}
+                    >
+                      {t('common.select')}
+                    </CButton>
+                  </CPopover>
+                </td>
+              ),
+            }}
+          />
+        </div>
+      </CCollapse>
     </CForm>
   );
 };

@@ -191,6 +191,14 @@ const EditConfigurationForm = ({
             />
           </div>
         </CCol>
+        <CLabel className="mb-2" md="5" lg="2" xl="2" xxl="1" col htmlFor="name">
+          <div>{t('common.created')}:</div>
+        </CLabel>
+        <CCol md="7" lg="4" xl="4" xxl="5">
+          <p className="mt-2 mb-0">
+            <FormattedDate date={fields.created.value} />
+          </p>
+        </CCol>
         <CLabel col className="mb-2" md="5" lg="2" xl="2" xxl="1" htmlFor="firmwareRCOnly">
           Only Release Candidates
         </CLabel>
@@ -205,14 +213,6 @@ const EditConfigurationForm = ({
             size="lg"
             disabled={!editing || fields.firmwareUpgrade.value === 'no'}
           />
-        </CCol>
-        <CLabel className="mb-2" md="5" lg="2" xl="2" xxl="1" col htmlFor="name">
-          <div>{t('common.created')}:</div>
-        </CLabel>
-        <CCol md="7" lg="4" xl="4" xxl="5">
-          <p className="mt-2 mb-0">
-            <FormattedDate date={fields.created.value} />
-          </p>
         </CCol>
         <CLabel className="mb-2" md="5" lg="2" xl="2" xxl="1" col htmlFor="name">
           <div>{t('common.modified')}:</div>

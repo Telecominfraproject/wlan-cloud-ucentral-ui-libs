@@ -32,6 +32,7 @@ const CustomMultiModal = ({
   noTable,
   toggleAdd,
   reset,
+  disabled,
 }) => {
   const [show, toggle] = useToggle();
 
@@ -82,12 +83,19 @@ const CustomMultiModal = ({
                 variant="outline"
                 className="ml-2"
                 onClick={toggleAdd}
+                disabled={disabled}
               >
                 <CIcon content={cilPlus} />
               </CButton>
             </CPopover>
             <CPopover content={t('common.save')}>
-              <CButton color="primary" variant="outline" className="ml-2" onClick={closeAndSave}>
+              <CButton
+                color="primary"
+                variant="outline"
+                className="ml-2"
+                onClick={closeAndSave}
+                disabled={disabled}
+              >
                 <CIcon content={cilSave} />
               </CButton>
             </CPopover>
@@ -145,6 +153,7 @@ CustomMultiModal.propTypes = {
   noTable: PropTypes.bool,
   toggleAdd: PropTypes.func,
   reset: PropTypes.func,
+  disabled: PropTypes.bool.isRequired,
 };
 
 CustomMultiModal.defaultProps = {

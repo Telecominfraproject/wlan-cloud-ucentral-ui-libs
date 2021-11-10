@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { CButtonClose } from '@coreui/react';
 
-const SectionToggler = ({ id, label, field, updateField }) => {
+const SectionToggler = ({ id, label, field, updateField, disabled }) => {
   const toggle = () => updateField(id, { enabled: !field.enabled });
 
   return (
     <div className="py-1 pb-0 mb-0">
       <h6 className="mt-1 float-left">{label}</h6>
       <div className="text-right">
-        <CButtonClose onClick={toggle} style={{ color: 'white' }} />
+        <CButtonClose onClick={toggle} style={{ color: 'white' }} disabled={disabled} />
       </div>
     </div>
   );
@@ -20,6 +20,7 @@ SectionToggler.propTypes = {
   field: PropTypes.instanceOf(Object).isRequired,
   label: PropTypes.string.isRequired,
   updateField: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
 };
 
 export default SectionToggler;
