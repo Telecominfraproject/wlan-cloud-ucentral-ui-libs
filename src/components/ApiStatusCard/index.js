@@ -12,7 +12,7 @@ import {
   CModalBody,
   CModalHeader,
   CModalTitle,
-  CDataTable,
+  CSmartTable,
 } from '@coreui/react';
 import Select from 'react-select';
 import CIcon from '@coreui/icons-react';
@@ -23,7 +23,7 @@ import useToggle from '../../hooks/useToggle';
 
 const ApiStatusCard = ({ t, info, reload }) => {
   const [types, setTypes] = useState([]);
-  const [showCerts, toggleCerts] = useToggle();
+  const [showCerts, toggleCerts, setShowCerts] = useToggle(false);
 
   const submit = () => {
     reload(
@@ -105,7 +105,7 @@ const ApiStatusCard = ({ t, info, reload }) => {
           <CCol>
             <div block="true">
               {info.certificates?.length > 0 ? (
-                <CButton className="ml-0 pl-0 py-0" color="link" onClick={toggleCerts}>
+                <CButton className="ms-0 ps-0 py-0" color="link" onClick={toggleCerts}>
                   {t('common.details')} ({info.certificates.length})
                 </CButton>
               ) : (
@@ -124,7 +124,7 @@ const ApiStatusCard = ({ t, info, reload }) => {
                 t('common.unknown')
               ) : (
                 <div>
-                  <div className="float-left" style={{ width: '85%' }}>
+                  <div className="float-start" style={{ width: '85%' }}>
                     <Select
                       isMulti
                       closeMenuOnSelect={false}
@@ -136,7 +136,7 @@ const ApiStatusCard = ({ t, info, reload }) => {
                       classNamePrefix="select"
                     />
                   </div>
-                  <div className="float-left text-right" style={{ width: '15%' }}>
+                  <div className="float-end text-end" style={{ width: '15%' }}>
                     <CPopover content={t('system.reload')}>
                       <CButton
                         color="primary"
@@ -144,7 +144,7 @@ const ApiStatusCard = ({ t, info, reload }) => {
                         onClick={submit}
                         disabled={types.length === 0}
                       >
-                        <CIcon content={cilSync} />
+                        <CIcon icon={cilSync} />
                       </CButton>
                     </CPopover>
                   </div>
@@ -154,19 +154,19 @@ const ApiStatusCard = ({ t, info, reload }) => {
           </CCol>
         </CRow>
       </CCardBody>
-      <CModal size="lg" show={showCerts} onClose={toggleCerts}>
-        <CModalHeader className="p-1">
-          <CModalTitle className="pl-1 pt-1">{t('common.certificates')}</CModalTitle>
+      <CModal size="lg" visible={showCerts} onClose={() => setShowCerts(false)}>
+        <CModalHeader closeButton={false} className="p-1">
+          <CModalTitle className="ps-1 pt-1">{t('common.certificates')}</CModalTitle>
           <div className="text-right">
-            <CPopover content={t('common.close')}>
+            <CPopover content={t('common.close')} trigger="hover" placement="bottom">
               <CButton color="primary" variant="outline" className="ml-2" onClick={toggleCerts}>
-                <CIcon content={cilX} />
+                <CIcon icon={cilX} />
               </CButton>
             </CPopover>
           </div>
         </CModalHeader>
         <CModalBody>
-          <CDataTable
+          <CSmartTable
             addTableClasses="table-sm"
             border
             items={info?.certificates.map((cert) => ({

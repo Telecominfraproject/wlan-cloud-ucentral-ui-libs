@@ -3,20 +3,19 @@ import {
   CButton,
   CCol,
   CForm,
-  CInput,
   CInputGroup,
-  CInputGroupPrepend,
   CInputGroupText,
   CRow,
   CSpinner,
   CPopover,
   CAlert,
-  CInvalidFeedback,
   CLink,
+  CFormInput,
+  CFormFeedback,
 } from '@coreui/react';
 import PropTypes from 'prop-types';
 import CIcon from '@coreui/icons-react';
-import { cilUser, cilLockLocked, cilLink } from '@coreui/icons';
+import { cilLink, cilLockLocked, cilUser } from '@coreui/icons';
 import LanguageSwitcher from '../LanguageSwitcher';
 import styles from './index.module.scss';
 
@@ -42,13 +41,11 @@ const LoginForm = ({
     <p className="text-muted">{t('login.sign_in_to_account')}</p>
     <CInputGroup className="mb-4">
       <CPopover content={t('login.username')}>
-        <CInputGroupPrepend>
-          <CInputGroupText>
-            <CIcon name="cilUser" content={cilUser} />
-          </CInputGroupText>
-        </CInputGroupPrepend>
+        <CInputGroupText>
+          <CIcon icon={cilUser} />
+        </CInputGroupText>
       </CPopover>
-      <CInput
+      <CFormInput
         id="username"
         invalid={fields.username.error}
         autoFocus
@@ -58,17 +55,17 @@ const LoginForm = ({
         autoComplete="username"
         onChange={updateField}
       />
-      <CInvalidFeedback className="help-block">{t('login.please_enter_username')}</CInvalidFeedback>
+      <CFormFeedback invalid className="help-block">
+        {t('login.please_enter_username')}
+      </CFormFeedback>
     </CInputGroup>
     <CInputGroup className="mb-4">
       <CPopover content={t('login.password')}>
-        <CInputGroupPrepend>
-          <CInputGroupText>
-            <CIcon content={cilLockLocked} />
-          </CInputGroupText>
-        </CInputGroupPrepend>
+        <CInputGroupText>
+          <CIcon icon={cilLockLocked} />
+        </CInputGroupText>
       </CPopover>
-      <CInput
+      <CFormInput
         id="password"
         invalid={fields.password.error}
         required
@@ -77,17 +74,17 @@ const LoginForm = ({
         autoComplete="current-password"
         onChange={updateField}
       />
-      <CInvalidFeedback className="help-block">{t('login.please_enter_password')}</CInvalidFeedback>
+      <CFormFeedback invalid className="help-block">
+        {t('login.please_enter_password')}
+      </CFormFeedback>
     </CInputGroup>
     <CInputGroup className="mb-4" hidden={fields.ucentralsecurl.hidden}>
       <CPopover content={t('login.url')}>
-        <CInputGroupPrepend>
-          <CInputGroupText>
-            <CIcon name="cilLink" content={cilLink} />
-          </CInputGroupText>
-        </CInputGroupPrepend>
+        <CInputGroupText>
+          <CIcon icon={cilLink} />
+        </CInputGroupText>
       </CPopover>
-      <CInput
+      <CFormInput
         id="ucentralsecurl"
         invalid={fields.ucentralsecurl.error}
         type="text"
@@ -97,22 +94,24 @@ const LoginForm = ({
         autoComplete="gateway-url"
         onChange={updateField}
       />
-      <CInvalidFeedback className="help-block">{t('login.please_enter_gateway')}</CInvalidFeedback>
+      <CFormFeedback invalid className="help-block">
+        {t('login.please_enter_gateway')}
+      </CFormFeedback>
     </CInputGroup>
     <CRow>
       <CCol>
-        <CAlert show={loginResponse.tried} color={!loginResponse.error ? 'success' : 'danger'}>
+        <CAlert visible={loginResponse.tried} color={!loginResponse.error ? 'success' : 'danger'}>
           {loginResponse.text}
         </CAlert>
       </CCol>
     </CRow>
-    <div className="d-flex flex-row align-middle">
+    <div>
       <CButton color="primary" className="px-4" onClick={signIn} disabled={loading}>
         {loading ? t('login.logging_in') : t('login.login')}
         <CSpinner hidden={!loading} color="light" component="span" size="sm" />
       </CButton>
       <CLink
-        className="c-subheader-nav-link px-3 align-self-center"
+        className="c-subheader-nav-link mx-2 align-self-center"
         aria-current="page"
         href={policies.accessPolicy}
         target="_blank"
@@ -129,7 +128,7 @@ const LoginForm = ({
       >
         {t('common.password_policy')}
       </CLink>
-      <CButton className="ml-auto" variant="ghost" color="primary" onClick={toggleForgotPassword}>
+      <CButton className="float-end" variant="ghost" color="primary" onClick={toggleForgotPassword}>
         {t('common.forgot_password')}
       </CButton>
     </div>

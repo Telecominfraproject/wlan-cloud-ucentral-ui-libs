@@ -1,10 +1,10 @@
 import React from 'react';
-import { CSelect } from '@coreui/react';
+import { CFormSelect } from '@coreui/react';
 import PropTypes from 'prop-types';
 
 const LanguageSwitcher = ({ i18n }) => (
-  <CSelect
-    custom
+  <CFormSelect
+    className="custom-select"
     defaultValue={i18n.language.split('-')[0]}
     onChange={(e) => i18n.changeLanguage(e.target.value)}
   >
@@ -13,7 +13,7 @@ const LanguageSwitcher = ({ i18n }) => (
     <option value="en">English</option>
     <option value="fr">Français</option>
     <option value="pt">Portugues</option>
-  </CSelect>
+  </CFormSelect>
 );
 
 LanguageSwitcher.propTypes = {

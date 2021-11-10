@@ -3,7 +3,7 @@ import { CFooter } from '@coreui/react';
 import PropTypes from 'prop-types';
 
 const TheFooter = ({ t, version }) => (
-  <CFooter fixed={false}>
+  <CFooter>
     <div>
       {t('footer.version')} {version}
     </div>

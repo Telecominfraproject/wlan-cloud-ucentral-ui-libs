@@ -27,10 +27,10 @@ export const ToastProvider = ({ children }) => {
             <CToast
               key={`toast${toast.key}`}
               autohide={toast.autohide ? 5000 : null}
-              fade
+              animation
               color={toast.color}
-              className="text-white align-items-center"
-              show
+              className="text-white align-items-center m-0 p-0"
+              visible
             >
               <CToastHeader closeButton={toast.closeButton}>{toast.title}</CToastHeader>
               <div className="d-flex">

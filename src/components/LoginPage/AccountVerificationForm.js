@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CButton, CCol, CForm, CInput, CRow, CSpinner, CAlert, CLink } from '@coreui/react';
+import { CButton, CCol, CForm, CFormInput, CRow, CSpinner, CAlert, CLink } from '@coreui/react';
 import PropTypes from 'prop-types';
 import LanguageSwitcher from '../LanguageSwitcher';
 import styles from './index.module.scss';
@@ -48,7 +48,7 @@ const AccountVerificationForm = ({
           : t('login.email_code_validation')}
       </p>
       <div className="d-flex flex-row">
-        <CInput
+        <CFormInput
           autoFocus
           required
           type="text"
@@ -69,7 +69,7 @@ const AccountVerificationForm = ({
       </div>
       <CRow className="pt-2">
         <CCol>
-          <CAlert show={success !== null} color={success ? 'success' : 'danger'}>
+          <CAlert visible={success !== null} color={success ? 'success' : 'danger'}>
             {t('login.wrong_code')}
           </CAlert>
         </CCol>
@@ -89,9 +89,12 @@ const AccountVerificationForm = ({
           >
             {t('common.access_policy')}
           </CLink>
-        </CCol>
-        <CCol xs="5" className={styles.forgotPassword}>
-          <CButton variant="ghost" color="primary" onClick={toggleForgotPassword}>
+          <CButton
+            className="float-end"
+            variant="ghost"
+            color="primary"
+            onClick={toggleForgotPassword}
+          >
             {t('common.back_to_login')}
           </CButton>
         </CCol>

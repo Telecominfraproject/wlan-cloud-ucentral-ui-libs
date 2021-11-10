@@ -2,7 +2,7 @@
 import React, { Suspense } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import { v4 as createUuid } from 'uuid';
-import { CContainer, CFade } from '@coreui/react';
+import { CContainer } from '@coreui/react';
 import PropTypes from 'prop-types';
 
 const loading = (
@@ -12,31 +12,29 @@ const loading = (
 );
 
 const PageContainer = ({ t, routes, redirectTo }) => (
-  <main className="c-main py-2">
-    <CContainer className="px-2" fluid>
-      <Suspense fallback={loading}>
-        <Switch>
-          {routes.map(
-            (route) =>
-              route.component && (
-                <Route
-                  key={createUuid()}
-                  path={route.path}
-                  exact={route.exact}
-                  name={t(route.name)}
-                  render={(props) => (
-                    <CFade>
-                      <route.component {...props} />
-                    </CFade>
-                  )}
-                />
-              ),
-          )}
-          <Redirect from="/" to={redirectTo} />
-        </Switch>
-      </Suspense>
-    </CContainer>
-  </main>
+  <CContainer fluid>
+    <Suspense fallback={loading}>
+      <Switch>
+        {routes.map(
+          (route) =>
+            route.component && (
+              <Route
+                key={createUuid()}
+                path={route.path}
+                exact={route.exact}
+                name={t(route.name)}
+                render={(props) => (
+                  <>
+                    <route.component {...props} />
+                  </>
+                )}
+              />
+            ),
+        )}
+        <Redirect from="/" to={redirectTo} />
+      </Switch>
+    </Suspense>
+  </CContainer>
 );
 
 PageContainer.propTypes = {

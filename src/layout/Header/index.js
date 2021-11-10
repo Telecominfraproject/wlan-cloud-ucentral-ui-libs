@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   CHeader,
-  CToggler,
+  CHeaderToggler,
   CHeaderBrand,
   CHeaderNav,
   CSubheader,
@@ -9,11 +9,12 @@ import {
   CDropdown,
   CDropdownToggle,
   CDropdownMenu,
+  CContainer,
   CDropdownItem,
 } from '@coreui/react';
 import PropTypes from 'prop-types';
 import CIcon from '@coreui/icons-react';
-import { cilAccountLogout } from '@coreui/icons';
+import { cilAccountLogout, cilMenu } from '@coreui/icons';
 import LanguageSwitcher from '../../components/LanguageSwitcher';
 import Avatar from '../../components/Avatar';
 
@@ -31,18 +32,11 @@ const Header = ({
   avatar,
   hideBreadcrumb,
   extraButton,
-  hideSidebarButton,
 }) => {
   const [translatedRoutes, setTranslatedRoutes] = useState(routes);
 
   const toggleSidebar = () => {
-    const val = [true, 'responsive'].includes(showSidebar) ? false : 'responsive';
-    setShowSidebar(val);
-  };
-
-  const toggleSidebarMobile = () => {
-    const val = [false, 'responsive'].includes(showSidebar) ? true : 'responsive';
-    setShowSidebar(val);
+    setShowSidebar(!showSidebar);
   };
 
   useEffect(() => {
@@ -50,55 +44,54 @@ const Header = ({
   }, [i18n.language]);
 
   return (
-    <CHeader withSubheader>
-      {hideSidebarButton ? null : (
-        <>
-          <CToggler inHeader className="ml-md-3 d-lg-none" onClick={toggleSidebarMobile} />
-          <CToggler inHeader className="ml-3 d-md-down-none" onClick={toggleSidebar} />
-        </>
-      )}
-      <CHeaderBrand className="mx-auto d-lg-none" to="/">
-        <img
-          src={logo}
-          alt="OpenWifi"
-          className="c-sidebar-brand-full"
-          style={{ height: '75px', width: '175px' }}
-        />
-      </CHeaderBrand>
-
-      <CHeaderNav className="d-md-down-none mr-auto" />
-
-      <CHeaderNav>{extraButton}</CHeaderNav>
-
-      <CHeaderNav className="px-3">
-        <LanguageSwitcher i18n={i18n} />
-      </CHeaderNav>
-
-      <CHeaderNav className="px-1">
-        <CDropdown inNav className="c-header-nav-items mx-2" direction="down">
-          <CDropdownToggle className="c-header-nav-link" caret={false}>
-            <Avatar src={avatar} fallback={user.email} />
-          </CDropdownToggle>
-          <CDropdownMenu className="pt-0" placement="bottom-end">
-            <CDropdownItem to={() => '/myprofile'}>
-              <div className="px-3">{t('user.my_profile')}</div>
-            </CDropdownItem>
-            <CDropdownItem onClick={() => logout(authToken, endpoints.owsec)}>
-              <strong className="px-3">{t('common.logout')}</strong>
-              <CIcon name="cilAccountLogout" content={cilAccountLogout} />
-            </CDropdownItem>
-          </CDropdownMenu>
-        </CDropdown>
-      </CHeaderNav>
-
-      {hideBreadcrumb ? null : (
-        <CSubheader hidden={hideBreadcrumb} className="px-3 justify-content-between">
-          <CBreadcrumbRouter
-            className="border-0 c-subheader-nav m-0 px-0 px-md-3"
-            routes={translatedRoutes}
+    <CHeader position="fixed" className="py-0">
+      <CContainer fluid>
+        <CHeaderToggler onClick={toggleSidebar} className="ps-1">
+          <CIcon icon={cilMenu} />
+        </CHeaderToggler>
+        <CHeaderBrand className="mx-auto d-md-none" to="/">
+          <img
+            src={logo}
+            alt="OpenWifi"
+            className="c-sidebar-brand-full"
+            style={{ height: '75px', width: '175px' }}
           />
-        </CSubheader>
-      )}
+        </CHeaderBrand>
+
+        <CHeaderNav>{extraButton}</CHeaderNav>
+
+        <CHeaderNav className="px-1">
+          <LanguageSwitcher i18n={i18n} />
+        </CHeaderNav>
+
+        <CHeaderNav className="px-1">
+          <CDropdown variant="nav-item">
+            <CDropdownToggle className="c-header-nav-link" caret={false}>
+              <Avatar src={avatar} fallback={user.email} />
+            </CDropdownToggle>
+            <CDropdownMenu className="pt-0" placement="bottom-end">
+              <CDropdownItem href="/myprofile">
+                <div className="px-3">{t('user.my_profile')}</div>
+              </CDropdownItem>
+              <CDropdownItem onClick={() => logout(authToken, endpoints.owsec)}>
+                <strong className="px-3">{t('common.logout')}</strong>
+                <CIcon icon={cilAccountLogout} />
+              </CDropdownItem>
+            </CDropdownMenu>
+          </CDropdown>
+        </CHeaderNav>
+
+        {hideBreadcrumb ? null : (
+          <CContainer fluid>
+            <CSubheader hidden={hideBreadcrumb} className="px-3 justify-content-between">
+              <CBreadcrumbRouter
+                className="border-0 c-subheader-nav m-0 px-0 px-md-3"
+                routes={translatedRoutes}
+              />
+            </CSubheader>
+          </CContainer>
+        )}
+      </CContainer>
     </CHeader>
   );
 };
@@ -117,13 +110,11 @@ Header.propTypes = {
   avatar: PropTypes.string.isRequired,
   hideBreadcrumb: PropTypes.bool,
   extraButton: PropTypes.node,
-  hideSidebarButton: PropTypes.bool,
 };
 
 Header.defaultProps = {
   extraButton: null,
   hideBreadcrumb: false,
-  hideSidebarButton: false,
 };
 
 export default React.memo(Header);

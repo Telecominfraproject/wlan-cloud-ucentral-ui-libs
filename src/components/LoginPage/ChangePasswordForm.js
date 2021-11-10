@@ -3,15 +3,14 @@ import {
   CButton,
   CCol,
   CForm,
-  CInput,
+  CFormInput,
   CInputGroup,
-  CInputGroupPrepend,
   CInputGroupText,
   CRow,
   CSpinner,
   CPopover,
   CAlert,
-  CInvalidFeedback,
+  CFormFeedback,
   CLink,
 } from '@coreui/react';
 import PropTypes from 'prop-types';
@@ -42,13 +41,11 @@ const ChangePasswordForm = ({
     <p className="text-muted">{t('login.change_password_instructions')}</p>
     <CInputGroup className="mb-4">
       <CPopover content={t('login.password')}>
-        <CInputGroupPrepend>
-          <CInputGroupText>
-            <CIcon name="cilLockLocked" content={cilLockLocked} />
-          </CInputGroupText>
-        </CInputGroupPrepend>
+        <CInputGroupText>
+          <CIcon name="cilLockLocked" content={cilLockLocked} />
+        </CInputGroupText>
       </CPopover>
-      <CInput
+      <CFormInput
         id="newpassword"
         invalid={fields.newpassword.error}
         autoFocus
@@ -58,17 +55,17 @@ const ChangePasswordForm = ({
         autoComplete="username"
         onChange={updateField}
       />
-      <CInvalidFeedback className="help-block">{t('login.please_enter_username')}</CInvalidFeedback>
+      <CFormFeedback invalid className="help-block">
+        {t('login.please_enter_username')}
+      </CFormFeedback>
     </CInputGroup>
     <CInputGroup className="mb-4">
       <CPopover content={t('login.password')}>
-        <CInputGroupPrepend>
-          <CInputGroupText>
-            <CIcon content={cilLockLocked} />
-          </CInputGroupText>
-        </CInputGroupPrepend>
+        <CInputGroupText>
+          <CIcon icon={cilLockLocked} />
+        </CInputGroupText>
       </CPopover>
-      <CInput
+      <CFormInput
         id="confirmpassword"
         invalid={fields.confirmpassword.error}
         required
@@ -77,12 +74,14 @@ const ChangePasswordForm = ({
         autoComplete="current-password"
         onChange={updateField}
       />
-      <CInvalidFeedback className="help-block">{t('login.different_passwords')}</CInvalidFeedback>
+      <CFormFeedback invalid className="help-block">
+        {t('login.different_passwords')}
+      </CFormFeedback>
     </CInputGroup>
     <CRow>
       <CCol>
         <CAlert
-          show={changePasswordResponse.tried}
+          visible={changePasswordResponse.tried}
           color={!changePasswordResponse.error ? 'success' : 'danger'}
         >
           {changePasswordResponse.text}

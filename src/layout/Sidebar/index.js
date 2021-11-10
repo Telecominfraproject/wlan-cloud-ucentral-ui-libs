@@ -1,17 +1,8 @@
 import React from 'react';
-import {
-  CCreateElement,
-  CSidebar,
-  CSidebarBrand,
-  CSidebarNav,
-  CSidebarNavDivider,
-  CSidebarNavTitle,
-  CSidebarMinimizer,
-  CSidebarNavDropdown,
-  CSidebarNavItem,
-} from '@coreui/react';
+import { CSidebar, CSidebarBrand, CSidebarNav } from '@coreui/react';
 import PropTypes from 'prop-types';
 import styles from './index.module.scss';
+import CreateElements from './CreateElements';
 
 const Sidebar = ({
   showSidebar,
@@ -22,33 +13,24 @@ const Sidebar = ({
   logoHeight,
   logoWidth,
 }) => (
-  <CSidebar show={showSidebar} onShowChange={(val) => setShowSidebar(val)}>
-    <CSidebarBrand className="d-md-down-none" to={redirectTo}>
+  <CSidebar
+    size="sm"
+    position="fixed"
+    unfoldable={false}
+    visible={showSidebar}
+    onVisibleChange={(val) => setShowSidebar(val)}
+  >
+    <CSidebarBrand className="d-none d-md-flex" to={redirectTo}>
       <img
         className={[styles.sidebarImgFull, 'c-sidebar-brand-full'].join(' ')}
         style={{ height: logoHeight ?? undefined, width: logoWidth ?? undefined }}
         src={logo}
         alt="OpenWifi"
       />
-      <img
-        className={[styles.sidebarImgMinimized, 'c-sidebar-brand-minimized'].join(' ')}
-        style={{ height: logoHeight ?? undefined, width: logoWidth ?? undefined }}
-        src={logo}
-        alt="OpenWifi"
-      />
     </CSidebarBrand>
     <CSidebarNav>
-      <CCreateElement
-        items={options}
-        components={{
-          CSidebarNavDivider,
-          CSidebarNavDropdown,
-          CSidebarNavItem,
-          CSidebarNavTitle,
-        }}
-      />
+      <CreateElements items={options} />
     </CSidebarNav>
-    <CSidebarMinimizer className="c-d-md-down-none" />
   </CSidebar>
 );
 

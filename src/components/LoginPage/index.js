@@ -92,12 +92,12 @@ const LoginPage = ({
   };
 
   return (
-    <div className="c-app c-default-layout flex-row align-items-center">
+    <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
         <CRow className="justify-content-center">
           <CCol md="8">
             <img
-              className={[styles.logo, 'c-sidebar-brand-full'].join(' ')}
+              className={[styles.logo, 'sidebar-brand-full'].join(' ')}
               src={logo}
               alt="OpenWifi"
             />

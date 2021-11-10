@@ -3,20 +3,19 @@ import {
   CButton,
   CCol,
   CForm,
-  CInput,
+  CFormInput,
   CInputGroup,
-  CInputGroupPrepend,
   CInputGroupText,
   CRow,
   CSpinner,
   CPopover,
   CAlert,
-  CInvalidFeedback,
+  CFormFeedback,
   CLink,
 } from '@coreui/react';
 import PropTypes from 'prop-types';
 import CIcon from '@coreui/icons-react';
-import { cilUser, cilLink } from '@coreui/icons';
+import { cilLink, cilUser } from '@coreui/icons';
 import LanguageSwitcher from '../LanguageSwitcher';
 import styles from './index.module.scss';
 
@@ -42,13 +41,11 @@ const ForgotPasswordForm = ({
     <p className="text-muted">{t('login.forgot_password_explanation')}</p>
     <CInputGroup className="mb-4">
       <CPopover content={t('login.username')}>
-        <CInputGroupPrepend>
-          <CInputGroupText>
-            <CIcon name="cilUser" content={cilUser} />
-          </CInputGroupText>
-        </CInputGroupPrepend>
+        <CInputGroupText>
+          <CIcon icon={cilUser} />
+        </CInputGroupText>
       </CPopover>
-      <CInput
+      <CFormInput
         id="forgotusername"
         invalid={fields.forgotusername.error}
         autoFocus
@@ -59,17 +56,17 @@ const ForgotPasswordForm = ({
         autoComplete="forgotusername"
         onChange={updateField}
       />
-      <CInvalidFeedback className="help-block">{t('login.please_enter_username')}</CInvalidFeedback>
+      <CFormFeedback invalid className="help-block">
+        {t('login.please_enter_username')}
+      </CFormFeedback>
     </CInputGroup>
     <CInputGroup className="mb-4" hidden={fields.ucentralsecurl.hidden}>
       <CPopover content={t('login.url')}>
-        <CInputGroupPrepend>
-          <CInputGroupText>
-            <CIcon name="cilLink" content={cilLink} />
-          </CInputGroupText>
-        </CInputGroupPrepend>
+        <CInputGroupText>
+          <CIcon icon={cilLink} />
+        </CInputGroupText>
       </CPopover>
-      <CInput
+      <CFormInput
         id="ucentralsecurl"
         invalid={fields.ucentralsecurl.error}
         type="text"
@@ -79,11 +76,13 @@ const ForgotPasswordForm = ({
         autoComplete="gateway-url"
         onChange={updateField}
       />
-      <CInvalidFeedback className="help-block">{t('login.please_enter_gateway')}</CInvalidFeedback>
+      <CFormFeedback invalid className="help-block">
+        {t('login.please_enter_gateway')}
+      </CFormFeedback>
     </CInputGroup>
     <CRow>
       <CCol>
-        <CAlert show={forgotResponse.tried} color={!forgotResponse.error ? 'success' : 'danger'}>
+        <CAlert visible={forgotResponse.tried} color={!forgotResponse.error ? 'success' : 'danger'}>
           {forgotResponse.text}
         </CAlert>
       </CCol>
@@ -117,9 +116,12 @@ const ForgotPasswordForm = ({
         >
           {t('common.password_policy')}
         </CLink>
-      </CCol>
-      <CCol xs="5" className={styles.forgotPassword}>
-        <CButton variant="ghost" color="primary" onClick={toggleForgotPassword}>
+        <CButton
+          className="float-end"
+          variant="ghost"
+          color="primary"
+          onClick={toggleForgotPassword}
+        >
           {t('common.back_to_login')}
         </CButton>
       </CCol>
