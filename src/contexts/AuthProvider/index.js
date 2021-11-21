@@ -3,12 +3,33 @@ import PropTypes from 'prop-types';
 
 const AuthContext = React.createContext();
 
+const preferencesToObj = (arr) => {
+  const obj = {};
+
+  for (let i = 0; i < arr.length; i += 1) {
+    obj[arr[i].tag] = arr[i].value;
+  }
+
+  return obj;
+};
+
+const preferencesToArr = (obj) => {
+  const arr = [];
+
+  for (const [tag, value] of Object.entries(obj)) {
+    arr.push({ tag, value });
+  }
+
+  return arr;
+};
+
 export const AuthProvider = ({ axiosInstance, token, apiEndpoints, children }) => {
   const [currentToken, setCurrentToken] = useState(token);
   const [endpoints, setEndpoints] = useState(apiEndpoints);
   const [avatar, setAvatar] = useState('');
   const [user, setUser] = useState({
     avatar: '',
+    preferences: {},
   });
 
   const logout = () => {
@@ -57,6 +78,20 @@ export const AuthProvider = ({ axiosInstance, token, apiEndpoints, children }) =
       .catch(() => {});
   };
 
+  const getPreferences = async () => {
+    const options = {
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${currentToken}`,
+      },
+    };
+
+    return axiosInstance
+      .get(`${endpoints.owsec}/api/v1/preferences`, options)
+      .then((response) => response.data)
+      .catch(() => ({}));
+  };
+
   const getUser = () => {
     const options = {
       headers: {
@@ -65,15 +100,68 @@ export const AuthProvider = ({ axiosInstance, token, apiEndpoints, children }) =
       },
     };
 
+    let newUser = {};
+
     axiosInstance
       .get(`${endpoints.owsec}/api/v1/oauth2?me=true`, options)
       .then((response) => {
+        newUser = response.data;
         setUser(response.data);
         if (response.data.Id && response.data.Id.length > 0) {
           getAvatar(response.data.Id);
         }
+        return axiosInstance.get(`${endpoints.owsec}/api/v1/preferences`, options);
       })
-      .catch(() => {});
+      .then((response) => {
+        const preferences = {
+          preferencesId: response.data.id,
+          preferencesModified: response.data.modified,
+          preferences: preferencesToObj(response.data.data),
+        };
+
+        newUser = { ...newUser, ...preferences };
+      })
+      .catch(() => {})
+      .finally(() => {
+        setUser(newUser);
+      });
+  };
+
+  const updatePreferences = async (newValues) => {
+    const oldPreferences = await getPreferences();
+    const oldObj = preferencesToObj(oldPreferences);
+    const preferencesObj = { ...oldObj, ...user.preferences, ...newValues };
+    const arr = preferencesToArr(preferencesObj);
+
+    const options = {
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${currentToken}`,
+      },
+    };
+
+    const parameters = {
+      data: arr,
+    };
+
+    return axiosInstance
+      .put(`${endpoints.owsec}/api/v1/preferences`, parameters, options)
+      .then((response) => {
+        const newPrefs = preferencesToObj(response.data.data);
+        setUser({
+          ...user,
+          ...{
+            preferences: newPrefs,
+            preferencesId: response.data.id,
+            preferencesModified: response.data.modified,
+          },
+        });
+        return { success: true };
+      })
+      .catch((e) => ({
+        success: false,
+        error: e.response?.data?.ErrorDescription ?? 'Unknown Error',
+      }));
   };
 
   useEffect(() => {
@@ -94,6 +182,7 @@ export const AuthProvider = ({ axiosInstance, token, apiEndpoints, children }) =
         avatar,
         getAvatar,
         logout,
+        updatePreferences,
       }}
     >
       {children}

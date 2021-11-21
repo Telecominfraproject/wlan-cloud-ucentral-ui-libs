@@ -23,7 +23,6 @@ import styles from './index.module.scss';
 const LoginForm = ({
   t,
   i18n,
-  onKeyDown,
   signIn,
   loading,
   fields,
@@ -32,7 +31,7 @@ const LoginForm = ({
   toggleForgotPassword,
   policies,
 }) => (
-  <CForm onKeyDown={(e) => onKeyDown(e, signIn)}>
+  <CForm onSubmit={signIn}>
     <h1>
       {t('login.login')}
       <div className={styles.languageSwitcher}>
@@ -107,7 +106,7 @@ const LoginForm = ({
       </CCol>
     </CRow>
     <div className="d-flex flex-row align-middle">
-      <CButton color="primary" className="px-4" onClick={signIn} disabled={loading}>
+      <CButton type="submit" color="primary" className="px-4" disabled={loading}>
         {loading ? t('login.logging_in') : t('login.login')}
         <CSpinner hidden={!loading} color="light" component="span" size="sm" />
       </CButton>
@@ -139,7 +138,6 @@ const LoginForm = ({
 LoginForm.propTypes = {
   t: PropTypes.func.isRequired,
   i18n: PropTypes.instanceOf(Object).isRequired,
-  onKeyDown: PropTypes.func.isRequired,
   signIn: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   fields: PropTypes.instanceOf(Object).isRequired,

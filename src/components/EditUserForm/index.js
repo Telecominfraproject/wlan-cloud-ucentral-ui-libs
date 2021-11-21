@@ -65,6 +65,7 @@ const EditUserForm = ({ t, user, updateUserWithId, policies, editing }) => {
             onChange={updateUserWithId}
             value={user.userRole.value}
             disabled={!editing}
+            style={{ width: '130px' }}
           >
             <option value="accounting">Accounting</option>
             <option value="admin">Admin</option>
@@ -72,8 +73,6 @@ const EditUserForm = ({ t, user, updateUserWithId, policies, editing }) => {
             <option value="installer">Installer</option>
             <option value="noc">NOC</option>
             <option value="root">Root</option>
-            <option value="special">Special</option>
-            <option value="sub">Sub</option>
             <option value="system">System</option>
           </CSelect>
         </CCol>

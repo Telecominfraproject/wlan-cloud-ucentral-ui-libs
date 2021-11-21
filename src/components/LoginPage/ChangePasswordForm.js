@@ -113,9 +113,12 @@ const ChangePasswordForm = ({
         >
           {t('common.password_policy')}
         </CLink>
-      </CCol>
-      <CCol xs="5" className={styles.forgotPassword}>
-        <CButton variant="ghost" color="primary" onClick={cancelPasswordChange}>
+        <CButton
+          className="float-right"
+          variant="ghost"
+          color="primary"
+          onClick={cancelPasswordChange}
+        >
           {t('common.cancel')}
         </CButton>
       </CCol>

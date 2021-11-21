@@ -20,6 +20,7 @@ const LoginPage = ({
   formType,
   toggleForgotPassword,
   onKeyDown,
+  submitForm,
   sendForgotPasswordEmail,
   changePasswordResponse,
   cancelPasswordChange,
@@ -79,8 +80,7 @@ const LoginPage = ({
       <LoginForm
         t={t}
         i18n={i18n}
-        onKeyDown={onKeyDown}
-        signIn={signIn}
+        signIn={submitForm}
         loading={loading}
         fields={fields}
         updateField={updateField}
@@ -125,6 +125,7 @@ LoginPage.propTypes = {
   updateField: PropTypes.func.isRequired,
   toggleForgotPassword: PropTypes.func.isRequired,
   onKeyDown: PropTypes.func.isRequired,
+  submitForm: PropTypes.func.isRequired,
   sendForgotPasswordEmail: PropTypes.func.isRequired,
   changePasswordResponse: PropTypes.instanceOf(Object).isRequired,
   cancelPasswordChange: PropTypes.func.isRequired,

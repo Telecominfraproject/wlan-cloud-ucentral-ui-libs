@@ -45,15 +45,19 @@ const CreateUserForm = ({ t, fields, updateField, policies, toggleChange }) => {
           {t('user.user_role')}
         </CLabel>
         <CCol sm="4">
-          <CSelect custom id="userRole" defaultValue="Admin" onChange={updateField}>
+          <CSelect
+            custom
+            id="userRole"
+            onChange={updateField}
+            value={fields.userRole.value}
+            style={{ width: '130px' }}
+          >
             <option value="accounting">Accounting</option>
             <option value="admin">Admin</option>
             <option value="csr">CSR</option>
             <option value="installer">Installer</option>
             <option value="noc">NOC</option>
             <option value="root">Root</option>
-            <option value="special">Special</option>
-            <option value="sub">Sub</option>
             <option value="system">System</option>
           </CSelect>
         </CCol>

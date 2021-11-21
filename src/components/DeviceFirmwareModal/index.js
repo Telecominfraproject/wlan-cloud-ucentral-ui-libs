@@ -11,6 +11,7 @@ import {
   CCol,
   CInput,
   CPopover,
+  CSwitch,
 } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
 import { cilX } from '@coreui/icons';
@@ -26,6 +27,8 @@ const DeviceFirmwareModal = ({
   upgradeToVersion,
   loading,
   upgradeStatus,
+  keepRedirector,
+  toggleRedirector,
 }) => {
   const [filter, setFilter] = useState('');
 
@@ -60,6 +63,20 @@ const DeviceFirmwareModal = ({
                 {t('firmware.installed_firmware')}
               </CCol>
               <CCol className="pt-2">{device.firmware}</CCol>
+            </CRow>
+            <CRow className="mt-3">
+              <CCol sm="2" className="pt-2">
+                {t('factory_reset.redirector')}
+              </CCol>
+              <CCol className="pt-2">
+                <CSwitch
+                  color="primary"
+                  defaultChecked={keepRedirector}
+                  onClick={toggleRedirector}
+                  labelOn="Yes"
+                  labelOff="No"
+                />
+              </CCol>
             </CRow>
             <CRow className="my-4">
               <CCol sm="5">
@@ -121,6 +138,8 @@ DeviceFirmwareModal.propTypes = {
   upgradeToVersion: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   upgradeStatus: PropTypes.instanceOf(Object).isRequired,
+  keepRedirector: PropTypes.bool.isRequired,
+  toggleRedirector: PropTypes.func.isRequired,
 };
 
 export default React.memo(DeviceFirmwareModal);
