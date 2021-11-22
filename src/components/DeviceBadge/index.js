@@ -21,6 +21,7 @@ const DeviceBadge = ({ t, device, deviceIcons }) => {
         setSrc(deviceIcons.iotIcon);
         break;
       default:
+        setSrc(deviceIcons.apIcon);
         break;
     }
   };
@@ -49,7 +50,7 @@ const DeviceBadge = ({ t, device, deviceIcons }) => {
         style={{ height: '35px', width: '35px' }}
         className={`c-avatar c-avatar-lg ${getCertColor()}`}
       >
-        <img src={src} className={styles.icon} alt={device.deviceType} />
+        <img src={src} className={styles.icon} alt="" />
         <CPopover content={device.connected ? t('common.connected') : t('common.not_connected')}>
           <span
             className={

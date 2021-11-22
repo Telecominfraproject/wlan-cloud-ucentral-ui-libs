@@ -44,6 +44,7 @@ export { default as DeviceFirmwareModal } from './components/DeviceFirmwareModal
 export { default as DeviceListTable } from './components/DeviceListTable';
 export { default as DeviceStatusCard } from './components/DeviceStatusCard';
 export { default as DeviceSearchBar } from './components/DeviceSearchBar';
+export { default as DuplicateEntityMapForm } from './components/DuplicateEntityMapForm';
 export { default as EditConfigurationForm } from './components/EditConfigurationForm';
 export { default as EditContactForm } from './components/EditContactForm';
 export { default as EditDefaultConfigurationForm } from './components/EditDefaultConfigurationForm';
