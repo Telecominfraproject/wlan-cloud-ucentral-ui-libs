@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 const DeviceContext = React.createContext();
@@ -19,6 +19,10 @@ export const DeviceProvider = ({ axiosInstance, serialNumber, children }) => {
       .then((response) => response.data.connected)
       .catch(() => false);
   };
+
+  useEffect(() => {
+    if (serialNumber !== deviceSerialNumber) setDeviceSerialNumber(serialNumber);
+  }, [serialNumber]);
 
   return (
     <DeviceContext.Provider

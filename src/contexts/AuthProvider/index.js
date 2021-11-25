@@ -106,7 +106,6 @@ export const AuthProvider = ({ axiosInstance, token, apiEndpoints, children }) =
       .get(`${endpoints.owsec}/api/v1/oauth2?me=true`, options)
       .then((response) => {
         newUser = response.data;
-        setUser(response.data);
         if (response.data.Id && response.data.Id.length > 0) {
           getAvatar(response.data.Id);
         }

@@ -19,7 +19,6 @@ const EntityTree = ({ elements, setElements, history, setReactFlowInstance, edit
   };
 
   const onLoad = (instance) => {
-    instance.fitView();
     setReactFlowInstance(instance);
   };
 

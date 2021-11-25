@@ -18,7 +18,7 @@ const DuplicateEntityMapForm = ({ t, disable, fields, updateField }) => (
       <CLabel col htmlFor="name">
         {t('user.name')}
       </CLabel>
-      <CCol sm="7">
+      <CCol sm="9">
         <CInput
           id="name"
           type="text"
@@ -36,7 +36,7 @@ const DuplicateEntityMapForm = ({ t, disable, fields, updateField }) => (
       <CLabel col htmlFor="description">
         {t('user.description')}
       </CLabel>
-      <CCol sm="7">
+      <CCol sm="9">
         <CInput
           id="description"
           type="text"
@@ -54,7 +54,7 @@ const DuplicateEntityMapForm = ({ t, disable, fields, updateField }) => (
       <CLabel col htmlFor="visibility">
         <div>{t('common.visibility')}:</div>
       </CLabel>
-      <CCol sm="7">
+      <CCol sm="9">
         <CSelect
           custom
           id="visibility"
@@ -64,6 +64,7 @@ const DuplicateEntityMapForm = ({ t, disable, fields, updateField }) => (
           onChange={updateField}
           invalid={fields.visibility.error}
           disabled={disable}
+          style={{ width: '100px' }}
           maxLength="50"
         >
           <option value="public">public</option>
@@ -75,7 +76,7 @@ const DuplicateEntityMapForm = ({ t, disable, fields, updateField }) => (
       <CLabel col htmlFor="note">
         {t('user.note')}
       </CLabel>
-      <CCol sm="7">
+      <CCol sm="9">
         <CInput
           id="note"
           type="text"

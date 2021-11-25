@@ -24,6 +24,31 @@ const DeviceSearchBar = ({ t, search, results, history, action }) => {
       filterOption={() => true}
       inputValue={selected}
       placeholder={t('common.search')}
+      styles={{
+        placeholder: (provided) => ({
+          ...provided,
+          // disable placeholder mouse events
+          pointerEvents: 'none',
+          userSelect: 'none',
+          MozUserSelect: 'none',
+          WebkitUserSelect: 'none',
+          msUserSelect: 'none',
+        }),
+        input: (css) => ({
+          ...css,
+          /* expand the Input Component div */
+          flex: '1 1 auto',
+          /* expand the Input Component child div */
+          '> div': {
+            width: '100%',
+          },
+          /* expand the Input Component input */
+          input: {
+            width: '100% !important',
+            textAlign: 'left',
+          },
+        }),
+      }}
       onInputChange={onInputChange}
       onChange={(property) =>
         action === null ? history.push(`/devices/${property.value}`) : action(property.value)

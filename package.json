@@ -1,6 +1,6 @@
 {
   "name": "ucentral-libs",
-  "version": "1.0.39",
+  "version": "1.0.44",
   "main": "dist/index.js",
   "source": "src/index.js",
   "engines": {
@@ -81,7 +81,6 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "husky": "^4.3.8",
     "lint-staged": "^11.0.0",
-    "node-sass": "^5.0.0",
     "path": "^0.12.7",
     "prettier": "^2.3.2",
     "react": "^17.0.2",
