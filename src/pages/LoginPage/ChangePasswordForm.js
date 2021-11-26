@@ -44,7 +44,7 @@ const ChangePasswordForm = ({
       <CPopover content={t('login.password')}>
         <CInputGroupPrepend>
           <CInputGroupText>
-            <CIcon name="cilLockLocked" content={cilLockLocked} />
+            <CIcon content={cilLockLocked} />
           </CInputGroupText>
         </CInputGroupPrepend>
       </CPopover>

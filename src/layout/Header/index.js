@@ -85,7 +85,7 @@ const Header = ({
             </CDropdownItem>
             <CDropdownItem onClick={() => logout(authToken, endpoints.owsec)}>
               <strong className="px-3">{t('common.logout')}</strong>
-              <CIcon name="cilAccountLogout" content={cilAccountLogout} />
+              <CIcon content={cilAccountLogout} />
             </CDropdownItem>
           </CDropdownMenu>
         </CDropdown>

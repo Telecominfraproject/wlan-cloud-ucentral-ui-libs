@@ -43,7 +43,7 @@ const LoginForm = ({
       <CPopover content={t('login.username')}>
         <CInputGroupPrepend>
           <CInputGroupText>
-            <CIcon name="cilUser" content={cilUser} />
+            <CIcon content={cilUser} />
           </CInputGroupText>
         </CInputGroupPrepend>
       </CPopover>
@@ -82,7 +82,7 @@ const LoginForm = ({
       <CPopover content={t('login.url')}>
         <CInputGroupPrepend>
           <CInputGroupText>
-            <CIcon name="cilLink" content={cilLink} />
+            <CIcon content={cilLink} />
           </CInputGroupText>
         </CInputGroupPrepend>
       </CPopover>

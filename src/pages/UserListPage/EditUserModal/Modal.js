@@ -62,7 +62,7 @@ const EditUserModal = ({
               onClick={toggleEditing}
               className="ml-2"
             >
-              <CIcon name="cil-pencil" content={cilPencil} />
+              <CIcon content={cilPencil} />
             </CButton>
           </CPopover>
           <CPopover content={t('common.close')}>

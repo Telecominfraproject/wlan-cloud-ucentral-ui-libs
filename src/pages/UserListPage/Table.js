@@ -78,14 +78,14 @@ const UserListTable = ({
             <div className="pl-2">
               <CPopover content={t('common.refresh')}>
                 <CButton onClick={refreshUsers} color="info">
-                  <CIcon name="cil-sync" content={cilSync} />
+                  <CIcon content={cilSync} />
                 </CButton>
               </CPopover>
             </div>
             <div className="pl-2">
               <CPopover content={t('user.create')}>
                 <CButton color="info" onClick={toggleCreate} block>
-                  <CIcon name="cil-plus" content={cilPlus} />
+                  <CIcon content={cilPlus} />
                 </CButton>
               </CPopover>
             </div>
@@ -160,7 +160,7 @@ const UserListTable = ({
                         size="sm"
                         onClick={() => toggleEdit(item.Id)}
                       >
-                        <CIcon name="cil-search" content={cilSearch} size="sm" />
+                        <CIcon content={cilSearch} size="sm" />
                       </CButton>
                     </CPopover>
                     <CPopover content={t('common.delete')}>

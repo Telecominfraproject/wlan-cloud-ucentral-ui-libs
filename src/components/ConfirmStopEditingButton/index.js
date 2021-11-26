@@ -25,7 +25,7 @@ const ConfirmStopEditingButton = ({ t, stopEditing, disabled }) => {
     <>
       <CPopover content={t('common.stop_editing')}>
         <CButton disabled={disabled} color="dark" onClick={toggleShow} className="ml-2">
-          <CIcon name="cil-x" content={cilX} />
+          <CIcon content={cilX} />
         </CButton>
       </CPopover>
       <CModal show={show} onClose={toggleShow}>

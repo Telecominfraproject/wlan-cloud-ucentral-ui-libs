@@ -97,7 +97,7 @@ const SimulationTable = ({
             data-event="click"
             style={{ width: '33px', height: '30px' }}
           >
-            <CIcon name="cil-trash" content={cilTrash} size="sm" />
+            <CIcon content={cilTrash} size="sm" />
           </CButton>
           <ReactTooltip
             id={tooltipId}
@@ -190,7 +190,7 @@ const SimulationTable = ({
                         style={{ width: '33px', height: '30px' }}
                         onClick={() => startSim(item.id)}
                       >
-                        <CIcon name="cil-media-play" content={cilMediaPlay} size="sm" />
+                        <CIcon content={cilMediaPlay} size="sm" />
                       </CButton>
                     </CPopover>
                     {deleteButton(item)}
@@ -204,7 +204,7 @@ const SimulationTable = ({
                         style={{ width: '33px', height: '30px' }}
                         onClick={() => toggleEdit(item.id)}
                       >
-                        <CIcon name="cil-search" content={cilSearch} size="sm" />
+                        <CIcon content={cilSearch} size="sm" />
                       </CButton>
                     </CPopover>
                   </CButtonToolbar>

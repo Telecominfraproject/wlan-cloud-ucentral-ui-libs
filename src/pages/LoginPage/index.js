@@ -44,7 +44,7 @@ const initialResponseState = {
   tried: false,
 };
 
-const Login = ({ t, i18n, setCurrentToken, setEndpoints, addToast, axios }) => {
+const Login = ({ t, i18n, setCurrentToken, setEndpoints, addToast, axios, logo }) => {
   const [defaultConfig, setDefaultConfig] = useState({
     value: '',
     error: false,
@@ -536,7 +536,7 @@ const Login = ({ t, i18n, setCurrentToken, setEndpoints, addToast, axios }) => {
       i18n={i18n}
       signIn={SignIn}
       loading={loading}
-      logo="assets/OpenWiFi_LogoLockup_DarkGreyColour.svg"
+      logo={logo}
       loginResponse={loginResponse}
       forgotResponse={forgotResponse}
       fields={fields}
@@ -562,6 +562,7 @@ Login.propTypes = {
   setEndpoints: PropTypes.func.isRequired,
   addToast: PropTypes.func.isRequired,
   axios: PropTypes.instanceOf(Object).isRequired,
+  logo: PropTypes.string.isRequired,
 };
 
 export default Login;
