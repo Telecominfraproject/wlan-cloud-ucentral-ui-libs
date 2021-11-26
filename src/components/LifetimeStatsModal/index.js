@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { v4 as createUuid } from 'uuid';
 import {
@@ -21,7 +22,8 @@ import CIcon from '@coreui/icons-react';
 import { cilX } from '@coreui/icons';
 import { cleanBytesString } from 'utils/formatting';
 
-const LifetimeStatsModal = ({ t, loading, show, toggle, data }) => {
+const LifetimeStatsModal = ({ loading, show, toggle, data }) => {
+  const { t } = useTranslation();
   const [key, setKey] = useState(0);
 
   if (loading) {
@@ -115,7 +117,6 @@ const LifetimeStatsModal = ({ t, loading, show, toggle, data }) => {
 };
 
 LifetimeStatsModal.propTypes = {
-  t: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,
   show: PropTypes.bool.isRequired,
   toggle: PropTypes.func.isRequired,

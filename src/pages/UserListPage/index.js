@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import { getItem, setItem } from 'utils/localStorageHelper';
 import CreateUserModal from './CreateUserModal';
 import EditUserModal from './EditUserModal';
 import Table from './Table';
 
-const UserListPage = ({ t, currentToken, endpoints, addToast, axiosInstance }) => {
+const UserListPage = ({ currentToken, endpoints, addToast, axiosInstance }) => {
+  const { t } = useTranslation();
   const [page, setPage] = useState({ selected: 0 });
   const [users, setUsers] = useState([]);
   const [usersToDisplay, setUsersToDisplay] = useState([]);
@@ -248,7 +250,6 @@ const UserListPage = ({ t, currentToken, endpoints, addToast, axiosInstance }) =
 };
 
 UserListPage.propTypes = {
-  t: PropTypes.func.isRequired,
   currentToken: PropTypes.string.isRequired,
   endpoints: PropTypes.instanceOf(Object).isRequired,
   addToast: PropTypes.func.isRequired,

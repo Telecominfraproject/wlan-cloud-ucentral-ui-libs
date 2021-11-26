@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useTranslation } from 'react-i18next';
 import { CDataTable, CRow, CCol, CLabel, CInput } from '@coreui/react';
 import { prettyDate } from '../../utils/formatting';
 import LoadingButton from '../LoadingButton';
 
 const NotesTable = ({
-  t,
   notes,
   addNote,
   loading,
@@ -14,6 +14,7 @@ const NotesTable = ({
   descriptionColumn,
   editable,
 }) => {
+  const { t } = useTranslation();
   const [currentNote, setCurrentNote] = useState('');
 
   const columns = [
@@ -169,7 +170,6 @@ const NotesTable = ({
 };
 
 NotesTable.propTypes = {
-  t: PropTypes.func.isRequired,
   notes: PropTypes.instanceOf(Array).isRequired,
   addNote: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired,

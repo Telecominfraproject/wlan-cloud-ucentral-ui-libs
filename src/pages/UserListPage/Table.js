@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import PropTypes from 'prop-types';
 import ReactPaginate from 'react-paginate';
 import {
@@ -19,7 +20,6 @@ import Avatar from '../../components/Avatar';
 import FormattedDate from '../../components/FormattedDate';
 
 const UserListTable = ({
-  t,
   users,
   loading,
   usersPerPage,
@@ -33,6 +33,7 @@ const UserListTable = ({
   toggleEdit,
   refreshUsers,
 }) => {
+  const { t } = useTranslation();
   const [idToDelete, setIdToDelete] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -232,7 +233,6 @@ const UserListTable = ({
 };
 
 UserListTable.propTypes = {
-  t: PropTypes.func.isRequired,
   users: PropTypes.arrayOf(Object).isRequired,
   loading: PropTypes.bool.isRequired,
   usersPerPage: PropTypes.string.isRequired,

@@ -17,9 +17,9 @@ import {
 import PropTypes from 'prop-types';
 import parsePhoneNumber from 'libphonenumber-js';
 import CIcon from '@coreui/icons-react';
-import ValidatePhoneNumberModal from 'components/ValidatePhoneNumberModal';
 import Avatar from 'components/Avatar';
 import useToggle from 'hooks/useToggle';
+import ValidatePhoneNumberModal from './ValidatePhoneNumberModal';
 
 const EditMyProfile = ({
   t,
