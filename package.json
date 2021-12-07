@@ -1,6 +1,6 @@
 {
   "name": "ucentral-libs",
-  "version": "1.0.48",
+  "version": "1.0.54",
   "main": "dist/index.js",
   "source": "src/index.js",
   "engines": {

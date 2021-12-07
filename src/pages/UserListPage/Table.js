@@ -73,7 +73,7 @@ const UserListTable = ({
       <CCard className="my-0 py-0">
         <CCardHeader className="dark-header">
           <div style={{ fontWeight: '600' }} className=" text-value-lg float-left">
-            {t('user.users')}
+            {t('user.table_title')}
           </div>
           <div className="d-flex flex-row-reverse">
             <div className="pl-2">

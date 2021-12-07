@@ -24,7 +24,7 @@ Modal.propTypes = {
 };
 
 Modal.defaultProps = {
-  size: 'md',
+  size: '',
   headerButtons: null,
   children: null,
   footer: null,

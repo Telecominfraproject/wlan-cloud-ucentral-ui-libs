@@ -3,6 +3,9 @@ export { default as COLOR_LIST } from './constants/colors';
 export { default as COUNTRY_LIST } from './constants/countryList';
 export { default as SELECT_STYLES } from './constants/selectStyles';
 
+// Utils
+export { numberToCompact } from './utils/formatting';
+
 // Layout
 export { default as Footer } from './layout/Footer';
 export { default as Header } from './layout/Header';
@@ -10,6 +13,7 @@ export { default as PageContainer } from './layout/PageContainer';
 export { default as Sidebar } from './layout/Sidebar';
 
 // General use components
+export { default as Dot } from './components/Dot';
 export { default as Modal } from './components/Modal';
 
 // Specific-task components
@@ -30,6 +34,7 @@ export { default as ConfirmFooter } from './components/ConfirmFooter';
 export { default as ConfirmStopEditingButton } from './components/ConfirmStopEditingButton';
 export { default as CopyToClipboardButton } from './components/CopyToClipboardButton';
 export { default as DetailedNotesTable } from './components/DetailedNotesTable';
+export { default as DeleteModal } from './components/DeleteModal';
 export { default as DeviceBadge } from './components/DeviceBadge';
 export { default as DeviceSearchBar } from './components/DeviceSearchBar';
 export { default as FileToStringButton } from './components/FileToStringButton';
