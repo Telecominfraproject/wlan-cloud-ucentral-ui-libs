@@ -126,6 +126,44 @@ export const AuthProvider = ({ axiosInstance, token, apiEndpoints, children }) =
       });
   };
 
+  const deletePreference = async (preferenceToDelete) => {
+    const oldPreferences = await getPreferences();
+    const oldObj = preferencesToObj(oldPreferences);
+    const preferencesObj = { ...oldObj, ...user.preferences };
+    delete preferencesObj[preferenceToDelete];
+    const arr = preferencesToArr(preferencesObj);
+
+    const options = {
+      headers: {
+        Accept: 'application/json',
+        Authorization: `Bearer ${currentToken}`,
+      },
+    };
+
+    const parameters = {
+      data: arr,
+    };
+
+    return axiosInstance
+      .put(`${endpoints.owsec}/api/v1/preferences`, parameters, options)
+      .then((response) => {
+        const newPrefs = preferencesToObj(response.data.data);
+        setUser({
+          ...user,
+          ...{
+            preferences: newPrefs,
+            preferencesId: response.data.id,
+            preferencesModified: response.data.modified,
+          },
+        });
+        return { success: true };
+      })
+      .catch((e) => ({
+        success: false,
+        error: e.response?.data?.ErrorDescription ?? 'Unknown Error',
+      }));
+  };
+
   const updatePreferences = async (newValues) => {
     const oldPreferences = await getPreferences();
     const oldObj = preferencesToObj(oldPreferences);
@@ -182,6 +220,7 @@ export const AuthProvider = ({ axiosInstance, token, apiEndpoints, children }) =
         getAvatar,
         logout,
         updatePreferences,
+        deletePreference,
       }}
     >
       {children}
