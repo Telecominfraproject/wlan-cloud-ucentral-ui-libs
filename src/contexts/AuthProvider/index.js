@@ -50,7 +50,7 @@ export const AuthProvider = ({ axiosInstance, token, apiEndpoints, children }) =
       });
   };
 
-  const getAvatar = (newUserId) => {
+  const getAvatar = (userForAvatar) => {
     const options = {
       headers: {
         Accept: 'application/json',
@@ -59,23 +59,27 @@ export const AuthProvider = ({ axiosInstance, token, apiEndpoints, children }) =
       responseType: 'arraybuffer',
     };
 
-    axiosInstance
-      .get(
-        `${endpoints.owsec}/api/v1/avatar/${
-          newUserId ?? user.Id
-        }?timestamp=${new Date().getTime()}`,
-        options,
-      )
-      .then((response) => {
-        const base64 = btoa(
-          new Uint8Array(response.data).reduce(
-            (data, byte) => data + String.fromCharCode(byte),
-            '',
-          ),
-        );
-        setAvatar(`data:;base64,${base64}`);
-      })
-      .catch(() => {});
+    if (
+      (userForAvatar && userForAvatar?.avatar !== '' && userForAvatar?.avatar !== '0') ||
+      (user && user?.avatar !== '' && user?.avatar !== '0')
+    )
+      axiosInstance
+        .get(
+          `${endpoints.owsec}/api/v1/avatar/${userForAvatar?.Id ?? user.Id}?cache=${
+            userForAvatar?.avatar ?? user.avatar
+          }`,
+          options,
+        )
+        .then((response) => {
+          const base64 = btoa(
+            new Uint8Array(response.data).reduce(
+              (data, byte) => data + String.fromCharCode(byte),
+              '',
+            ),
+          );
+          setAvatar(`data:;base64,${base64}`);
+        })
+        .catch(() => {});
   };
 
   const getPreferences = async () => {
@@ -106,8 +110,13 @@ export const AuthProvider = ({ axiosInstance, token, apiEndpoints, children }) =
       .get(`${endpoints.owsec}/api/v1/oauth2?me=true`, options)
       .then((response) => {
         newUser = response.data;
-        if (response.data.Id && response.data.Id.length > 0) {
-          getAvatar(response.data.Id);
+        if (
+          response.data.Id &&
+          response.data.Id.length > 0 &&
+          newUser.avatar !== '' &&
+          newUser.avatar !== '0'
+        ) {
+          getAvatar(newUser);
         }
         return axiosInstance.get(`${endpoints.owsec}/api/v1/preferences`, options);
       })

@@ -140,14 +140,15 @@ const ProfilePage = ({ axiosInstance }) => {
 
     axiosInstance
       .post(`${endpoints.owsec}/api/v1/avatar/${user.Id}`, data, options)
-      .then(() => {
+      .then((response) => {
         addToast({
           title: t('user.update_success_title'),
           body: t('user.update_success'),
           color: 'success',
           autohide: true,
         });
-        getAvatar();
+        if (response.data.avatar !== '' && response.data.avatar !== '0')
+          getAvatar(response.data.Id, response.data.avatar);
         setNewAvatar('');
         setNewAvatarFile(null);
         setFileInputKey(fileInputKey + 1);
@@ -177,8 +178,8 @@ const ProfilePage = ({ axiosInstance }) => {
 
       axiosInstance
         .delete(`${endpoints.owsec}/api/v1/avatar/${user.Id}`, options)
-        .then(() => {
-          getAvatar();
+        .then((response) => {
+          getAvatar(response.data);
         })
         .catch(() => {});
     }

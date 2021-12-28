@@ -71,7 +71,7 @@ const UserListPage = ({ currentToken, endpoints, addToast, axiosInstance }) => {
       });
   };
 
-  const getAvatarPromises = (userIds) => {
+  const getAvatarPromises = (userList) => {
     const options = {
       headers: {
         Accept: 'application/json',
@@ -80,15 +80,35 @@ const UserListPage = ({ currentToken, endpoints, addToast, axiosInstance }) => {
       responseType: 'arraybuffer',
     };
 
-    const promises = userIds.map(async (id) =>
-      axiosInstance.get(
-        `${endpoints.owsec}/api/v1/avatar/${id}?timestamp=${new Date().toString()}`,
-        options,
-      ),
-    );
+    const promises = userList.map(async (user) => {
+      if (user.avatar !== '' && user.avatar !== '0') {
+        return axiosInstance.get(
+          `${endpoints.owsec}/api/v1/avatar/${user.Id}?cache=${user.avatar}`,
+          options,
+        );
+      }
+      return new Promise('');
+    });
 
     return promises;
   };
+
+  const getUserDetails = async (headers, idsToGet) =>
+    axiosInstance
+      .get(`${endpoints.owsec}/api/v1/users?select=${idsToGet}`, {
+        headers,
+      })
+      .then((response) => response.data.users)
+      .catch((e) => {
+        addToast({
+          title: t('common.error'),
+          body: t('user.error_fetching_users', { error: e.response?.data?.ErrorDescription }),
+          color: 'danger',
+          autohide: true,
+        });
+        setLoading(false);
+        return [];
+      });
 
   const displayUsers = async () => {
     setLoading(true);
@@ -105,44 +125,33 @@ const UserListPage = ({ currentToken, endpoints, addToast, axiosInstance }) => {
       Authorization: `Bearer ${currentToken}`,
     };
 
-    const avatarRequests = getAvatarPromises(users.slice(startIndex, endIndex));
+    let newUsers = await getUserDetails(headers, idsToGet);
 
-    const avatars = await Promise.all(avatarRequests).then((results) =>
+    const avatarRequests = getAvatarPromises(newUsers);
+    const avatars = await Promise.allSettled(avatarRequests).then((results) =>
       results.map((response) => {
-        const base64 = btoa(
-          new Uint8Array(response.data).reduce(
-            (data, byte) => data + String.fromCharCode(byte),
-            '',
-          ),
-        );
-        return `data:;base64,${base64}`;
+        if (response.status === 'fulfilled') {
+          const base64 = btoa(
+            new Uint8Array(response.value.data).reduce(
+              (data, byte) => data + String.fromCharCode(byte),
+              '',
+            ),
+          );
+          return `data:;base64,${base64}`;
+        }
+        return '';
       }),
     );
 
-    axiosInstance
-      .get(`${endpoints.owsec}/api/v1/users?select=${idsToGet}`, {
-        headers,
-      })
-      .then((response) => {
-        const newUsers = response.data.users.map((user, index) => {
-          const newUser = {
-            ...user,
-            avatar: avatars[index],
-          };
-          return newUser;
-        });
-        setUsersToDisplay(newUsers);
-        setLoading(false);
-      })
-      .catch((e) => {
-        addToast({
-          title: t('common.error'),
-          body: t('user.error_fetching_users', { error: e.response?.data?.ErrorDescription }),
-          color: 'danger',
-          autohide: true,
-        });
-        setLoading(false);
-      });
+    newUsers = newUsers.map((user, index) => {
+      const newUser = {
+        ...user,
+        avatar: avatars[index],
+      };
+      return newUser;
+    });
+    setUsersToDisplay(newUsers);
+    setLoading(false);
   };
 
   const deleteUser = (userId) => {
