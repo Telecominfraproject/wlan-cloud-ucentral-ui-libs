@@ -83,7 +83,7 @@ const UserListPage = ({ currentToken, endpoints, addToast, axiosInstance }) => {
     const promises = userList.map(async (user) => {
       if (user.avatar !== '' && user.avatar !== '0') {
         return axiosInstance.get(
-          `${endpoints.owsec}/api/v1/avatar/${user.Id}?cache=${user.avatar}`,
+          `${endpoints.owsec}/api/v1/avatar/${user.id}?cache=${user.avatar}`,
           options,
         );
       }

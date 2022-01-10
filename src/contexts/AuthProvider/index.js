@@ -65,7 +65,7 @@ export const AuthProvider = ({ axiosInstance, token, apiEndpoints, children }) =
     )
       axiosInstance
         .get(
-          `${endpoints.owsec}/api/v1/avatar/${userForAvatar?.Id ?? user.Id}?cache=${
+          `${endpoints.owsec}/api/v1/avatar/${userForAvatar?.id ?? user.id}?cache=${
             userForAvatar?.avatar ?? user.avatar
           }`,
           options,
@@ -111,8 +111,8 @@ export const AuthProvider = ({ axiosInstance, token, apiEndpoints, children }) =
       .then((response) => {
         newUser = response.data;
         if (
-          response.data.Id &&
-          response.data.Id.length > 0 &&
+          response.data.id &&
+          response.data.id.length > 0 &&
           newUser.avatar !== '' &&
           newUser.avatar !== '0'
         ) {

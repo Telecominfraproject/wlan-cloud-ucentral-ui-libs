@@ -95,7 +95,7 @@ const ProfilePage = ({ axiosInstance }) => {
     };
 
     axiosInstance
-      .get(`${endpoints.owsec}/api/v1/user/${user.Id}`, options)
+      .get(`${endpoints.owsec}/api/v1/user/${user.id}`, options)
       .then((response) => {
         const newUser = {};
 
@@ -139,7 +139,7 @@ const ProfilePage = ({ axiosInstance }) => {
     data.append('file', newAvatarFile);
 
     axiosInstance
-      .post(`${endpoints.owsec}/api/v1/avatar/${user.Id}`, data, options)
+      .post(`${endpoints.owsec}/api/v1/avatar/${user.id}`, data, options)
       .then((response) => {
         addToast({
           title: t('user.update_success_title'),
@@ -148,7 +148,7 @@ const ProfilePage = ({ axiosInstance }) => {
           autohide: true,
         });
         if (response.data.avatar !== '' && response.data.avatar !== '0')
-          getAvatar(response.data.Id, response.data.avatar);
+          getAvatar(response.data.id, response.data.avatar);
         setNewAvatar('');
         setNewAvatarFile(null);
         setFileInputKey(fileInputKey + 1);
@@ -177,7 +177,7 @@ const ProfilePage = ({ axiosInstance }) => {
       };
 
       axiosInstance
-        .delete(`${endpoints.owsec}/api/v1/avatar/${user.Id}`, options)
+        .delete(`${endpoints.owsec}/api/v1/avatar/${user.id}`, options)
         .then((response) => {
           getAvatar(response.data);
         })
@@ -205,7 +205,7 @@ const ProfilePage = ({ axiosInstance }) => {
       propInfo.mfa.enabled = userForm.mfaMethod.value !== '';
 
       const parameters = {
-        id: user.Id,
+        id: user.id,
         description: userForm.description.value,
         name: userForm.name.value,
         notes: newNotes,
@@ -221,7 +221,7 @@ const ProfilePage = ({ axiosInstance }) => {
       };
 
       axiosInstance
-        .put(`${endpoints.owsec}/api/v1/user/${user.Id}`, parameters, options)
+        .put(`${endpoints.owsec}/api/v1/user/${user.id}`, parameters, options)
         .then(() => {
           addToast({
             title: t('user.update_success_title'),
@@ -329,14 +329,14 @@ const ProfilePage = ({ axiosInstance }) => {
   };
 
   useEffect(() => {
-    if (user.Id) {
+    if (user.id) {
       getAvatar();
       getUser();
     }
     if (policies.passwordPattern.length === 0) {
       getPasswordPolicy();
     }
-  }, [user.Id]);
+  }, [user.id]);
 
   return (
     <CCard className="my-0 py-0">

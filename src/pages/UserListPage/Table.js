@@ -159,7 +159,7 @@ const UserListTable = ({
                         variant="outline"
                         shape="square"
                         size="sm"
-                        onClick={() => toggleEdit(item.Id)}
+                        onClick={() => toggleEdit(item.id)}
                       >
                         <CIcon content={cilSearch} size="sm" />
                       </CButton>
@@ -167,7 +167,7 @@ const UserListTable = ({
                     <CPopover content={t('common.delete')}>
                       <CButton
                         className="mx-1"
-                        onClick={() => handleDeleteClick(item.Id)}
+                        onClick={() => handleDeleteClick(item.id)}
                         color="primary"
                         variant="outline"
                         shape="square"
