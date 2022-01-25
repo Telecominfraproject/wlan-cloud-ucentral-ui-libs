@@ -35,7 +35,7 @@ const AccountVerificationForm = ({
   };
 
   return (
-    <CForm onKeyDown={(e) => onKeyDown(e, validateVerificationCode)}>
+    <CForm onKeyDown={(e) => onKeyDown(e, validateVerificationCode)} onSubmit={validate}>
       <h1>
         {t('login.account_verification')}
         <div className={styles.languageSwitcher}>
@@ -62,6 +62,7 @@ const AccountVerificationForm = ({
           color="primary"
           onClick={resendCode}
           disabled={sending || validating}
+          type="button"
         >
           {sending ? t('login.sending_ellipsis') : t('user.send_code_again')}
           <CSpinner hidden={!sending} color="light" component="span" size="sm" />
@@ -76,7 +77,13 @@ const AccountVerificationForm = ({
       </CRow>
       <CRow className="pt-2">
         <CCol>
-          <CButton color="primary" className="px-4" onClick={validate} disabled={validating}>
+          <CButton
+            color="primary"
+            className="px-4"
+            onClick={validate}
+            type="submit"
+            disabled={validating}
+          >
             {validating ? t('login.sending_ellipsis') : t('user.validate_phone')}
             <CSpinner hidden={!validating} color="light" component="span" size="sm" />
           </CButton>

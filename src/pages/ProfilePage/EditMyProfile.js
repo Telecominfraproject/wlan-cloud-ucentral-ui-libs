@@ -236,6 +236,9 @@ const EditMyProfile = ({
         </CCol>
       </CRow>
       <CRow>
+        <CCol className="mt-2 text-left" xs={2}>
+          Security Retries: {localStorage.getItem('sec_retries') ?? 0}
+        </CCol>
         <CCol />
         <CCol xs={2} className="mt-2 text-right">
           <CLink

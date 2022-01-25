@@ -1,23 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
 import CIcon from '@coreui/icons-react';
 import { cilClone } from '@coreui/icons';
 import PropTypes from 'prop-types';
 import { CButton, CPopover } from '@coreui/react';
+import { useToast } from 'contexts/ToastProvider';
 
 const CopyToClipboardButton = ({ t, content, size }) => {
-  const [result, setResult] = useState('');
+  const { addToast } = useToast();
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(content);
-    setResult(t('common.copied'));
+    addToast({
+      title: t('common.success'),
+      body: t('common.copied_to_clipboard'),
+      color: 'success',
+      autohide: true,
+    });
   };
 
   return (
     <CPopover content={t('common.copy_to_clipboard')}>
       <CButton onClick={copyToClipboard} size={size} className="py-0">
         <CIcon content={cilClone} />
-        {'   '}
-        {result || ''}
       </CButton>
     </CPopover>
   );
