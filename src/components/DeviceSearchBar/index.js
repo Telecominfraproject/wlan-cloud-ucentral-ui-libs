@@ -11,7 +11,7 @@ const DeviceSearchBar = ({ t, search, results, history, action }) => {
   );
 
   const onInputChange = (value) => {
-    if (value === '' || value.match('^[a-fA-F0-9]+$')) {
+    if (value === '' || value.match('^[a-fA-F0-9-*]+$')) {
       setSelected(value);
       search(value);
     }

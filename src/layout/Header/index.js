@@ -83,9 +83,6 @@ const Header = ({
             <CDropdownItem to={() => '/myprofile'}>
               <div className="px-3">{t('user.my_profile')}</div>
             </CDropdownItem>
-            <CDropdownItem to={() => '/preferences'}>
-              <div className="px-3">{t('common.preferences')}</div>
-            </CDropdownItem>
             <CDropdownItem onClick={() => logout(authToken, endpoints.owsec)}>
               <strong className="px-3">{t('common.logout')}</strong>
               <CIcon content={cilAccountLogout} />
